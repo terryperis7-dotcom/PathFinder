@@ -48,7 +48,6 @@ pathfinder-kenya/
 - Always verify cut-offs/fees on the official websites linked in the app.
 
 ## Accounts
-- **SuperAdmin:** emmanuelmwangi88@gmail.com / #Chege888 · code 888888 · 0758382850
 - **Demo:** one-click buttons on signin.html (only place mock data appears)
 - **Real students:** start empty → must complete onboarding (results + 12Q×6 quiz, redo anytime)
 
