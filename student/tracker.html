@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#7c5cff">
+<meta name="description" content="My Tracker — PathFinder Kenya — PathFinder Kenya. Free KUCCPS, HELB & TVET guidance.">
+<meta name="author" content="PathFinder Kenya">
+<meta name="copyright" content="© 2026 PathFinder Kenya. All rights reserved.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PathFinder">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<title>My Tracker — PathFinder Kenya</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="netStatus" role="status"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-role">🎓 <b data-user-name>Student</b><br><span class="tiny" data-user-role>KCSE Candidate</span></div>
+    <nav class="snav">
+      <h5>MY PATH</h5>
+      <a href="dashboard.html">⌂ &nbsp;Dashboard</a>
+      <a href="quiz.html">🧭 &nbsp;Passion Quiz</a>
+      <a href="institutions.html">🏛 &nbsp;Institutions</a>
+      <a href="funding.html">💰 &nbsp;Funding &amp; HELB</a>
+      <a href="tracker.html" class="on">📊 &nbsp;My Tracker</a>
+      <h5>ACCOUNT</h5>
+      <a href="profile.html">👤 &nbsp;Profile &amp; Stage</a>
+      <a href="../index.html">← &nbsp;Public homepage</a>
+      <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
+    </nav>
+    <div class="side-foot"><b>🛡 Private &amp; free</b><br>Kenya DPA 2019 compliant · v0.9.4<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <button class="iconbtn hamb" onclick="toggleSidebar()" aria-label="Open or close menu" aria-expanded="false">☰</button>
+      <div class="crumb"><span>Student</span> / My Tracker</div>
+      <div class="search">⌕ <input id="globalSearch" placeholder="Search courses, cluster points…"></div>
+      <div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Student</b><small data-user-role>KCSE Candidate</small></span><span class="avatar" data-user-initials>ST</span></div>
+    </header>
+    <main class="view"><div id="demoSlot"></div>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:flex-start">
+        <div><p class="eyebrow">KCSE · CBC Dual Track · Term 2 · 2025</p><h1 style="font-size:32px;margin:8px 0 8px">Academic Progress Tracker</h1><p class="muted">Monitor your grades against KUCCPS cut-offs. Edit targets to see your predicted cluster.</p></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Export PDF/CSV</button><button class="btn btn-dark btn-sm" onclick="document.getElementById('addModal').classList.add('open')">+ Add new result</button></div>
+      </div>
+
+      <div class="card" style="margin-top:20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:28px">🗓</span>
+        <div style="flex:1;min-width:200px"><b>Term 2 · 2025</b> <span class="chip lime">Active</span><p class="tiny muted">May 5 – Aug 8, 2025 · Kenya MoE calendar</p></div>
+        <div style="flex:1;min-width:200px"><div style="display:flex;justify-content:space-between" class="tiny muted"><span>64% elapsed</span><span>48 days to KNEC Mocks</span></div><div class="bar" style="margin-top:7px"><i style="width:64%"></i></div></div>
+      </div>
+
+      <div class="grid g4" style="margin-top:18px">
+        <div class="card"><div class="kpi-lab">KCSE mean</div><div class="kpi-num" style="margin:10px 0">76.8%</div><span class="chip lime">B+ (77 pts)</span></div>
+        <div class="card"><div class="kpi-lab">Strongest</div><div class="kpi-num" style="margin:10px 0">88%</div><p class="tiny muted">Mathematics · Grade A</p></div>
+        <div class="card"><div class="kpi-lab">Top momentum</div><div class="kpi-num" style="margin:10px 0">+12 pts</div><p class="tiny muted">Computer Studies 75% → 87%</p></div>
+        <div class="card" style="background:#fdecea;border-color:#f5c6bd"><div class="kpi-lab" style="color:var(--terra-d)">Urgent bottleneck</div><div class="kpi-num" style="margin:10px 0;color:var(--terra-d)">49%</div><p class="tiny">Chemistry — below 50% gateway</p></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3>Subject trajectories vs KUCCPS target</h3>
+        <p class="tiny muted" style="margin:4px 0 10px">Opener → Mid-term → Pre-Mock · Dashed line = Software Engineering gateway (72%)</p>
+        <div id="trackerChart"></div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px" class="tiny"><span>● Mathematics (88%)</span><span>● Physics (82%)</span><span>● English (79%)</span><span style="color:var(--red)">● Chemistry (49% — bottleneck)</span></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3>Subject targets &amp; remediation</h3>
+        <p class="tiny muted" style="margin:4px 0 12px">Edit a target and your gap updates instantly.</p>
+        <div style="overflow:auto"><table><thead><tr><th>Subject</th><th>Current</th><th>Target %</th><th>Gap</th><th>Strategy</th></tr></thead><tbody id="trackerTable"></tbody></table></div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1.6fr 1fr;margin-top:18px;align-items:start">
+        <div class="card">
+          <h3>Assessment history</h3>
+          <div style="overflow:auto;margin-top:10px"><table><thead><tr><th>Assessment</th><th>Date</th><th>Subject</th><th>Score</th><th>Points</th></tr></thead><tbody id="assessTable"></tbody></table></div>
+        </div>
+        <div class="card" style="background:var(--lime-soft)">
+          <p class="eyebrow">Safeguarding &amp; consent</p>
+          <h3 style="margin:8px 0">Guardian sync active</h3>
+          <p class="small muted">Your mother Mary N. views progress read-only. SMS alerts + WhatsApp digest enabled.</p>
+          <a class="btn btn-ghost btn-sm" style="margin-top:14px" href="profile.html">Manage permissions →</a>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-bg" id="addModal">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:20px">Add new result</h3><button class="iconbtn" onclick="document.getElementById('addModal').classList.remove('open')">✕</button></div>
+    <p class="tiny muted" style="margin:6px 0 16px">Guardian sync updates instantly after saving.</p>
+    <div class="grid g2" style="gap:12px">
+      <div><label class="flab">Assessment name</label><input class="input" id="nrName" placeholder="e.g. Term 2 Mid-Term"></div>
+      <div><label class="flab">Date</label><input class="input" type="date" id="nrDate" value="2025-06-18"></div>
+      <div><label class="flab">Subject</label><select class="input" id="nrSubject"><option>Mathematics</option><option>Physics</option><option>Chemistry</option><option>Computer Studies</option><option>English</option><option>Kiswahili</option></select></div>
+      <div><label class="flab">Paper</label><select class="input" id="nrPaper"><option>Paper 1</option><option>Paper 2</option><option>Paper 3 (Practical)</option></select></div>
+      <div><label class="flab">Score obtained</label><input class="input" type="number" id="nrGot" placeholder="e.g. 34"></div>
+      <div><label class="flab">Out of</label><input class="input" type="number" id="nrOut" placeholder="e.g. 40"></div>
+    </div>
+    <div id="nrPreview" class="alert-green" style="margin-top:14px">Enter scores to preview KNEC percentage &amp; points.</div>
+    <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end"><button class="btn btn-ghost" onclick="document.getElementById('addModal').classList.remove('open')">Cancel</button><button class="btn btn-dark" onclick="saveResult()">✓ Save result</button></div>
+  </div>
+</div>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
+<div class="toast-wrap" id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/supabase.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/shell.js"></script>
+<script>
+const sess=requireRole("student","../signin.html"); if(sess)fillUserChip();
+try{ attachAutocomplete(document.getElementById('globalSearch'), function(q){ return globalSearchItems(q); }, function(it){ toast('Searching: ' + it.title); }); }catch(e){}
+ensureDemoData();
+const sdata=getStudentData();
+if(!sdata||!sdata.results||!sdata.results.length){location.href="onboarding.html";throw new Error("onboarding")}
+const s=sess;
+const SUBJECTS=(sdata.results||[]).map(r=>({name:r.subject,short:r.subject.slice(0,2).toUpperCase(),cur:r.score,target:r.target||r.score,strat:"Personalised focus from your improvement plan — see dashboard for study routine.",hist:[Math.max(30,r.score-12),Math.max(30,r.score-5),r.score]}));
+let added=JSON.parse(localStorage.getItem("pf_results")||"[]");
+function gapOf(x){const g=x.cur-x.target;return{label:(g>=0?"+":"")+g+"% "+(g>=0?"Exceeds":"Deficit"),cls:g>=0?"green":g>=-3?"amber":"red"}}
+function renderTracker(){
+ document.getElementById("trackerTable").innerHTML=SUBJECTS.map((x,i)=>{const g=gapOf(x);return `<tr style="${x.cur<55?"background:#fdecea":""}"><td><b>${x.name}</b></td><td><b>${x.cur}%</b></td><td><input class="input" style="width:80px;height:40px" type="number" value="${x.target}" onchange="SUBJECTS[${i}].target=+this.value||${x.target};document.getElementById("demoSlot").innerHTML=demoBanner();
+renderTracker();toast('🎯 ${x.name} target updated — cluster recalculated.')"></td><td><span class="chip ${g.cls}">${g.label}</span></td><td class="small muted" style="max-width:320px">${x.strat}</td></tr>`}).join("");
+ const rows=[...(sdata.assessments||[]).map(a=>[a.name,a.date,a.subject,a.raw,a.pts]),...added.map(r=>[r.name,r.date,r.subject+" ("+r.paper+")",r.raw,r.pts])];
+ document.getElementById("assessTable").innerHTML=rows.map(r=>`<tr><td><b>${r[0]}</b></td><td class="muted">${r[1]}</td><td>${r[2]}</td><td><b>${r[3]}</b></td><td>${r[4]}</td></tr>`).join("");
+}
+function lineChart(elId,series,w,h){
+ const el=document.getElementById(elId);const pad={l:42,r:14,t:14,b:32},iw=w-pad.l-pad.r,ih=h-pad.t-pad.b;
+ const x=i=>pad.l+iw*(i/2), y=v=>pad.t+ih*(1-v/100);
+ let g="";[0,50,100].forEach(v=>{g+=`<line x1="${pad.l}" y1="${y(v)}" x2="${w-pad.r}" y2="${y(v)}" stroke="rgba(23,63,53,.10)"/><text x="${pad.l-7}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="#8a8ab0">${v}%</text>`});
+ let lines="",dots="";
+ series.forEach(s=>{lines+=`<polyline points="${s.hist.map((v,i)=>x(i)+","+y(v)).join(" ")}" fill="none" stroke="${s.color}" stroke-width="2.5"/>`;s.hist.forEach((v,i)=>dots+=`<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="${s.color}" stroke="#fff" stroke-width="1.5"/>`)});
+ const gw=y(72);
+ el.innerHTML=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;display:block">${g}<line x1="${pad.l}" y1="${gw}" x2="${w-pad.r}" y2="${gw}" stroke="#2e7d32" stroke-dasharray="6 4"/><text x="${w-pad.r}" y="${gw-6}" text-anchor="end" font-size="10.5" fill="#2e7d32" font-weight="700">KUCCPS gateway: 72%</text>${lines}${dots}<text x="${x(0)}" y="${h-12}" text-anchor="middle" font-size="10.5" fill="#8a8ab0">Term 1 Mock · Mar 2025</text><text x="${x(1)}" y="${h-12}" text-anchor="middle" font-size="10.5" fill="#8a8ab0">Term 2 Opener · May 2025</text><text x="${x(2)}" y="${h-12}" text-anchor="middle" font-size="10.5" fill="#8a8ab0">Mid-Term · Jun 2025</text></svg>`;
+}
+lineChart("trackerChart",[{hist:[72,78,88],color:"#5b4fe0"},{hist:[70,76,82],color:"#8a8ab0"},{hist:[74,77,79],color:"#c5c3e8"},{hist:[58,54,49],color:"#ba1a1a"}],760,250);
+document.getElementById("demoSlot").innerHTML=demoBanner();
+renderTracker();
+function preview(){
+ const got=+document.getElementById("nrGot").value,out=+document.getElementById("nrOut").value;
+ if(got&&out){const pct=Math.round(got/out*100);const pts=pct>=80?12:pct>=70?11:pct>=60?10:pct>=50?8:pct>=40?6:4;document.getElementById("nrPreview").innerHTML=`<b>Preview:</b> ${pct}% · KNEC points <b>${pts}.0</b>`;return{pct,pts}}
+ document.getElementById("nrPreview").textContent="Enter scores to preview KNEC percentage & points.";return null;
+}
+["nrGot","nrOut"].forEach(id=>document.getElementById(id).addEventListener("input",preview));
+function saveResult(){
+ const p=preview();if(!p){toast("⚠ Enter both score and out-of marks.");return}
+ const r={name:document.getElementById("nrName").value||"New Assessment",date:document.getElementById("nrDate").value,subject:document.getElementById("nrSubject").value,paper:document.getElementById("nrPaper").value,raw:document.getElementById("nrGot").value+"/"+document.getElementById("nrOut").value+" ("+p.pct+"%)",pts:p.pts.toFixed(1)};
+ added.unshift(r);localStorage.setItem("pf_results",JSON.stringify(added));
+ document.getElementById("addModal").classList.remove("open");document.getElementById("demoSlot").innerHTML=demoBanner();
+renderTracker();
+ toast("✅ Result saved — "+r.subject+" "+p.pct+"%. Guardian SMS sent to Mary N.");
+}
+document.getElementById("addModal").addEventListener("click",e=>{if(e.target.id==="addModal")e.target.classList.remove("open")});
+</script>
+</body>
+</html>

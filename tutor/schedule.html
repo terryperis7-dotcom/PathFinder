@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#7c5cff">
+<meta name="description" content="Sessions & Schedule — PathFinder Kenya — PathFinder Kenya. Free KUCCPS, HELB & TVET guidance.">
+<meta name="author" content="PathFinder Kenya">
+<meta name="copyright" content="© 2026 PathFinder Kenya. All rights reserved.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PathFinder">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<title>Sessions & Schedule — PathFinder Kenya</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="netStatus" role="status"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · TUTOR</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-role">👩‍🏫 <b data-user-name>Tutor</b><br><span class="tiny" data-user-role>TSC Tutor</span></div>
+    <nav class="snav">
+      <h5>TEACHING</h5>
+      <a href="dashboard.html">⌂ &nbsp;Dashboard</a>
+      <a href="students.html">🎓 &nbsp;My Students</a>
+      <a href="schedule.html" class="on">🗓 &nbsp;Sessions &amp; Schedule</a>
+      <h5>ACCOUNT</h5>
+      <a href="profile.html">👤 &nbsp;Tutor Profile</a>
+      <a href="../index.html">← &nbsp;Public homepage</a>
+      <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
+    </nav>
+    <div class="side-foot"><b>🛡 Safeguarding active</b><br>Guardian-notified sessions · DPA 2019<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <button class="iconbtn hamb" onclick="toggleSidebar()" aria-label="Open or close menu" aria-expanded="false">☰</button>
+      <div class="crumb"><span>Tutor</span> / Sessions &amp; Schedule</div>
+      <div class="search">⌕ <input placeholder="Search sessions…"></div>
+      <div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Tutor</b><small data-user-role>TSC Tutor</small></span><span class="avatar" data-user-initials>TT</span></div>
+    </header>
+    <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Demo data.</b> Tutor workspace sample data is illustrative (mock) until connected to live student records. <span class="chip mock">⚠ MOCK DATA</span></div>
+      <p class="eyebrow">Classroom Studio · Encrypted, low-bandwidth (3G/4G optimised)</p>
+      <h1 style="font-size:32px;margin:8px 0 8px">Sessions &amp; Schedule</h1>
+      <p class="muted" style="max-width:620px">Book, join and log sessions. Payment releases from M-Pesa escrow only after the guardian confirms completion.</p>
+
+      <div class="grid g3" style="margin-top:24px">
+        <div class="card"><div class="kpi-lab">This week</div><div class="kpi-num" style="margin:10px 0">8 sessions</div><p class="tiny muted">32 teaching hours booked</p></div>
+        <div class="card"><div class="kpi-lab">Completed (June)</div><div class="kpi-num" style="margin:10px 0">24</div><p class="tiny muted">100% guardian-confirmed</p></div>
+        <div class="card"><div class="kpi-lab">Escrow pending</div><div class="kpi-num" style="margin:10px 0">KES 16,000</div><p class="tiny muted">Releases on confirmation</p></div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3>Week ahead</h3><button class="btn btn-lime btn-sm" onclick="bookSession()">+ Book session</button><button class="btn btn-dark btn-sm" onclick="setAvailability()">+ Set availability</button></div>
+        <div style="overflow:auto;margin-top:10px"><table><thead><tr><th>Day</th><th>Time (EAT)</th><th>Student</th><th>Subject</th><th>Mode</th><th>Status</th><th></th></tr></thead><tbody id="schedTable"></tbody></table></div>
+      </div>
+
+      <div class="grid g2" style="margin-top:20px">
+        <div class="card">
+          <h3>How escrow works</h3>
+          <ol style="margin:12px 0 0 20px;font-size:14.5px;line-height:2;color:var(--muted)">
+            <li>Guardian funds escrow via Daraja STK Push (M-Pesa).</li>
+            <li>You teach the session in Classroom Studio.</li>
+            <li>Guardian confirms completion by SMS.</li>
+            <li>Funds release to you automatically. 100% refundable if cancelled.</li>
+          </ol>
+        </div>
+        <div class="card" style="background:var(--lime-soft)">
+          <h3>Session checklist</h3>
+          <div style="margin-top:8px">
+            <div class="checkrow"><span class="ck done">✓</span><span><b>Guardian notified</b><br><span class="tiny muted">SMS sent 1 hour before</span></span></div>
+            <div class="checkrow"><span class="ck done">✓</span><span><b>Homework notes logged</b><br><span class="tiny muted">Shared with guardian automatically</span></span></div>
+            <div class="checkrow"><span class="ck"></span><span><b>Progress updated in tracker</b><br><span class="tiny muted">After each session</span></span></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="students.html"><span class="bic">🎓</span>Students</a><a href="schedule.html"><span class="bic">🗓</span>Schedule</a><a href="profile.html"><span class="bic">👤</span>Profile</a><a href="../index.html"><span class="bic">←</span>Site</a></nav>
+<div class="toast-wrap" id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/supabase.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/shell.js"></script>
+<script>
+const s=requireRole("tutor","../signin.html"); if(s)fillUserChip();
+const SESS=[
+ ["Monday","4:00 PM","Amina Odhiambo","Physics","Online Studio","Confirmed"],
+ ["Tuesday","5:30 PM","Moses Kiprop","Mathematics","Online Studio","Pending guardian"],
+ ["Wednesday","4:00 PM","Amina Odhiambo","Physics","Online Studio","Confirmed"],
+ ["Thursday","6:00 PM","Brian Kibet","Chemistry","Online Studio","Confirmed"],
+ ["Saturday","10:00 AM","Faith Wanjiku","Integrated Science","Online Studio","Confirmed"]
+];
+function setAvailability(){
+  const days = prompt("Set your teaching days (comma separated, e.g. Mon, Wed, Sat):", "Mon, Wed, Sat");
+  if(days) toast("🗓 Availability saved: " + days + " — students can now book these windows.");
+}
+function bookSession(){
+  const days=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const day=days[Math.floor(Math.random()*days.length)];
+  const stu=["Amina Odhiambo","Moses Kiprop","Faith Wanjiku","Brian Kibet"][Math.floor(Math.random()*4)];
+  SESS.push([day,"4:00 PM",stu,"Mathematics","Online Studio","Pending guardian"]);
+  renderSched(); toast("🗓 Session booked: " + stu + " · " + day + " 4:00 PM — guardian notified via SMS.");
+}
+function renderSched(){
+  document.getElementById("schedTable").innerHTML=SESS.map(function(x){ return '<tr><td><b>' + x[0] + '</b></td><td>' + x[1] + '</td><td>' + x[2] + '</td><td>' + x[3] + '</td><td>' + x[4] + '</td><td><span class="chip ' + (x[5]==="Confirmed"?"green":"amber") + '">' + x[5] + '</span></td><td><button class="btn btn-dark btn-sm" onclick="toast(\'Studio link sent to student + guardian.\')">Join</button></td></tr>'; }).join("");
+}
+document.getElementById("schedTable").innerHTML=SESS.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td>${x[4]}</td><td><span class="chip ${x[5]==="Confirmed"?"green":"amber"}">${x[5]}</span></td><td><button class="btn btn-dark btn-sm" onclick="toast('🎥 Studio link sent to student + guardian.')">Join</button></td></tr>`).join("");
+</script>
+</body>
+</html>

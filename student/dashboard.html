@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#7c5cff">
+<meta name="description" content="Student Dashboard — PathFinder Kenya — PathFinder Kenya. Free KUCCPS, HELB & TVET guidance.">
+<meta name="author" content="PathFinder Kenya">
+<meta name="copyright" content="© 2026 PathFinder Kenya. All rights reserved.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PathFinder">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<title>Student Dashboard — PathFinder Kenya</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="netStatus" role="status"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-role">🎓 <b data-user-name>Student</b><br><span class="tiny" data-user-role>KCSE Candidate</span></div>
+    <nav class="snav">
+      <h5>MY PATH</h5>
+      <a href="dashboard.html" class="on">⌂ &nbsp;Dashboard</a>
+      <a href="quiz.html">🧭 &nbsp;Passion Quiz</a>
+      <a href="institutions.html">🏛 &nbsp;Institutions</a>
+      <a href="funding.html">💰 &nbsp;Funding &amp; HELB</a>
+      <a href="tracker.html">📊 &nbsp;My Tracker</a>
+      <h5>ACCOUNT</h5>
+      <a href="onboarding.html">✨ &nbsp;My Setup</a>
+      <a href="profile.html">👤 &nbsp;Profile &amp; Stage</a>
+      <a href="../index.html">← &nbsp;Public homepage</a>
+      <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
+    </nav>
+    <div class="side-foot"><b>🛡 Private &amp; free</b><br>Kenya DPA 2019 compliant · v0.9.4<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <button class="iconbtn hamb" onclick="toggleSidebar()" aria-label="Open or close menu" aria-expanded="false">☰</button>
+      <div class="crumb"><span>Student</span> / Dashboard</div>
+      <div class="search">⌕ <input id="globalSearch" placeholder="Search courses, cluster points…" onkeydown="if(event.key==='Enter')location.href='institutions.html'"></div>
+      <button class="iconbtn" onclick="toast('🔔 KUCCPS revision window opens 12 Dec · Check your tracker for subject alerts.')">🔔<span class="n">2</span></button>
+      <div class="lang" style="display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:#fff"><button data-lang="en" class="on" style="border:0;background:#7c5cff;color:#fff;padding:8px 11px;font-weight:800;font-size:12px">EN</button><button data-lang="sw" style="border:0;background:#fff;padding:8px 11px;font-weight:800;font-size:12px;color:var(--muted)">SW</button></div><div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Student</b><small data-user-role>KCSE Candidate</small></span><span class="avatar" data-user-initials>ST</span></div>
+    </header>
+    <main class="view">
+      <div id="demoSlot"></div>
+      <div id="dashBody"></div>
+    </main>
+  </div>
+</div>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
+<div class="toast-wrap" id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/supabase.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/shell.js"></script>
+<script>
+const sess=requireRole("student","../signin.html"); if(sess)fillUserChip();
+try{ attachAutocomplete(document.getElementById('globalSearch'), function(q){ return globalSearchItems(q); }, function(it){ toast('Searching: ' + it.title); }); }catch(e){}
+ensureDemoData();
+const data=getStudentData();
+document.getElementById("demoSlot").innerHTML=demoBanner();
+if(!data||!data.results||!data.results.length){
+ document.getElementById("dashBody").innerHTML=`
+  <div class="empty" style="margin-top:20px">
+   <div style="font-size:44px">✨</div>
+   <h2 style="margin:12px 0 8px">Welcome! Let's build your real path</h2>
+   <p class="muted" style="max-width:520px;margin:0 auto">Your account starts empty — no mock data. Enter your real results and take the 2-minute quiz, and we'll calculate your actual KUCCPS pathways + improvement plan.</p>
+   <a class="btn btn-lime btn-lg" style="margin-top:20px" href="onboarding.html">Start setup (2 min) →</a>
+  </div>`;
+} else {
+ const rec=computeRecommendations(data);
+ const top=rec.ranked[0], weak=rec.plans[0];
+ const strong=[...data.results].sort((a,b)=>b.score-a.score)[0];
+ document.getElementById("dashBody").innerHTML=`
+  <p class="eyebrow">${data.stage||"Student"} · ${data.county||""} · ${data.mock?"Mock data (demo)":"Your real data"}</p>
+  <h1 style="font-size:34px;margin:8px 0 8px">Sasa, <span data-user-name>${sess.name.replace(" (Demo)","")}</span> 👋</h1>
+  <p class="muted" style="max-width:620px">Based on your ${data.mock?"mock":"real"} average of <b>${rec.avg}%</b> and your ${rec.riasecLabel} personality profile.</p>
+  <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+    <a class="btn btn-lime" href="quiz.html">🧭 Retake quiz</a>
+    <a class="btn btn-dark" href="tracker.html">+ Update results</a>
+    <a class="btn btn-ghost" href="onboarding.html">✨ Redo setup</a>
+  </div>
+  <div class="grid g4" style="margin-top:26px">
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="kpi-lab">Your average</div><span class="tile lav">↗</span></div><div class="kpi-num" style="margin:10px 0">${rec.avg}%</div><span class="chip lime">Grade ${gradeOf(rec.avg)} projection</span><p class="tiny muted" style="margin-top:8px">${data.results.length} subjects entered</p></div>
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="kpi-lab">Top pathway match</div><span class="tile mint">✦</span></div><div class="kpi-num" style="margin:10px 0">${top.overall}%</div><p class="tiny muted">${top.name}</p><a class="tiny" href="quiz.html"><b>See all 6 →</b></a></div>
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="kpi-lab">Strongest subject</div><span class="tile peach">🏆</span></div><div class="kpi-num" style="margin:10px 0">${strong.score}%</div><p class="tiny muted">${strong.subject} · Grade ${gradeOf(strong.score)}</p></div>
+    <div class="card warm-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="kpi-lab" style="color:var(--terra-d)">Focus first</div><span class="tile pink">♥</span></div><div class="kpi-num" style="margin:10px 0;color:var(--terra-d)">${weak.score}%</div><p class="tiny">${weak.subject} — needs +${Math.max(0,weak.gap)} pts</p><a class="tiny" href="tracker.html"><b>Improvement plan →</b></a></div>
+  </div>
+  <div class="pine-panel" style="margin-top:20px;display:grid;grid-template-columns:1.2fr .8fr;gap:24px">
+    <div>
+      <span class="chip lime">● Your top match: ${top.overall}%</span>
+      <h2 style="font-size:28px;margin:12px 0 10px">${top.name}</h2>
+      <p class="small" style="color:#d6d0ff">${top.verdict}. Personality fit ${top.persPct}% · Grade feasibility ${top.feasPct}% (from your real marks).</p>
+      ${top.gaps.length?`<div style="margin-top:12px"><b style="color:#ffd9d0">Close these gaps:</b><p class="small" style="color:#d6d0ff">${top.gaps.map(g=>"• "+g.msg).join("<br>")}</p></div>`:'<p class="small" style="color:#d6d0ff;margin-top:10px">✓ You meet the grade requirements for this pathway.</p>'}
+      <a class="btn btn-lime" style="margin-top:16px" href="institutions.html">Explore institutions for this path →</a>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:20px">
+      <b style="color:#fff;font-size:12px;letter-spacing:.08em">YOUR 6 PATHWAYS (RANKED)</b>
+      <div style="display:grid;gap:10px;margin-top:14px">${rec.ranked.map(p=>`<div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:#f0efff">${p.name}</span><b style="color:var(--lime)">${p.overall}%</b></div>`).join("")}</div>
+      <p class="tiny" style="color:#c5bfff;margin-top:12px">Ranked by personality (55%) + real grade feasibility (45%).</p>
+    </div>
+  </div>
+  <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:20px;align-items:start">
+    <div class="card">
+      <h3>Your subjects at a glance</h3>
+      <p class="tiny muted" style="margin:4px 0 12px">${data.mock?"Mock results (demo account)":"Your entered results"} · ${data.exam||"Latest exam"}</p>
+      <div class="grid g2" id="dashSubjects"></div><h4 style="margin:18px 0 8px">Progress graph — your subjects vs target</h4><div id="progressChart"></div>
+    </div>
+    <div style="display:grid;gap:20px">
+      <div class="card">
+        <h3>Next step</h3>
+        <p class="small muted" style="margin-top:8px"><b>Focus:</b> ${weak.focus}</p>
+        <p class="small muted" style="margin-top:6px"><b>Routine:</b> ${weak.hours}</p>
+        <a class="btn btn-dark btn-sm" style="margin-top:14px" href="tracker.html">Open full tracker →</a>
+      </div>
+      <div class="pine-panel" style="padding:24px">
+        <h3>HELB &amp; KUCCPS windows</h3>
+        <p class="small" style="color:#d6d0ff;margin-top:8px">KUCCPS revision: Feb–Mar · KCSE release: Jan · HEF funding: Jul–Aug</p>
+        <a class="btn btn-lime btn-sm" style="margin-top:14px" href="funding.html">Funding guide →</a>
+      </div>
+    </div>
+  </div>`;
+ document.getElementById("progressChart").innerHTML=(function(){ const max=100; const w=640,h=220,pad={l:36,r:12,t:12,b:28}; const iw=w-pad.l-pad.r, ih=h-pad.t-pad.b; const n=data.results.length; const bw=iw/n; let bars=""; data.results.forEach(function(r,i){ const x=pad.l+bw*i+bw*0.2, bw2=bw*0.6; const y1=pad.t+ih*(1-r.score/100), y2=pad.t+ih*(1-(r.target||r.score)/100); bars+="<rect x=\""+x+"\" y=\""+y1+"\" width=\""+bw2+"\" height=\""+(pad.t+ih-y1)+"\" rx=\"6\" fill=\"#7c5cff\"/><line x1=\""+x+"\" y1=\""+y2+"\" x2=\""+(x+bw2)+"\" y2=\""+y2+"\" stroke=\"#ff7a59\" stroke-width=\"3\"/><text x=\""+(x+bw2/2)+"\" y=\""+(h-10)+"\" text-anchor=\"middle\" font-size=\"10\" fill=\"#6b6b8a\">"+r.subject.slice(0,10)+"</text><text x=\""+(x+bw2/2)+"\" y=\""+(y1-6)+"\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"700\" fill=\"#2e1065\">"+r.score+"%</text>"; }); return "<svg viewBox=\"0 0 "+w+" "+h+"\" style=\"width:100%;display:block\"><line x1=\""+pad.l+"\" y1=\""+(pad.t+ih)+"\" x2=\""+(w-pad.r)+"\" y2=\""+(pad.t+ih)+"\" stroke=\"rgba(124,92,255,.15)\"/>"+bars+"</svg><p class=\"tiny muted\">Purple bar = your score · Orange line = target. Update results in Tracker to see progress move.</p>"; })();
+document.getElementById("dashSubjects").innerHTML=data.results.map(r=>`<div style="border:1px solid var(--line);border-radius:14px;padding:14px"><div style="display:flex;justify-content:space-between"><b>${r.subject}</b><span class="tiny muted">${r.score}% · ${gradeOf(r.score)}</span></div><div class="bar" style="margin-top:9px"><i class="${r.score<50?"red":""}" style="width:${r.score}%"></i></div><p class="tiny muted" style="margin-top:7px">Target ${r.target||"—"}%${r.target&&r.score<r.target?` · <span style="color:var(--terra-d)">+${r.target-r.score} pts needed</span>`:" · On track ✓"}</p></div>`).join("");
+}
+</script>
+</body>
+</html>

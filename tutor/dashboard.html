@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#7c5cff">
+<meta name="description" content="Tutor Dashboard — PathFinder Kenya — PathFinder Kenya. Free KUCCPS, HELB & TVET guidance.">
+<meta name="author" content="PathFinder Kenya">
+<meta name="copyright" content="© 2026 PathFinder Kenya. All rights reserved.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PathFinder">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<title>Tutor Dashboard — PathFinder Kenya</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="netStatus" role="status"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · TUTOR</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-role">👩‍🏫 <b data-user-name>Tutor</b><br><span class="tiny" data-user-role>TSC Tutor</span></div>
+    <nav class="snav">
+      <h5>TEACHING</h5>
+      <a href="dashboard.html" class="on">⌂ &nbsp;Dashboard</a>
+      <a href="students.html">🎓 &nbsp;My Students</a>
+      <a href="schedule.html">🗓 &nbsp;Sessions &amp; Schedule</a>
+      <h5>ACCOUNT</h5>
+      <a href="profile.html">👤 &nbsp;Tutor Profile</a>
+      <a href="../index.html">← &nbsp;Public homepage</a>
+      <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
+    </nav>
+    <div class="side-foot"><b>🛡 Safeguarding active</b><br>Guardian-notified sessions · DPA 2019<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <button class="iconbtn hamb" onclick="toggleSidebar()" aria-label="Open or close menu" aria-expanded="false">☰</button>
+      <div class="crumb"><span>Tutor</span> / Dashboard</div>
+      <div class="search">⌕ <input id="globalSearch" placeholder="Search students, subjects…"></div>
+      <button class="iconbtn" onclick="toast('🔔 1 new session request from a guardian in Nairobi.')">🔔<span class="n">1</span></button>
+      <div class="lang" style="display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:#fff"><button data-lang="en" class="on" style="border:0;background:#7c5cff;color:#fff;padding:8px 11px;font-weight:800;font-size:12px">EN</button><button data-lang="sw" style="border:0;background:#fff;padding:8px 11px;font-weight:800;font-size:12px;color:var(--muted)">SW</button></div><div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Tutor</b><small data-user-role>TSC Tutor</small></span><span class="avatar" data-user-initials>TT</span></div>
+    </header>
+    <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Demo data.</b> Tutor workspace sample data is illustrative (mock) until connected to live student records. <span class="chip mock">⚠ MOCK DATA</span></div>
+      <p class="eyebrow">Phase 2 · TSC vetting pilot · Safeguarding pipeline active</p>
+      <h1 style="font-size:32px;margin:8px 0 8px">Karibu, <span data-user-name>Tutor</span> 👋</h1>
+      <p class="muted" style="max-width:620px">Your verified teaching workspace. Sessions are supervised, guardian-notified, and paid via protected M-Pesa escrow.</p>
+
+      <div class="grid g4" style="margin-top:24px">
+        <div class="card"><div class="kpi-lab">Active students</div><div class="kpi-num" style="margin:10px 0">12</div><p class="tiny muted">Nairobi &amp; Kiambu cohorts</p></div>
+        <div class="card"><div class="kpi-lab">Sessions this week</div><div class="kpi-num" style="margin:10px 0">8</div><p class="tiny muted">4 hrs · Maths &amp; Physics</p></div>
+        <div class="card"><div class="kpi-lab">Escrow earnings</div><div class="kpi-num" style="margin:10px 0">KES 16,000</div><p class="tiny muted">Releases after guardian confirms</p></div>
+        <div class="card"><div class="kpi-lab">Rating</div><div class="kpi-num" style="margin:10px 0">★ 4.9</div><p class="tiny muted">38 guardian reviews</p></div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:20px;align-items:start">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming sessions</h3><a class="tiny" href="schedule.html"><b>Full schedule →</b></a></div>
+          <div style="overflow:auto;margin-top:10px"><table><thead><tr><th>Student</th><th>Subject</th><th>When</th><th>Status</th><th></th></tr></thead><tbody>
+            <tr><td><b>Amina Odhiambo</b><br><span class="tiny muted">KCSE · Pangani Girls</span></td><td>Physics</td><td>Wed · 4:00 PM</td><td><span class="chip green">Confirmed</span></td><td><button class="btn btn-dark btn-sm" onclick="toast('🎥 Classroom studio link sent to student + guardian.')">Join studio</button></td></tr>
+            <tr><td><b>Moses Kiprop</b><br><span class="tiny muted">KCSE · Uasin Gishu</span></td><td>Mathematics</td><td>Thu · 5:30 PM</td><td><span class="chip amber">Pending guardian</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('✉️ Guardian notified via SMS.')">Nudge</button></td></tr>
+            <tr><td><b>Faith Wanjiku</b><br><span class="tiny muted">CBC Gr. 9 · Nairobi</span></td><td>Integrated Science</td><td>Sat · 10:00 AM</td><td><span class="chip green">Confirmed</span></td><td><button class="btn btn-dark btn-sm" onclick="toast('🎥 Classroom studio link sent.')">Join studio</button></td></tr>
+          </tbody></table></div>
+          <div class="alert-green" style="margin-top:14px">🔒 Every session start &amp; completion is SMS-notified to the registered guardian with homework notes.</div>
+        </div>
+        <div style="display:grid;gap:20px">
+          <div class="pine-panel" style="padding:24px">
+            <h3>Verification status</h3>
+            <p class="small" style="color:#d6d0ff;margin-top:8px">✓ TSC Registration verified<br>✓ DCI Certificate of Good Conduct<br>✓ Degree parchment verified<br>✓ Safeguarding training complete</p>
+            <a class="btn btn-lime btn-sm" style="margin-top:14px" href="profile.html">View public profile →</a>
+          </div>
+          <div class="card">
+            <h3>Rate estimator</h3>
+            <p class="tiny muted" style="margin:6px 0 12px">Fixed national rate: <b>KES 500/hour</b>. No negotiation, no hidden fees.</p>
+            <div class="grid g2" style="gap:10px">
+              <div><label class="flab">Subjects</label><select class="input" id="estSubj"><option>2 subjects</option><option>1 subject</option><option>3 subjects</option></select></div>
+              <div><label class="flab">Hours / week</label><input class="input" type="number" id="estHrs" value="4" min="1" max="20" oninput="calcEst()"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><span class="tiny muted">Monthly escrow (4 wks)</span><b style="font-size:22px" id="estTotal">KES 8,000</b></div>
+            <button class="btn btn-dark btn-block btn-sm" style="margin-top:12px" onclick="toast('🔒 Escrow estimate shared with guardian — no charge until confirmed.')">Share estimate with guardian</button>
+          </div>
+        </div>
+      </div>
+    <div class="card" style="margin-top:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3>Tutor directory (pilot)</h3><span class="chip mock">⚠ MOCK DATA — pilot sample</span></div>
+        <p class="tiny muted" style="margin:6px 0 14px">Verified TSC tutors across Kenya. Fixed rate KES 500/hour via M-Pesa escrow.</p>
+        <div class="grid g3" id="tutorDir"></div>
+      </div>
+    </main>
+  </div>
+</div>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="students.html"><span class="bic">🎓</span>Students</a><a href="schedule.html"><span class="bic">🗓</span>Schedule</a><a href="profile.html"><span class="bic">👤</span>Profile</a><a href="../index.html"><span class="bic">←</span>Site</a></nav>
+<div class="toast-wrap" id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/supabase.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/shell.js"></script>
+<script>
+const s=requireRole("tutor","../signin.html"); if(s)fillUserChip();
+try{ attachAutocomplete(document.getElementById('globalSearch'), function(q){ return globalSearchItems(q); }, function(it){ toast('Searching: ' + it.title); }); }catch(e){}
+function calcEst(){const h=+document.getElementById("estHrs").value||0;document.getElementById("estTotal").textContent="KES "+(h*500*4).toLocaleString()}
+calcEst();
+const TUTORS=window.PF_TUTORS||[];
+document.getElementById("tutorDir").innerHTML=TUTORS.slice(0,6).map(x=>`<div style="border:1px solid var(--line);border-radius:14px;padding:16px"><b>${x.name}</b><br><span class="tiny muted">${x.tsc} · ${x.qual}</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${x.tags.map(g=>`<span class="chip">${g}</span>`).join("")}</div><p class="tiny muted" style="margin-top:8px">★ ${x.rate} (${x.reviews}) · ${x.loc}</p></div>`).join("");
+</script>
+</body>
+</html>

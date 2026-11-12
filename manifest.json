@@ -1,0 +1,17 @@
+{
+  "name": "PathFinder Kenya",
+  "short_name": "PathFinder",
+  "description": "Free KUCCPS, HELB, TVET, KCSE & CBC guidance for Kenyan students.",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/index.html",
+  "scope": "/",
+  "theme_color": "#7c5cff",
+  "background_color": "#faf7ff",
+  "categories": ["education"],
+  "lang": "en",
+  "icons": [
+    { "src": "assets/avatars/anime-girl.jpg", "sizes": "256x256", "type": "image/jpeg", "purpose": "any" },
+    { "src": "assets/avatars/anime-girl.jpg", "sizes": "512x512", "type": "image/jpeg", "purpose": "any" }
+  ]
+}

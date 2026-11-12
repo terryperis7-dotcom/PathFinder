@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#7c5cff">
+<meta name="description" content="SuperAdmin Console — PathFinder Kenya — PathFinder Kenya. Free KUCCPS, HELB & TVET guidance.">
+<meta name="author" content="PathFinder Kenya">
+<meta name="copyright" content="© 2026 PathFinder Kenya. All rights reserved.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PathFinder">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<title>SuperAdmin Console — PathFinder Kenya</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="netStatus" role="status"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · ADMIN</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-role">🛡 <b data-user-name>SuperAdmin</b><br><span class="tiny" data-user-role>SuperAdmin · MFA Active</span></div>
+    <nav class="snav">
+      <h5>GOVERNANCE</h5>
+      <a href="dashboard.html" class="on">⌂ &nbsp;Console</a>
+      <a href="deployment.html">🚀 &nbsp;Deployment Centre</a>
+      <a href="dpa.html">🛡 &nbsp;Data Protection (DPA)</a>
+      <h5>ACCOUNT</h5>
+      <a href="../index.html">← &nbsp;Public homepage</a>
+      <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
+    </nav>
+    <div class="side-foot"><b>● ROLE: ADMIN · MFA ACTIVE · RLS ENFORCED</b><br>ODPC Kenya Act 2019 Compliant<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <button class="iconbtn hamb" onclick="toggleSidebar()" aria-label="Open or close menu" aria-expanded="false">☰</button>
+      <div class="crumb"><span>SuperAdmin</span> / Governance</div>
+      <div class="search">⌕ <input id="globalSearch" placeholder="Filter pilot records, code, ID…" id="adminSearch" oninput="renderAdmin()"></div>
+      <button class="btn btn-dark btn-sm" onclick="exportCSV()">⬇ Export dataset (CSV)</button>
+      <div class="lang" style="display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:#fff"><button data-lang="en" class="on" style="border:0;background:#7c5cff;color:#fff;padding:8px 11px;font-weight:800;font-size:12px">EN</button><button data-lang="sw" style="border:0;background:#fff;padding:8px 11px;font-weight:800;font-size:12px;color:var(--muted)">SW</button></div><div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>SuperAdmin</b><small data-user-role>SuperAdmin</small></span><span class="avatar" data-user-initials>SA</span></div>
+    </header>
+    <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Pilot demo data.</b> Cohort &amp; telemetry shown are illustrative (mock) for the private pilot. <span class="chip mock">⚠ MOCK DATA</span></div>
+      <p class="eyebrow">Private pilot · 18 of 20 seats active</p>
+      <h1 style="font-size:32px;margin:8px 0 8px">SuperAdmin Governance</h1>
+      <p class="muted" style="max-width:620px">Safeguarded pilot oversight. Full pseudonymisation under Section 31 of the Kenya DPA 2019.</p>
+
+      <div class="grid g4" style="margin-top:24px">
+        <div class="card"><div class="kpi-lab">Pilot students</div><div class="kpi-num" style="margin:10px 0">18</div><p class="tiny muted">8 counties · 100% consent logged</p></div>
+        <div class="card"><div class="kpi-lab">Verified institutions</div><div class="kpi-num" style="margin:10px 0">16</div><p class="tiny muted">11 universities · 5 TVETs · CUE validated</p></div>
+        <div class="card"><div class="kpi-lab">Funding tracked</div><div class="kpi-num" style="margin:10px 0">KES 32.4M</div><p class="tiny muted">8 HELB schemes · KUCCPS '24</p></div>
+        <div class="card" style="background:#fdecea"><div class="kpi-lab" style="color:var(--terra-d)">Reviews pending</div><div class="kpi-num" style="margin:10px 0;color:var(--terra-d)">2</div><p class="tiny">1 cut-off update · 1 DPA request</p></div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center">
+          <h3>Safeguarded Student Cohort (Pilot Group)</h3>
+          <span class="tiny muted">● Supabase Postgres · eu-west-1 replica · RLS handshake 4m ago</span>
+        </div>
+        <div style="overflow:auto;margin-top:12px"><table><thead><tr><th>Learner &amp; ID</th><th>Stage</th><th>County</th><th>Mean</th><th>Intervention need</th><th>Pathway match</th><th>Teacher req.</th><th>Audit</th></tr></thead><tbody id="adminTable"></tbody></table></div>
+        <p class="tiny muted" style="margin-top:12px">Showing <span id="adminCount">5</span> of 18 students · Counties: Nairobi, Kisumu, Uasin Gishu, Kericho, Mombasa, Kiambu, Machakos, Nakuru</p>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center"><h3>User Control — manage who uses PathFinder</h3><span class="chip pine">SuperAdmin privileges</span></div>
+        <p class="tiny muted" style="margin:6px 0 12px">Suspend, reactivate, reset onboarding, change roles, or remove accounts. All actions are audit-logged (DPA 2019).</p>
+        <div style="overflow:auto"><table><thead><tr><th>User</th><th>Role</th><th>Status</th><th>Onboarded</th><th>Actions</th></tr></thead><tbody id="userTable"></tbody></table></div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="exportUsers()">⬇ Export all users (CSV)</button>
+          <button class="btn btn-ghost btn-sm" onclick="toast('🔒 Pilot seats: 18/20 active. New signups auto-approved in pilot mode.')">Pilot seats: 18/20</button>
+          <button class="btn btn-dark btn-sm" onclick="toast('📢 Broadcast sent to all users (demo).')">📢 Broadcast message</button>
+        </div>
+      </div>
+      <div class="grid g3" style="margin-top:20px">
+        <div class="card"><h3>Quick actions</h3><div style="display:grid;gap:8px;margin-top:12px"><button class="btn btn-ghost btn-sm" onclick="toast('🏛 Institution database review opened.')">Review institutions (16)</button><button class="btn btn-ghost btn-sm" onclick="toast('💰 Funding allocations review opened.')">Review funding (8)</button><button class="btn btn-ghost btn-sm" onclick="toast('⛓ Immutable audit log — append-only chain verified.')">View audit log</button></div></div>
+        <div class="card"><h3>System health</h3><p class="small muted" style="margin-top:10px">✓ Edge Nairobi-01 · 24ms<br>✓ RLS 100% active · 0 leaks<br>✓ KIXP peering nominal · 99.98% SLA<br>✓ Backups daily · af-south-1</p><a class="btn btn-dark btn-sm" style="margin-top:12px" href="deployment.html">Open Deployment Centre →</a></div>
+        <div class="card" style="background:var(--lime-soft)"><h3>Privacy &amp; DPA</h3><p class="small muted" style="margin-top:8px">ODPC Reg. ODPC/PR/2024/0918 · 1 erasure request pending review.</p><a class="btn btn-dark btn-sm" style="margin-top:12px" href="dpa.html">Open DPA console →</a></div>
+      </div>
+    </main>
+  </div>
+</div>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Console</a><a href="deployment.html"><span class="bic">🚀</span>Deploy</a><a href="dpa.html"><span class="bic">🛡</span>DPA</a><a href="../index.html"><span class="bic">←</span>Site</a><a href="../signin.html"><span class="bic">↩</span>Sign out</a></nav>
+<div class="toast-wrap" id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/supabase.js"></script>
+<script src="../assets/js/data.js"></script>
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/shell.js"></script>
+<script>
+const s=requireRole("superadmin","../signin.html"); if(s)fillUserChip();
+try{ attachAutocomplete(document.getElementById('globalSearch'), function(q){ return globalSearchItems(q); }, function(it){ toast('Searching: ' + it.title); }); }catch(e){}
+const STUDENTS=[
+ {name:"Amina Odhiambo",id:"PILOT-KEN-0842",stage:"KCSE Candidate",county:"Kisumu",mean:"78%",need:"Physics (C+)",path:"Biomedical Eng. (94% fit)",teacher:"2 Endorsements"},
+ {name:"Moses Kiprop",id:"PILOT-KEN-0911",stage:"KCSE Candidate",county:"Uasin Gishu",mean:"82%",need:"English (B−)",path:"Software Systems (98% fit)",teacher:"1 Endorsement"},
+ {name:"Faith Wanjiku",id:"PILOT-KEN-0421",stage:"CBC Grade 9",county:"Nairobi",mean:"71%",need:"Integrated Sci.",path:"STEM · Agricultural Tech",teacher:"Needs Tutor Review"},
+ {name:"Brian Kibet",id:"PILOT-KEN-0318",stage:"KCSE Candidate",county:"Kericho",mean:"69%",need:"Chemistry (C)",path:"TVET Diploma · Mechatronics",teacher:"1 Endorsement"},
+ {name:"Salma Noor",id:"PILOT-KEN-0199",stage:"CBC Grade 8",county:"Mombasa",mean:"86%",need:"None Flagged",path:"Arts & Sports · Architecture",teacher:"2 Endorsements"}
+];
+function renderAdmin(){
+ const q=(document.getElementById("adminSearch").value||"").toLowerCase();
+ const list=STUDENTS.filter(x=>(x.name+x.id+x.county).toLowerCase().includes(q));
+ document.getElementById("adminCount").textContent=list.length;
+ document.getElementById("adminTable").innerHTML=list.map(x=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:38px;height:38px;font-size:12px">${x.name.split(" ").map(w=>w[0]).join("")}</span><span><b>${x.name}</b><br><span class="tiny muted">${x.id} · Consented</span></span></div></td><td><span class="chip">${x.stage}</span></td><td>${x.county}</td><td><b>${x.mean}</b></td><td><span class="chip ${x.need==="None Flagged"?"green":""}">${x.need}</span></td><td class="tiny">${x.path}</td><td class="tiny">${x.teacher}</td><td><button class="btn btn-ghost btn-sm" onclick="toast('⛓ Audit log for ${x.id} — 14 entries, chain verified.')">View log</button></td></tr>`).join("")||'<tr><td colspan="8" class="muted" style="text-align:center;padding:24px">No records match.</td></tr>';
+}
+function exportCSV(){
+ const rows=[["Learner","ID","Stage","County","Mean","Pathway"],...STUDENTS.map(x=>[x.name,x.id,x.stage,x.county,x.mean,x.path])];
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([rows.map(r=>r.join(",")).join("\n")],{type:"text/csv"}));a.download="pilot-dataset.csv";a.click();
+ toast("⬇ Pilot dataset exported (CSV) — audit entry created.");
+}
+function renderUsers(){
+  const users = getUsers();
+  const rows = users.map(function(u,i){
+    const status = u.suspended ? '<span class="chip red">Suspended</span>' : '<span class="chip green">Active</span>';
+    const ob = u.role==="student" ? ((getStudentDataFor(u.email)||{}).onboarded ? "Yes" : "No") : "—";
+    return '<tr><td><b>' + u.name + '</b><br><span class="tiny muted">' + u.email + '</span></td><td><span class="chip">' + u.role + '</span></td><td>' + status + '</td><td>' + ob + '</td><td style="white-space:nowrap">' +
+      '<button class="btn btn-ghost btn-sm" onclick="adminToggleSuspend(' + i + ')">' + (u.suspended ? "Reactivate" : "Suspend") + '</button> ' +
+      '<button class="btn btn-ghost btn-sm" onclick="adminResetOnboard(' + i + ')">Reset setup</button> ' +
+      '<button class="btn btn-sm" style="background:var(--red);color:#fff" onclick="adminDeleteUser(' + i + ')">Remove</button></td></tr>';
+  }).join("");
+  document.getElementById("userTable").innerHTML = rows || '<tr><td colspan="5" class="muted" style="text-align:center;padding:20px">No registered users yet — sign up to create accounts. Demo users are not listed here.</td></tr>';
+}
+function getStudentDataFor(email){ try{ return JSON.parse(localStorage.getItem("pf_data_" + email) || "null"); }catch(e){ return null; } }
+function adminToggleSuspend(i){ const u=getUsers(); u[i].suspended=!u[i].suspended; saveUsers(u); renderUsers(); toast(u[i].suspended ? "⛔ " + u[i].name + " suspended — cannot sign in." : "✅ " + u[i].name + " reactivated."); }
+function adminResetOnboard(i){ const u=getUsers(); localStorage.removeItem("pf_data_" + u[i].email); toast("↻ Onboarding reset for " + u[i].name + " — they will redo results + quiz on next sign-in."); }
+function adminDeleteUser(i){ const u=getUsers(); const n=u[i].name; u.splice(i,1); saveUsers(u); renderUsers(); toast("🗑 " + n + " removed from PathFinder."); }
+function exportUsers(){ const u=getUsers(); const csv=[["Name","Email","Role","Phone","Status"],...u.map(x=>[x.name,x.email,x.role,x.phone||"",x.suspended?"Suspended":"Active"])].map(r=>r.join(",")).join("\n"); const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="pathfinder-users.csv"; a.click(); toast("⬇ Users exported (CSV)."); }
+renderUsers();
+renderAdmin();
+</script>
+</body>
+</html>

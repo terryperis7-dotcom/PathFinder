@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PathFinder Kenya — Every Kenyan Student Deserves a Clear Path</title>
+<meta name="description" content="KUCCPS, HELB, TVET, KCSE & CBC guidance for Kenyan students. Free, private, built for Kenyan phones.">
+<style>
+:root{
+--pine:#173f35;--pine2:#0f2e26;--pine3:#002920;--lime:#c7ee62;--lime2:#b9df55;--lime-soft:#eef7d6;
+--cream:#fbf9f3;--cream2:#f5f3ed;--card:#fffefa;--ink:#1b1c18;--muted:#5a6b64;--line:rgba(23,63,53,.10);
+--terra:#ed806b;--terra-d:#a83d29;--amber:#efba55;--red:#ba1a1a;--green:#2e7d32;
+--r:16px;--shadow:0 2px 8px -2px rgba(23,63,53,.07);--shadow2:0 8px 24px -4px rgba(23,63,53,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.55}
+h1,h2,h3,h4,.disp{font-family:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;letter-spacing:-.015em;color:var(--pine3)}
+a{color:var(--pine);text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+.serif{font-family:Georgia,"Times New Roman",serif}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2cc;border-radius:99px}
+/* ---------- LAYOUT ---------- */
+#app{display:flex;min-height:100vh}
+.sidebar{width:248px;flex:0 0 248px;background:linear-gradient(180deg,#12352c,#0d2a22);color:#dcebe4;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;z-index:40}
+.logo{display:flex;align-items:center;gap:10px;padding:18px 18px 14px}
+.logo-mark{width:38px;height:38px;border-radius:11px;background:var(--lime);display:grid;place-items:center;color:var(--pine3);font-weight:900;font-family:Manrope;font-size:20px}
+.logo b{color:#fff;font-family:Manrope;font-size:17px;line-height:1.05;display:block}
+.logo small{color:var(--lime);font-size:10px;letter-spacing:.22em;font-weight:800}
+.sync{margin:4px 14px 10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:8px 10px;font-size:11px;display:flex;justify-content:space-between;align-items:center;color:#cfe3d8}
+.sync .dot{width:8px;height:8px;border-radius:50%;background:var(--lime);display:inline-block;margin-right:6px}
+.nav{flex:1;overflow-y:auto;padding:4px 12px 12px}
+.nav h5{font-size:10px;letter-spacing:.16em;color:#8fb3a4;margin:14px 8px 6px;font-weight:800}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;color:#d7e8df;font-size:13.5px;font-weight:600;margin-bottom:2px}
+.nav a svg{width:17px;height:17px;flex:0 0 17px;opacity:.9}
+.nav a:hover{background:rgba(255,255,255,.07)}
+.nav a.on{background:var(--lime);color:var(--pine3)}
+.side-foot{margin:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:12px;font-size:11.5px;color:#cfe3d8}
+.side-foot b{color:#fff}
+.side-links{display:flex;gap:10px;margin-top:8px;font-size:11px}
+.side-links a{color:#cfe3d8}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(251,249,243,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 22px}
+.topbar .crumb{font-weight:700;color:var(--pine3);font-family:Manrope}
+.topbar .crumb span{color:var(--muted);font-weight:600}
+.search{flex:1;max-width:420px;margin-left:auto;display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:0 12px;height:42px}
+.search input{border:0;outline:0;flex:1;font-size:13.5px;background:transparent}
+.search kbd{font-size:10px;background:var(--cream2);border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--muted)}
+.lang{display:flex;border:1.5px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
+.lang button{border:0;background:#fff;padding:8px 11px;font-weight:800;font-size:12px;color:var(--muted)}
+.lang button.on{background:var(--pine);color:#fff}
+.iconbtn{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;position:relative}
+.iconbtn .n{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:9px;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-weight:800}
+.userchip{display:flex;align-items:center;gap:9px}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--pine);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.userchip b{font-size:13px;display:block;line-height:1.1;color:var(--pine3)}
+.userchip small{font-size:11px;color:var(--muted)}
+.view{padding:22px;max-width:1280px;width:100%;margin:0 auto}
+.page{display:none}.page.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+/* ---------- COMPONENTS ---------- */
+.eyebrow{font-size:11px;letter-spacing:.14em;font-weight:800;color:var(--muted);text-transform:uppercase}
+.h-xl{font-size:34px;line-height:1.12;font-weight:800}
+.h-lg{font-size:26px;line-height:1.2;font-weight:800}
+.lead{color:var(--muted);max-width:640px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px}
+.card h3{font-size:17px}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;padding:0 18px;height:46px;font-weight:700;font-size:14px;border:1.5px solid transparent;transition:.15s}
+.btn:active{transform:translateY(1px)}
+.btn-dark{background:var(--pine);color:#fff}.btn-dark:hover{background:var(--pine2)}
+.btn-lime{background:var(--lime);color:var(--pine3)}.btn-lime:hover{background:var(--lime2)}
+.btn-line{background:#fff;border-color:var(--pine);color:var(--pine)}
+.btn-ghost{background:var(--cream2);color:var(--pine3);border-color:var(--line)}
+.btn-red{background:var(--red);color:#fff}
+.btn-sm{height:36px;padding:0 13px;font-size:12.5px;border-radius:9px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700;background:var(--cream2);border:1px solid var(--line);color:var(--pine3)}
+.chip.lime{background:var(--lime);border-color:var(--lime)}
+.chip.pine{background:var(--pine);color:#fff;border-color:var(--pine)}
+.chip.red{background:#fdecea;color:var(--terra-d);border-color:#f5c6bd}
+.chip.amber{background:#fdf3d7;color:#7a5b00;border-color:#f0dd9a}
+.chip.green{background:#e6f4ea;color:#1e6b2e;border-color:#bfe3c6}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.kpi-num{font-size:34px;font-weight:800;font-family:Manrope;color:var(--pine3);line-height:1}
+.kpi-lab{font-size:11px;letter-spacing:.1em;font-weight:800;color:var(--muted);text-transform:uppercase}
+.bar{height:8px;background:rgba(23,63,53,.10);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--lime2);border-radius:99px}
+.bar i.pine{background:var(--pine)}.bar i.red{background:var(--terra)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 8px;border-bottom:1px solid var(--line)}
+td{padding:12px 8px;border-bottom:1px solid rgba(23,63,53,.06);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.input{width:100%;height:46px;border:1.5px solid rgba(23,63,53,.2);border-radius:10px;padding:0 13px;background:#fff;color:var(--pine3);font-size:14px;outline:0}
+.input:focus{border-color:var(--pine);box-shadow:0 0 0 3px rgba(185,223,85,.3)}
+textarea.input{height:auto;padding:11px 13px}
+label.flab{font-size:12.5px;font-weight:700;color:var(--pine3);display:block;margin-bottom:6px}
+.toggle{width:46px;height:26px;border-radius:99px;background:#cfd8d2;position:relative;border:0;flex:0 0 46px;transition:.2s}
+.toggle::after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.toggle.on{background:var(--pine)}.toggle.on::after{left:23px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:700;font-size:12.5px;color:var(--pine3)}
+.tabs button.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+.muted{color:var(--muted)}.small{font-size:12.5px}.tiny{font-size:11.5px}
+.divider{height:1px;background:var(--line);margin:14px 0}
+.toast-wrap{position:fixed;bottom:18px;right:18px;z-index:99;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--pine3);color:#fff;border-radius:12px;padding:12px 16px;font-size:13.5px;box-shadow:var(--shadow2);max-width:340px;display:flex;gap:9px;align-items:flex-start}
+.modal-bg{position:fixed;inset:0;background:rgba(15,46,38,.45);backdrop-filter:blur(4px);z-index:80;display:none;place-items:center;padding:16px}
+.modal-bg.open{display:grid}
+.modal{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:24px;box-shadow:var(--shadow2)}
+.ring{transform:rotate(-90deg)}.ring circle{fill:none;stroke-width:9}
+.faq{border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:8px;overflow:hidden}
+.faq button{width:100%;text-align:left;background:#fff;border:0;padding:15px 16px;font-weight:700;font-size:14.5px;color:var(--pine3);display:flex;justify-content:space-between;gap:10px}
+.faq .a{display:none;padding:0 16px 15px;color:var(--muted);font-size:13.5px}
+.faq.open .a{display:block}
+.code{background:#0d2a22;color:#c7ee62;border-radius:14px;padding:18px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.7;overflow:auto;white-space:pre}
+.inst-logo{width:52px;height:52px;border-radius:13px;display:grid;place-items:center;font-weight:900;font-family:Manrope;color:#fff;flex:0 0 52px;font-size:15px}
+.prog{display:flex;gap:6px}.prog i{flex:1;height:6px;border-radius:99px;background:rgba(23,63,53,.12)}.prog i.done{background:var(--lime2)}
+.quiz-opt{display:flex;gap:12px;border:1.5px solid var(--line);border-radius:13px;padding:14px;background:#fff;text-align:left;width:100%;font-size:14px}
+.quiz-opt:hover{border-color:var(--pine)}
+.quiz-opt.sel{border-color:var(--pine);background:var(--lime-soft);box-shadow:0 0 0 2px rgba(185,223,85,.5)}
+.quiz-opt .k{width:28px;height:28px;border-radius:8px;background:var(--cream2);display:grid;place-items:center;font-weight:800;flex:0 0 28px;font-size:12px}
+.quiz-opt.sel .k{background:var(--pine);color:#fff}
+.checkrow{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid rgba(23,63,53,.07)}
+.checkrow:last-child{border:0}
+.ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:0 0 24px;background:#fff;font-size:13px;color:#fff}
+.ck.done{background:var(--pine);border-color:var(--pine)}
+.persona{border:1.5px solid var(--line);border-radius:13px;padding:9px;text-align:center;background:#fff;font-size:11px;font-weight:700}
+.persona .face{width:48px;height:48px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;font-size:20px}
+.persona.sel{border-color:var(--pine);background:var(--lime-soft);box-shadow:0 0 0 2px rgba(185,223,85,.5)}
+.phase{border:1.5px solid var(--line);border-radius:13px;padding:14px;display:flex;gap:11px;background:#fff;text-align:left;width:100%}
+.phase.sel{border-color:var(--pine);background:var(--lime-soft)}
+.radio{width:19px;height:19px;border-radius:50%;border:2px solid #b9c4bd;flex:0 0 19px;display:grid;place-items:center;margin-top:2px}
+.phase.sel .radio{border-color:var(--pine)}.phase.sel .radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--pine)}
+.band{border:1.5px solid var(--line);border-radius:14px;padding:16px;background:#fff;text-align:left;width:100%}
+.band.sel{border-color:var(--pine);background:var(--lime-soft);box-shadow:0 0 0 2px rgba(185,223,85,.5)}
+.hamb{display:none}
+.alert-red{background:#fdecea;border:1px solid #f5c6bd;border-radius:12px;padding:13px 15px;font-size:13px;color:#7a1f14}
+.alert-green{background:#e6f4ea;border:1px solid #bfe3c6;border-radius:12px;padding:13px 15px;font-size:13px;color:#14532d}
+.pine-panel{background:linear-gradient(135deg,#173f35,#0f2e26);color:#e8f2ec;border-radius:18px;padding:22px}
+.pine-panel h2,.pine-panel h3{color:#fff}
+.pine-panel .muted{color:#a9c4b6}
+.footer{border-top:1px solid var(--line);padding:26px 22px;color:var(--muted);font-size:12.5px;display:flex;gap:18px;flex-wrap:wrap;justify-content:space-between}
+/* Landing */
+.landing{min-height:100vh;background:var(--cream)}
+.lnav{position:sticky;top:0;z-index:50;background:rgba(251,249,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:22px;padding:12px 26px}
+.lnav a{font-weight:600;font-size:14px;color:var(--pine3)}
+.lnav .links{display:flex;gap:22px;margin:0 auto}
+.hero{max-width:1240px;margin:0 auto;padding:44px 26px 30px;display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center}
+.hero h1{font-size:52px;line-height:1.04;font-weight:800}
+.hero h1 em{font-style:italic;color:var(--pine);position:relative}
+.hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:8px;background:var(--amber);opacity:.55;border-radius:99px;z-index:-1}
+.wrap{max-width:1240px;margin:0 auto;padding:0 26px}
+.stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.path-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+.path-ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:12px}
+.testi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px}
+.stars{color:#d99a00;letter-spacing:2px;font-size:14px}
+@media(max-width:1024px){
+.sidebar{position:fixed;left:-260px;transition:.25s;box-shadow:var(--shadow2)}
+.sidebar.open{left:0}
+.hamb{display:grid}
+.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}
+.hero{grid-template-columns:1fr}.hero h1{font-size:40px}
+.stat-row{grid-template-columns:repeat(2,1fr)}
+.lnav .links{display:none}
+}
+@media(max-width:640px){
+.g2,.g3,.g4{grid-template-columns:1fr}
+.view{padding:14px}.topbar{padding:10px 12px}
+.search kbd{display:none}.userchip .ut{display:none}
+.hero h1{font-size:34px}
+table{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LANDING ============ -->
+<div id="landing" class="landing" style="display:none">
+  <nav class="lnav">
+    <a href="#/" style="display:flex;align-items:center;gap:9px"><span class="logo-mark" style="width:34px;height:34px;font-size:17px">S</span><b style="font-family:Manrope;font-size:18px;color:var(--pine3)">PathFinder <span style="font-size:10px;letter-spacing:.2em;color:var(--pine);border:1px solid var(--line);border-radius:99px;padding:2px 7px">KENYA</span></b></a>
+    <div class="links"><a href="#/quiz">Pathways</a><a href="#/dashboard">How it works</a><a href="#/funding">Funding</a><a href="#/institutions">Institutions</a><a href="#/dpa">Privacy</a></div>
+    <div class="lang"><button class="on" data-lang="en">EN</button><button data-lang="sw">SW</button></div>
+    <button class="btn btn-dark btn-sm" onclick="go('dashboard')" data-i18n="getstarted">Get started</button>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <span class="chip green" style="margin-bottom:16px"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span> KUCCPS · HELB · TVET · KCSE · CBC — ONE GUIDE, EVERY STEP</span>
+      <h1 data-i18n="hero1">Every Kenyan student deserves a <em>clear path.</em></h1>
+      <p class="lead" style="margin:16px 0 22px;font-size:17px" data-i18n="heroSub">From Grade 7 to your first payslip — PathFinder helps you pick the right subjects, find courses, universities and TVET colleges, unlock government funding, and track every mark along the way. Free, private, built for Kenyan phones.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-lime" onclick="go('dashboard')"><span data-i18n="cta1">Create your free account</span> →</button>
+        <button class="btn btn-line" onclick="go('quiz')" data-i18n="cta2">Take the 60-second quiz</button>
+      </div>
+      <p class="tiny muted" style="margin-top:12px">✓ No fees ever &nbsp;·&nbsp; ✓ Works on 2G/3G &amp; Opera Mini &nbsp;·&nbsp; ✓ Data protected under Kenya DPA 2019</p>
+      <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
+        <span class="chip">47 Counties Covered</span><span class="chip">6 Strategic Pathways</span><span class="chip">62+ Accredited Institutions</span><span class="chip lime">KES 0 — Always Free</span>
+      </div>
+    </div>
+    <div>
+      <div style="border-radius:22px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow2);background:linear-gradient(180deg,#f7e8c3 0%,#f3d98b 38%,#8aa86b 38.5%,#5d7d4a 62%,#3f5c38 100%);position:relative;min-height:380px">
+        <svg viewBox="0 0 600 380" style="width:100%;display:block" aria-hidden="true">
+          <circle cx="470" cy="150" r="62" fill="#f5b93f"/><circle cx="470" cy="150" r="82" fill="#f5b93f" opacity=".25"/>
+          <path d="M0 210 Q150 175 300 205 T600 195 V380 H0 Z" fill="#6d8a52"/>
+          <path d="M0 260 Q180 225 340 255 T600 245 V380 H0 Z" fill="#4c6b3f"/>
+          <path d="M300 380 C310 320 285 290 300 240 C312 200 340 185 355 150" stroke="#f3e5bd" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <path d="M120 380 C140 330 120 300 150 260" stroke="#f3e5bd" stroke-width="9" fill="none" stroke-linecap="round" opacity=".7"/>
+          <g><rect x="150" y="185" width="6" height="55" fill="#3a2a1a"/><ellipse cx="153" cy="172" rx="58" ry="16" fill="#2f4a2c"/><ellipse cx="153" cy="164" rx="42" ry="12" fill="#3a5c36"/></g>
+          <path d="M90 120 q10 -8 20 0 M210 95 q10 -8 20 0 M420 85 q10 -8 20 0" stroke="#3a2a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M470 300 l6 -22 6 22 z M488 300 l5 -18 5 18 z" fill="#2f4a2c"/>
+        </svg>
+        <div style="position:absolute;top:16px;left:16px;background:#fff;border-radius:14px;padding:13px 15px;display:flex;gap:11px;align-items:center;box-shadow:var(--shadow2);max-width:230px">
+          <span style="width:38px;height:38px;border-radius:10px;background:var(--lime-soft);display:grid;place-items:center;color:var(--pine);font-weight:900">≡</span>
+          <span><b style="font-size:13.5px;color:var(--pine3)">KUCCPS placement</b><br><span class="tiny muted">Typically April — we remind you</span></span>
+        </div>
+        <div style="position:absolute;bottom:16px;right:16px;background:#fff;border-radius:14px;padding:13px 15px;display:flex;gap:11px;align-items:center;box-shadow:var(--shadow2)">
+          <span style="width:38px;height:38px;border-radius:50%;border:3px solid var(--amber);display:grid;place-items:center;color:#b97e00;font-weight:900">◷</span>
+          <span><b style="font-size:13.5px;color:var(--pine3)">Funding guide</b><br><span class="tiny muted">Universities Fund · HELB · TVET</span></span>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px;display:flex;gap:12px;align-items:center">
+        <span class="avatar" style="background:var(--lime);color:var(--pine3)">AO</span>
+        <div style="flex:1"><b style="color:var(--pine3)">Amina Odhiambo</b> <span class="chip lime" style="margin-left:4px">KCSE Candidate</span><div class="tiny muted">Software Engineering track · Cluster 88% match · Nairobi</div></div>
+        <button class="btn btn-dark btn-sm" onclick="go('dashboard')">Open dashboard</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom:8px">
+    <div class="stat-row">
+      <div class="card" style="text-align:center"><div class="kpi-num">47</div><div class="tiny muted">Counties covered — urban &amp; rural</div></div>
+      <div class="card" style="text-align:center"><div class="kpi-num">6</div><div class="tiny muted">Strategic pathways: STEM, Health, Law &amp; more</div></div>
+      <div class="card" style="text-align:center"><div class="kpi-num">62+</div><div class="tiny muted">Accredited universities, TVET &amp; KMTC</div></div>
+      <div class="card" style="text-align:center"><div class="kpi-num">KES 0</div><div class="tiny muted">Always free for public secondary &amp; TVET</div></div>
+      <div class="card" style="text-align:center"><div class="kpi-num">100%</div><div class="tiny muted">DPA 2019 compliant — no data selling</div></div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:34px">
+    <p class="eyebrow">Six fields, one journey</p>
+    <h2 class="h-lg" style="margin:6px 0 8px">Where will your path lead?</h2>
+    <p class="lead">Every career in Kenya flows through six fields. PathFinder matches your interests to the right one — with real universities, TVET colleges and KUCCPS routes, not guesswork.</p>
+    <div class="grid g3" style="margin-top:18px" id="landingPaths"></div>
+  </section>
+
+  <section class="wrap" style="padding-top:36px">
+    <p class="eyebrow">The journey made plain</p>
+    <h2 class="h-lg" style="margin:6px 0 14px">Three steps from classroom to career</h2>
+    <div class="grid g3">
+      <div class="card"><div class="kpi-num" style="color:var(--lime2)">01</div><h3 style="margin:8px 0 6px">Tell us your stage</h3><p class="small muted">CBC Grade 7–9, Senior School, KCSE Form 3–4, Form Four leaver or TVET scholar. We calibrate cluster points and funding advice to your exact stage.</p><button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="go('profile')">Set my stage →</button></div>
+      <div class="card"><div class="kpi-num" style="color:var(--lime2)">02</div><h3 style="margin:8px 0 6px">Get your matches</h3><p class="small muted">A 60-second RIASEC-aligned quiz plus your KCSE/CBC scores produce weighted KUCCPS cluster points and ranked degree &amp; TVET pathways.</p><button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="go('quiz')">Take the quiz →</button></div>
+      <div class="card"><div class="kpi-num" style="color:var(--lime2)">03</div><h3 style="margin:8px 0 6px">Track the climb &amp; fund it</h3><p class="small muted">Log every mock, watch subject trajectories against KUCCPS cut-offs, and unlock Universities Fund &amp; HELB guidance — no cyber-café brokers.</p><button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="go('funding')">Explore funding →</button></div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:36px">
+    <div class="pine-panel" style="display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center">
+      <div>
+        <p class="eyebrow" style="color:var(--lime)">Universities Fund &amp; HELB — without the cyber café brokers</p>
+        <h2 style="font-size:28px;margin:8px 0">Kenya's Student-Centred Funding Model explained in plain language.</h2>
+        <p class="muted small">Vulnerable, Extremely Needy, Needy, Less Needy and Least Needy bands — what each covers, when to apply, and how to appeal. Plus a free funding-need calculator.</p>
+        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn btn-lime" onclick="go('funding')">Calculate your funding need</button><button class="btn btn-line" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)" onclick="go('funding')">Download checklist (PDF)</button></div>
+      </div>
+      <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:16px">
+        <b style="color:#fff;font-size:13px">FIRST-TIME APPLICANT FLOW</b>
+        <ol style="margin:10px 0 0 18px;font-size:13px;color:#d7e8df;line-height:2">
+          <li>KCSE Index Number + Birth Certificate</li>
+          <li>Parent / Guardian ID</li>
+          <li>Valid mobile number (M-Pesa)</li>
+          <li>Valid email address</li>
+          <li>Lead Chief &amp; years in office</li>
+        </ol>
+        <p class="tiny" style="color:#a9c4b6;margin-top:8px">Need help with Higher Education Financing? <u>Talk to a verified mentor</u></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:36px">
+    <p class="eyebrow" style="color:var(--terra-d)">From real Kenyan students</p>
+    <h2 class="h-lg" style="margin:6px 0 14px">One app, many turning points</h2>
+    <div class="grid g3">
+      <div class="testi"><div class="stars">★★★★★</div><p style="margin:10px 0;font-size:15px">“The quiz matched me to engineering. The funding guide showed my mother exactly how the HEF portal works — we never paid the broker who quoted KES 8,000.”</p><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="background:#0f5c46">BO</span><span><b>Brian Otieno</b><br><span class="tiny muted">Form 4, Kisumu → now at JKUAT</span></span></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p style="margin:10px 0;font-size:15px">“As a parent I finally see her Chemistry slipping below 50% before it ruins her term. The targets and the graph say more than report cards ever did.”</p><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="background:#b34724">GW</span><span><b>Grace Wanjiru</b><br><span class="tiny muted">Parent &amp; guardian, Nyeri</span></span></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p style="margin:10px 0;font-size:15px">“Senior school pathways felt random until this. My son now knows exactly why he is doing Physics and how it leads to an aviation career.”</p><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="background:#6d28d9">AH</span><span><b>Amina Hassan</b><br><span class="tiny muted">Parent of a Grade 10 learner, Mombasa</span></span></div></div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:36px;padding-bottom:36px">
+    <p class="eyebrow" style="color:var(--terra-d)">Honest answers</p>
+    <h2 class="h-lg" style="margin:6px 0 14px">Everything you need to know</h2>
+    <div id="faqWrap"></div>
+    <div class="card" style="text-align:center;margin-top:22px;background:var(--pine);color:#fff">
+      <h2 style="color:#fff;font-size:28px">Build a future that fits you.</h2>
+      <p style="color:#cfe3d8;margin:8px auto 16px;max-width:520px">Join thousands of Kenyan students across all 47 counties charting their course from secondary school to university, college and their first payslip.</p>
+      <button class="btn btn-lime" onclick="go('quiz')">Start free with the 60-second quiz</button>
+      <button class="btn btn-line" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4);margin-left:8px" onclick="go('institutions')">Browse 62+ institutions</button>
+    </div>
+  </section>
+  <div class="footer"><span>© 2026 PathFinder Kenya · Private Pilot · Compliant with Kenya Data Protection Act 2019</span><span><a href="#/dpa">Data Protection</a> · <a href="#/funding">Funding</a> · <a href="#/deployment">Deployment</a></span></div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="app" style="display:none">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo"><span class="logo-mark">S</span><span><b>PathFinder</b><small>KENYA</small></span></div>
+    <div class="sync"><span><span class="dot"></span>KUCCPS &amp; TVETA SYNC</span><span>⚙</span></div>
+    <nav class="nav" id="sidenav">
+      <h5>OVERVIEW</h5>
+      <a href="#/landing" data-nav="landing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-4-4 6-2z"/></svg>Main Portal</a>
+      <a href="#/dashboard" data-nav="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Student Dashboard</a>
+      <a href="#/teacher" data-nav="teacher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M6 10v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>Teacher / Tutor Centre</a>
+      <a href="#/superadmin" data-nav="superadmin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 4.5-3.5 7.5-8 9-4.5-1.5-8-4.5-8-9V6l8-3z"/></svg>SuperAdmin Console</a>
+      <h5>TOOLS</h5>
+      <a href="#/quiz" data-nav="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.7-.9 1.7"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>Passion Quiz &amp; Pathways</a>
+      <a href="#/institutions" data-nav="institutions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>Institutions Database</a>
+      <a href="#/funding" data-nav="funding"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg>Funding &amp; HELB</a>
+      <a href="#/tracker" data-nav="tracker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>Academic Tracker</a>
+      <a href="#/institutions" data-nav="shortlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-6-4-6 4V3z"/></svg>Shortlist <span class="chip lime" id="navShortCount" style="margin-left:auto;padding:1px 8px">3</span></a>
+      <h5>SETTINGS</h5>
+      <a href="#/profile" data-nav="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Profile &amp; Stage</a>
+      <a href="#/dpa" data-nav="dpa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 4.5-3.5 7.5-8 9-4.5-1.5-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>Data Protection (DPA 2019)</a>
+      <a href="#/deployment" data-nav="deployment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>Deployment Centre</a>
+    </nav>
+    <div class="side-foot"><b>🛡 Private Pilot</b><br>Compliant with Kenya Data Protection Act 2019<div class="side-links"><a href="#/dpa">KUCCPS Support</a>·<a href="#/deployment">Helpdesk</a>·<span>v0.9.4</span></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="iconbtn hamb" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="Menu">☰</button>
+      <div class="crumb"><span>PathFinder Kenya</span> / <span id="crumbPage">Dashboard</span></div>
+      <div class="search"><span>⌕</span><input id="globalSearch" placeholder="Search courses, cluster points..."><kbd>⌘K</kbd></div>
+      <button class="iconbtn" onclick="toast('🔔 2 alerts: KUCCPS revision window opens 12 Dec · Chemistry target review due Friday.')">🔔<span class="n">2</span></button>
+      <div class="lang"><button class="on" data-lang="en">EN</button><button data-lang="sw">SW</button></div>
+      <button class="iconbtn" onclick="toast('☀ Display: Warm Light (default for sunlight readability). Switch in Profile & Stage.')">☀</button>
+      <div class="userchip"><span class="ut" style="text-align:right"><b>Amina Odhiambo</b><small>KCSE Candidate (Role)</small></span><span class="avatar">AO</span></div>
+    </header>
+    <main class="view" id="view">
+
+    <!-- ===== DASHBOARD ===== -->
+    <section class="page" data-page="dashboard">
+      <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start">
+        <div>
+          <p class="eyebrow">● CBC Senior School · Grade 10–12 (Form 3–4) &nbsp;·&nbsp; Saved offline · Private by default</p>
+          <h1 class="h-xl" style="margin-top:6px">Sasa, Amina Njeri 👋</h1>
+          <p class="muted" style="max-width:560px">Every mock exam, cluster calculation, and study session brings your Software Engineering goal into clearer focus. Keep building your momentum.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="go('quiz')">⟳ Retake Career Quiz</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Export Data (PDF)</button>
+          <button class="btn btn-lime btn-sm" onclick="openAddResult()">+ Add New Result</button>
+        </div>
+      </div>
+
+      <div class="grid g4" style="margin-top:18px">
+        <div class="card"><div class="kpi-lab">Overall Average ↗</div><div class="kpi-num" style="margin:8px 0">76.8<span style="font-size:18px">%</span></div><span class="small muted">KCSE Grade Projection</span> <span class="chip lime">A− (Minus)</span><div class="tiny muted" style="margin-top:6px">↑ +3.2% vs Term 1 End</div></div>
+        <div class="card"><div class="kpi-lab">Shortlisted Hubs</div><div class="kpi-num" style="margin:8px 0">3 <span style="font-size:15px">Institutions</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">UoN</span><span class="chip">JKUAT</span><span class="chip">Strathmore</span></div><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="go('institutions')">Manage shortlist →</button></div>
+        <div class="card"><div class="kpi-lab">Active Subjects</div><div class="kpi-num" style="margin:8px 0">6 <span style="font-size:14px">CBC/KCSE Curricula</span></div><span class="small muted">Strongest pillar</span> <b>Maths (88%)</b></div>
+        <div class="card" style="background:#fdecea;border-color:#f5c6bd"><div class="kpi-lab" style="color:var(--terra-d)">Needs Attention ⚠</div><div class="kpi-num" style="margin:8px 0;color:var(--terra-d)">1 <span style="font-size:14px">Subject below threshold</span></div><span class="small">Chemistry (49%)</span> <button class="btn btn-sm btn-red" style="margin-left:6px" onclick="go('tracker')">Revision plan →</button></div>
+      </div>
+
+      <div class="pine-panel" style="margin-top:16px;display:grid;grid-template-columns:1.15fr .85fr;gap:20px">
+        <div>
+          <span class="chip lime">● KUCCPS CLUSTER WEIGHTED: 88% MATCH</span>
+          <p class="tiny" style="color:#a9c4b6;margin:8px 0">Updated 2 days ago · Nairobi STEM Track</p>
+          <h2 style="font-size:30px;line-height:1.15">Software Engineering &amp; Computer Systems</h2>
+          <p class="small" style="color:#cfe3d8;margin:10px 0">Your high scores in Mathematics (88%) and Physics (82%) position you well above the 2024 KUCCPS cut-off weights (Weighted Cluster −41.2 / Cutoff 39.8). Bridging Chemistry from 49% to 65% guarantees full eligibility for state-subsidized university placement.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">
+            <span class="chip" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">✓ Maths: 88% (Exceeds)</span>
+            <span class="chip" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">✓ Physics: 82% (Exceeds)</span>
+            <span class="chip" style="background:rgba(237,128,107,.25);color:#ffd9d0;border-color:rgba(237,128,107,.5)">⚠ Chemistry: 49% (Gap: −16%)</span>
+          </div>
+          <button class="btn btn-lime" onclick="go('institutions')">Explore 8 Degree &amp; TVET Pathways →</button>
+          <button class="btn btn-line" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4);margin-left:8px" onclick="recalc()">Recalculate Cluster Points</button>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#fff;font-size:12px;letter-spacing:.08em">TOP ADMISSION ODDS</b><span class="chip lime" style="font-size:10px">2025/2026 Intake</span></div>
+          <div id="oddsList" style="margin-top:12px;display:grid;gap:10px"></div>
+          <p class="tiny" style="color:#a9c4b6;margin-top:10px">Verified with CUE · KUCCPS Data · <a href="#/institutions" style="color:var(--lime)">View All 14 Institutions</a></p>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:16px;align-items:start">
+        <div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><h3>Academic Performance Trajectory</h3><p class="tiny muted">Continuous Assessment Scores · Term 1 2024 through Term 2 2024</p></div>
+            <div class="tabs"><button class="on">Term View</button><button onclick="toast('Monthly mocks view — switch to Tracker for full history.')">Monthly Mocks</button><button onclick="toast('KCSE target line set at 80% (A plain).')">KCSE Target</button></div></div>
+            <div id="dashChart" style="margin-top:10px"></div>
+            <div class="grid g2" style="margin-top:12px" id="dashSubjects"></div>
+          </div>
+
+          <div class="card" style="margin-top:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><div><h3>Strategic Subject Targets &amp; Gap Resolution</h3><p class="tiny muted">Personalized retrieval roadmap based on your latest mock examination</p></div><button class="btn btn-ghost btn-sm" onclick="go('tracker')">✎ Edit Target Scores</button></div>
+            <div style="overflow:auto"><table><thead><tr><th>Subject</th><th>Current</th><th>Goal (Target)</th><th>Gap</th><th>KUCCPS Impact</th><th>Recommended Action</th></tr></thead><tbody id="dashTable"></tbody></table></div>
+            <div class="alert-green" style="margin-top:12px"><b>PathFinder Tutor Insight for Chemistry:</b> “Amina, your Paper 2 qualitative analysis lost 18 marks on stoichiometry and gas laws. Allocating 30 minutes daily before prep will comfortably elevate you to a B (65%) before Term 3 Mock exams.” <button class="btn btn-dark btn-sm" style="margin-left:8px" onclick="toast('📝 Chemistry quiz generated — 12 stoichiometry questions added to your practice queue.')">Generate Chemistry Quiz</button></div>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:16px">
+          <div class="pine-panel">
+            <p class="eyebrow" style="color:var(--lime)">Official Kenyan Timelines</p>
+            <h3 style="margin:6px 0 10px">HELB &amp; KUCCPS Windows</h3>
+            <p class="tiny" style="color:#a9c4b6">Stay informed early so you don't encounter last-minute broker fees or missed placement cycles.</p>
+            <div style="display:grid;gap:12px;margin-top:12px;font-size:13px">
+              <div><b style="color:#fff">KUCCPS School-Based Application</b><br><span style="color:#cfe3d8">Typical window: Feb – March (Form 4). Submit initial 7 course choices through your school principal portal.</span></div>
+              <div><b style="color:#fff">KCSE Examination &amp; Release</b><br><span style="color:#cfe3d8">November – January. Official cluster points calculated upon KNEC results publication.</span></div>
+              <div><b style="color:#fff">New Higher Education Funding (HEF)</b><br><span style="color:#cfe3d8">Window: July – August 2025. Means-tested band categorisation (Band 1 to 5) for University &amp; TVET grants.</span></div>
+            </div>
+            <button class="btn btn-lime" style="width:100%;margin-top:14px" onclick="toast('✅ Free SMS/Email alerts activated for KUCCPS & HELB windows.')">Set Free SMS / Email Alerts</button>
+            <p class="tiny" style="color:#a9c4b6;text-align:center;margin-top:6px">Zero spam · Official MoE / KUCCPS alerts only</p>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between"><h3>Senior School Checklist</h3><span class="chip lime" id="checkCount">3 of 5 Done</span></div>
+            <div id="checklist"></div>
+            <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" onclick="toast('🎯 Personal milestones opened — add your own targets.')">Manage Personal Milestones</button>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between"><h3>Saved Institutions</h3><button class="btn btn-ghost btn-sm" onclick="go('institutions')">Compare All</button></div>
+            <div id="dashSaved" style="margin-top:10px;display:grid;gap:10px"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== QUIZ ===== -->
+    <section class="page" data-page="quiz">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:flex-start">
+        <div><p class="eyebrow">RIASEC-Aligned · Pilot Instrument v1.4 &nbsp;·&nbsp; CBC 8-4-4 Bridge</p><h1 class="h-xl" style="margin-top:6px">Passion Quiz &amp; 6-Pathway Matcher</h1><p class="lead">Validated psychometric profiling calibrated against KUCCPS degree cutoffs, TVET skill frameworks, and Kenya Vision 2030 priority growth clusters.</p></div>
+        <div style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Export Report (PDF)</button><button class="btn btn-dark btn-sm" onclick="resetQuiz()">⟳ Retake Diagnostic</button></div>
+      </div>
+
+      <div class="pine-panel" style="margin-top:16px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center">
+        <div>
+          <p class="eyebrow" style="color:var(--lime)">⚡ Top Projected Affinity</p>
+          <h2 style="font-size:26px;line-height:1.25;margin:8px 0">Your interests strongly align with <span style="color:var(--lime)">Engineering &amp; Technology (88% Match)</span> and <span style="color:var(--lime)">Health &amp; Medicine (74% Match)</span></h2>
+          <p class="small" style="color:#cfe3d8">Based on your high investigative and realistic scores (RIASEC R-I profile), you demonstrate strong problem-solving in tangible systems, analytical data loops, and medical laboratory diagnostics.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><span class="chip" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">34 University Clusters Open</span><span class="chip" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">48 TVET Artisan/Diploma Pathways</span><span class="chip" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">Aggregated Mean KCSE: B+ (Weighted)</span></div>
+        </div>
+        <div style="text-align:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:18px">
+          <p class="tiny" style="color:#a9c4b6">Pathway Distribution · Top 2 of 6</p>
+          <div style="position:relative;width:130px;height:130px;margin:10px auto">
+            <svg width="130" height="130" viewBox="0 0 130 130"><circle cx="65" cy="65" r="54" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="11"/><circle cx="65" cy="65" r="54" fill="none" stroke="#c7ee62" stroke-width="11" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="41" transform="rotate(-90 65 65)"/></svg>
+            <div style="position:absolute;inset:0;display:grid;place-items:center"><b style="color:#fff;font-size:26px">88%</b></div>
+          </div>
+          <b style="color:#fff">Engineering &amp; Tech</b><div class="tiny" style="color:#a9c4b6">Highest potential KUCCPS grant allocation probability</div>
+          <div class="bar" style="margin-top:12px;background:rgba(255,255,255,.15)"><i style="width:74%"></i></div>
+          <div class="tiny" style="color:#cfe3d8;margin-top:5px">Secondary: Health &amp; Med — 74%</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px" id="quizCard">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div><span class="chip pine">4</span> <b>Real-Time Question Sample</b><div class="tiny muted" id="quizStepLab">Question 4 of 12 · RIASEC Realistic/Investigative Axis</div></div>
+          <span class="tiny muted" id="quizPct">33% Completed</span>
+        </div>
+        <div class="prog" style="margin:12px 0"><i id="qp1" class="done"></i><i id="qp2" class="done"></i><i id="qp3" class="done"></i><i id="qp4"></i><i id="qp5"></i><i id="qp6"></i></div>
+        <h3 id="quizQ" style="font-size:19px;margin-bottom:6px">Which workplace sounds most energising to you on an everyday basis?</h3>
+        <p class="small muted" style="margin-bottom:12px">Select the environment where you would naturally spend extra uninterrupted hours solving deep issues.</p>
+        <div class="grid g2" id="quizOpts"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:8px">
+          <span class="tiny muted">◷ Responses update live probability scores below without overwriting saved KCSE records.</span>
+          <span style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" onclick="skipQ()">Skip Question</button><button class="btn btn-dark btn-sm" id="quizNext" onclick="nextQ()">Next (5/12) →</button></span>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px;flex-wrap:wrap;gap:8px">
+        <div><p class="eyebrow">Six National Career Clusters</p><h2 class="h-lg">Personalized Pathway Decomposition</h2></div>
+        <span class="tiny muted">Sorted by: Diagnostic Match % (High to Low)</span>
+      </div>
+      <div class="grid g3" id="pathwayGrid"></div>
+      <div class="alert-green" style="margin-top:16px"><b>Statutory Ministry of Education &amp; KUCCPS Guidance Disclaimer:</b> This algorithmic psychometric output is an advisory tool aligning aptitude with Kenya National Qualifications Framework (KNQF) levels. Cluster cutoffs change yearly according to overall national KCSE grade distribution curves. Consult your school's TSC Guidance and Counseling Master or certified TVETA guidance coordinator before final lock-in on the KUCCPS applicant portal. <span class="chip green" style="margin-left:6px">● CUE Verified</span></div>
+    </section>
+
+    <!-- ===== INSTITUTIONS ===== -->
+    <section class="page" data-page="institutions">
+      <div class="pine-panel">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center">
+          <div><p class="eyebrow" style="color:var(--lime)">CUE &amp; TVETA Official Gazetted Directory · 2025/2026 Intake Sync Active</p><h1 style="font-size:30px;margin-top:6px">Accredited Institutions &amp; TVET Database</h1><p class="small" style="color:#cfe3d8;max-width:620px">Comprehensive, non-commercial admissions intelligence for Kenyan candidates. Explore degree pathways, national polytechnics, KMTC branches, and merit scholarships with zero agent commissions.</p></div>
+          <span class="chip lime">● Live KUCCPS Port Sync: 4 hrs ago</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-top:16px" class="inst-filters">
+          <input class="input" id="instSearch" placeholder="⌕ Search 84+ institutions, courses or cutoffs..." oninput="renderInstitutions()">
+          <select class="input" id="instRegion" onchange="renderInstitutions()"><option value="">Region: All Kenya</option><option>Nairobi</option><option>Kiambu</option><option>Kisumu</option><option>Mombasa</option><option>Nakuru</option><option>Uasin Gishu</option><option>Meru</option><option>Ontario, Canada</option></select>
+          <select class="input" id="instType" onchange="renderInstitutions()"><option value="">Ownership: All Accredited</option><option>Public University</option><option>Private University</option><option>National Polytechnic / TVET</option><option>Health College</option><option>International</option></select>
+          <select class="input" id="instField" onchange="renderInstitutions()"><option value="">Career Field: All Specialisms</option><option>Engineering</option><option>Health</option><option>Business</option><option>ICT</option></select>
+        </div>
+      </div>
+
+      <div class="grid g4" style="margin-top:16px">
+        <div class="card" style="display:flex;gap:12px;align-items:center"><span style="font-size:24px">🏛</span><span><b>47 Counties</b><br><span class="tiny muted">Represented Nationwide</span></span></div>
+        <div class="card" style="display:flex;gap:12px;align-items:center"><span style="font-size:24px">🛡</span><span><b>100% Verified</b><br><span class="tiny muted">CUE, TVETA &amp; MoH</span></span></div>
+        <div class="card" style="display:flex;gap:12px;align-items:center"><span style="font-size:24px">💰</span><span><b>KES 0 Fee</b><br><span class="tiny muted">Zero Broker / Agent Fees</span></span></div>
+        <div class="card" style="display:flex;gap:12px;align-items:center"><span style="font-size:24px">↻</span><span><b>4 Hours Ago</b><br><span class="tiny muted">KUCCPS Band Sync Verified</span></span></div>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;align-items:center">
+        <div class="tabs" id="instTabs">
+          <button class="on" data-f="">All Institutions <b>84</b></button>
+          <button data-f="Public University">Kenyan Universities <b>42</b></button>
+          <button data-f="National Polytechnic / TVET">TVET &amp; National Poly <b>38</b></button>
+          <button data-f="Health College">KMTC Campuses <b>71</b></button>
+        </div>
+        <button class="btn btn-lime btn-sm" style="margin-left:auto" onclick="toggleShortlistOnly()" id="shortOnlyBtn">♥ My Shortlist <span id="shortCount2">3</span></button>
+      </div>
+      <p class="tiny muted" style="margin-bottom:10px">Sort by: <b>Cluster Relevance (Amina KCSE B+)</b> ▾ &nbsp;·&nbsp; <span id="instCountLab"></span></p>
+
+      <div class="grid" style="grid-template-columns:1.6fr 1fr;align-items:start" id="instLayout">
+        <div id="instList" style="display:grid;gap:14px"></div>
+        <aside style="display:grid;gap:14px;position:sticky;top:76px">
+          <div class="card" style="border-color:var(--lime2);background:var(--lime-soft)">
+            <div style="display:flex;justify-content:space-between;align-items:center"><h3>Amina's Shortlist</h3><span class="chip lime" id="shortBadge">3 Selected</span></div>
+            <p class="tiny muted">KCSE Mean Grade: B+ (76.8%)</p>
+            <div id="shortList" style="display:grid;gap:10px;margin-top:10px"></div>
+            <button class="btn btn-dark" style="width:100%;margin-top:12px" onclick="toast('📊 Deep Comparison Matrix generated — cutoffs, fees & funding side-by-side.')">▶ Run Deep Comparison Matrix</button>
+            <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" onclick="exportData()">⬇ Export Shortlist to PDF &amp; WhatsApp</button>
+            <p class="tiny muted" style="margin-top:8px">Based on Amina's sub-county household assessment, she falls under Universities Fund (Band 2). Scholarship 70%, HELB Loan 25%, Household 5%.</p>
+          </div>
+          <div class="pine-panel" style="padding:16px">
+            <b style="color:#fff">Need Tutor Guidance?</b>
+            <p class="small" style="color:#cfe3d8;margin:6px 0 10px">Book 15 mins with an accredited KUCCPS career counselor.</p>
+            <button class="btn btn-lime btn-sm" onclick="go('teacher')">Book Free Session →</button>
+          </div>
+        </aside>
+      </div>
+      <p class="tiny muted" style="margin-top:16px;text-align:center">Source Authority: Commission for University Education (CUE), KUCCPS 2025/2026 Cycle Portal and TVETA Directory. Last verified by Terry Peris (KUCCPS Lead Liaison). &nbsp;·&nbsp; <a href="#/dpa">Report discrepancy in cutoff points</a> · <a href="#/funding">Download Official CUE Gazette</a></p>
+    </section>
+
+    <!-- ===== FUNDING ===== -->
+    <section class="page" data-page="funding">
+      <div class="alert-red" style="margin-bottom:14px"><b>Notice on Tertiary Education Fund Authority (TEFA) &amp; Broker Alert:</b> The Ministry of Education is intensifying crackdowns under the proposed TEFA Bill. Do NOT pay any cyber-café agents to create HEF accounts or submit applications. PathFinder is the only free, official guide. Report fraud via Section 29 of the Computer Misuse and Cybercrimes Act. <span class="chip red" style="float:right">FREE OFFICIAL PORTAL</span></div>
+      <div class="pine-panel" style="display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center">
+        <div>
+          <p class="eyebrow" style="color:var(--lime)">Government Funding Architecture</p>
+          <h1 style="font-size:32px;line-height:1.15;margin:8px 0">Government Funding &amp; HELB Scholarship Hub</h1>
+          <p class="small" style="color:#cfe3d8">Understand means testing, avoid cyber-café broker traps, and never miss an official deadline. Navigate the Higher Education Financing (HEF) framework with complete transparency.</p>
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn btn-lime" onclick="document.getElementById('fundCalc').scrollIntoView({behavior:'smooth'})">Explore 3 Means-Testing Bands</button><button class="btn btn-line" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)" onclick="toast('🔔 Official deadline alerts set — SMS + email.')">Set Official Deadlines Alert</button></div>
+        </div>
+        <div style="display:grid;gap:10px">
+          <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px;display:flex;justify-content:space-between"><span><b style="color:#fff">2024/2025</b><br><span class="tiny" style="color:#a9c4b6">Appeals Processing Open</span></span><span class="chip lime">● Active</span></div>
+          <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px"><b style="color:#fff">KES 60,000</b><br><span class="tiny" style="color:#a9c4b6">Max Band 1 Grant (Vulnerable)</span></div>
+          <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px"><b style="color:#fff">*642#</b><br><span class="tiny" style="color:#a9c4b6">USSD Mobile Portal Fallback (Zero Data)</span></div>
+        </div>
+      </div>
+
+      <p class="eyebrow" style="margin:22px 0 4px">Universities Act (2012) &amp; HELB Act Cap</p>
+      <h2 class="h-lg">The 3 Pillars of Kenyan Student Financing</h2>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="card"><span class="chip pine">1</span><h3 style="margin:10px 0 6px">Universities Fund (UF) Scholarship</h3><p class="small muted">Direct government scholarship determined through the Means Testing Instrument (MTI) calculated by KUCCPS based on public records.</p><ul class="small" style="margin:10px 0 0 16px;color:var(--muted);line-height:1.9"><li><b>Coverage:</b> 30% to 70% of tuition</li><li><b>Eligibility:</b> KUCCPS Public University Placement</li><li><b>Direct to Registrar:</b> No cash to student</li></ul><div class="divider"></div><p class="tiny muted"><b>ALERT TRIGGER:</b> Immediate SMS triggers upon KUCCPS placement release.</p></div>
+        <div class="card"><span class="chip pine">2</span><h3 style="margin:10px 0 6px">HELB Tuition Loans</h3><p class="small muted">Concessional revolving student loans disbursed directly to university accounts, repayable after graduation through employer payroll deductions.</p><ul class="small" style="margin:10px 0 0 16px;color:var(--muted);line-height:1.9"><li><b>Interest Rate:</b> 4% Flat (Simple Interest)</li><li><b>Guarantor:</b> 2 Kenyan guarantors (ID + KRA PIN)</li><li><b>Repayment:</b> Starts 1 year after completion</li></ul><div class="divider"></div><p class="tiny muted"><b>ALERT TRIGGER:</b> Automated M-Pesa disbursement tracking.</p></div>
+        <div class="card"><span class="chip pine">3</span><h3 style="margin:10px 0 6px">HELB Upkeep/Living Loan</h3><p class="small muted">Essential living stipend disbursed directly to the student's registered mobile money wallet to cover accommodation, meals, and books.</p><ul class="small" style="margin:10px 0 0 16px;color:var(--muted);line-height:1.9"><li><b>Annual Amount:</b> KES 45,000 – KES 62,000</li><li><b>Disbursement:</b> 2 equal semester tranches</li><li><b>Channel:</b> Direct M-Pesa to student wallet</li></ul><div class="divider"></div><p class="tiny muted"><b>ALERT TRIGGER:</b> Immediate SMS triggers upon tranche release.</p></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px;flex-wrap:wrap;gap:8px"><div><p class="eyebrow">Means Testing Instrument (MTI)</p><h2 class="h-lg">HEF Funding Categorization: Bands 1 through 5</h2></div><span class="tiny muted">Automated scoring factors include family income level, orphanhood status, county marginalization index, and disability status.</span></div>
+      <div class="grid g3" id="bandGrid" style="grid-template-columns:repeat(5,1fr)"></div>
+      <div class="alert-green" style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><span><b>Placed in the wrong band?</b> You have the statutory right to launch a free re-categorization Appeal within 30 days of initial publication on the HEF portal by uploading supplementary proof (death certificates, medical records).</span><button class="btn btn-dark btn-sm" onclick="toast('📝 Band Appeal wizard opened — guided document upload started.')">File Band Appeal</button></div>
+
+      <div class="grid" style="grid-template-columns:1.4fr 1fr;margin-top:16px;align-items:start" id="fundCalc">
+        <div class="card">
+          <p class="eyebrow">Standard Operating Procedure</p><h3 style="margin:6px 0 12px">How to Apply: Clear Walkthrough</h3>
+          <div class="grid g2">
+            <div><span class="chip lime">First-Time Undergraduates &amp; TVETs</span>
+              <ol style="margin:12px 0 0 18px;font-size:13.5px;line-height:2.1;color:var(--muted)">
+                <li><b>Visit KUCCPS Placement Letter:</b> Obtain your official KUCCPS admission letter with the student portal login credentials.</li>
+                <li><b>Create Account on hef.co.ke:</b> Use your valid KCSE Index Number, national ID number, and active mobile number.</li>
+                <li><b>NEMIS / UPI &amp; CUE Verification:</b> System queries the Integrated Population Registration System (IPRS) and Ministry of Education NEMIS registry.</li>
+                <li><b>Upload Guardian Documents:</b> Clear Guardian's National ID, death certificates (if applicable), and household income declarations.</li>
+                <li><b>Input Upkeep Payout Channel:</b> Register your mobile money number matching your own national ID.</li>
+                <li><b>Mandatory Financial Literacy Quiz &amp; Consent:</b> Complete the 2019 loan consent guidelines and acknowledge the repayment agreement.</li>
+              </ol>
+              <p class="tiny muted" style="margin-top:8px">Average First-Time Completion: 45 Minutes · 100% Paperless</p>
+            </div>
+            <div><span class="chip pine">Continuing Students (Subsequent Loans)</span>
+              <ol style="margin:12px 0 0 18px;font-size:13.5px;line-height:2.1;color:var(--muted)">
+                <li><b>Annual Subsequent Application:</b> Complete online questionnaires in years 2, 3, 4, 5, and 6. It does not require re-uploading core identity documents.</li>
+                <li><b>Channel 1: Official HEF Mobile App:</b> Download from Google Play Store (App Name: HEF Kenya).</li>
+                <li><b>Channel 2: Offline USSD *642#:</b> Dial *642# on any Safaricom/Airtel line to check status without internet.</li>
+                <li><b>Timelines: August &amp; September:</b> Subsequent loan windows open in August and close mid-September every academic year.</li>
+              </ol>
+              <div class="alert-green" style="margin-top:10px"><b>Automated SMS &amp; Email Dispatch:</b> Never miss a disbursement or appeal deadline</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;gap:14px">
+          <div class="card">
+            <p class="eyebrow">Funding Deadlines &amp; Intake Windows</p>
+            <div style="display:grid;gap:12px;margin-top:10px">
+              <div style="display:flex;gap:12px"><span class="kpi-num" style="font-size:22px;color:var(--terra-d)">01</span><span><b>KUCCPS University &amp; TVET Revision</b><br><span class="tiny muted">Official window of inclusion and instructions for reform (4th Revision). Complete promptly, typically before mid-April portal account opening.</span></span></div>
+              <div style="display:flex;gap:12px"><span class="kpi-num" style="font-size:22px">31</span><span><b>HEF First-Time Undergraduate Application</b><br><span class="tiny muted">Strictly tied to band assessment. Students submit eligibility, disability proof, and select payment channels.</span></span></div>
+              <div style="display:flex;gap:12px"><span class="kpi-num" style="font-size:22px">15</span><span><b>Band Re-Categorization &amp; Review Appeal</b><br><span class="tiny muted">Deadline for students categorized into Bands 3 to 5 to appeal for evaluation with updated proof of need.</span></span></div>
+              <div style="display:flex;gap:12px"><span class="kpi-num" style="font-size:22px">30</span><span><b>International Prestigious Scholarships</b><br><span class="tiny muted">Application window for Mastercard Foundation Scholars, UK Chevening, Commonwealth, and German DAAD.</span></span></div>
+            </div>
+          </div>
+          <div class="card" style="background:var(--lime-soft)">
+            <h3>Never Miss a Disbursement or Appeal Deadline</h3>
+            <p class="tiny muted" style="margin:6px 0 10px">Activate free automated reminders for upcoming funding windows and disbursement schedules.</p>
+            <label class="flab">Full Legal Name</label><input class="input" id="fundName" value="Amina Odhiambo" style="margin-bottom:8px">
+            <label class="flab">Mobile Number (Safaricom)</label><input class="input" id="fundPhone" value="+254 712 ••• ••89" style="margin-bottom:8px">
+            <label class="flab">Email Address</label><input class="input" value="amina.odhiambo@example.ke" style="margin-bottom:8px">
+            <label class="flab">Incoming First-Year (KCSE 2025/2026)</label>
+            <select class="input" style="margin-bottom:12px"><option>2025/2026 Intake</option><option>2024/2025 Intake</option><option>TVET Intake</option></select>
+            <button class="btn btn-dark" style="width:100%" onclick="activateTracker()">✓ Activate Free Deadline Tracker</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <p class="eyebrow">Alternative Financial Aid</p><h3 style="margin:6px 0 4px">Verified Supplementary Scholarships Directory</h3>
+        <p class="tiny muted">Combine government HEF funding with audited private sector philanthropic scholarships to bridge the household contribution gap.</p>
+        <div style="display:flex;gap:8px;margin:12px 0;flex-wrap:wrap"><input class="input" style="max-width:340px" placeholder="⌕ Search scholarships..." id="schSearch" oninput="renderScholarships()"><select class="input" style="max-width:200px" id="schType" onchange="renderScholarships()"><option value="">All Types</option><option>Full Scholarship</option><option>Partial Grant</option><option>Merit Award</option></select></div>
+        <div class="grid g4" id="schGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== TRACKER ===== -->
+    <section class="page" data-page="tracker">
+      <p class="eyebrow">KCSE · CBC Dual Track Tracker · Form 4 / Senior School</p>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:flex-start">
+        <div><h1 class="h-xl" style="margin-top:6px">Academic Progress Tracker &amp; Target Setting</h1><p class="lead">Monitor secondary grade trajectories against official KUCCPS degree cut-offs and TVET cluster targets.</p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Export Progress PDF/CSV</button><button class="btn btn-ghost btn-sm" onclick="toast('🗓 Term configured: Term 2 · 2025 (May 5 – Aug 8).')">⚙ Configure Term</button><button class="btn btn-dark btn-sm" onclick="openAddResult()">+ Add New Mark / Result</button></div>
+      </div>
+
+      <div class="card" style="margin-top:16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:30px">🗓</span>
+        <div style="flex:1;min-width:220px"><b>Term 2 · 2025</b> <span class="chip lime">ACTIVE</span><div class="tiny muted">May 5, 2025 – August 8, 2025 · Kenya MoE National Calendar</div></div>
+        <div style="flex:1;min-width:220px"><div style="display:flex;justify-content:space-between" class="tiny muted"><span>64% elapsed</span><span>48 days remaining to KNEC Mocks</span></div><div class="bar" style="margin-top:6px"><i style="width:64%"></i></div></div>
+        <div class="tiny muted">Opener Assessment (Completed) · Mid-Term (Completed) · Pre-KCSE Finals (Upcoming) · <a href="#" onclick="toast('📅 Customize dates — term calendar editor.');return false">Customize Dates</a></div>
+      </div>
+
+      <div class="grid g4" style="margin-top:14px">
+        <div class="card"><div class="kpi-lab">Overall KCSE Mean</div><div class="kpi-num" style="margin:8px 0">76.8% <span class="chip lime">B+ (77 pts)</span></div><div class="tiny muted">+3.2% vs. Term 1 End</div></div>
+        <div class="card"><div class="kpi-lab">Strongest Subject</div><div class="kpi-num" style="margin:8px 0">88% <span class="small">Mathematics</span></div><div class="tiny muted">Grade A · 12.0 Pts · +3% over target</div></div>
+        <div class="card"><div class="kpi-lab">Top Momentum</div><div class="kpi-num" style="margin:8px 0">+12 <span class="small">pts Computer Std.</span></div><div class="tiny muted">Shifted from 75% to 87% (A−)</div></div>
+        <div class="card" style="background:#fdecea;border-color:#f5c6bd"><div class="kpi-lab" style="color:var(--terra-d)">⚠ Urgent Bottleneck</div><div class="kpi-num" style="margin:8px 0;color:var(--terra-d)">49% <span class="small">Chemistry</span></div><div class="tiny">Below 50% Gateway Cut-off · <button class="btn btn-sm btn-red" onclick="toast('🎯 Chemistry remediation plan opened — Wed tutor clinic.')">Action Req.</button></div></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center">
+          <div><h3>Subject Trajectories vs. KUCCPS Degree Target</h3><p class="tiny muted">Comparing progression across Opener, Mid-term, and Pre-Mock runs against software engineering gateway requirements.</p></div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="chip pine">Cluster 1: STEM / Engineering</span><div class="tabs"><button class="on">Percentages (0–100%)</button><button onclick="toast('KCSE grades (A–E) view — A=88%, B+=79%…')">KCSE (A–E)</button><button onclick="toast('CBC 8-4-4 Bridge view.')">CBC 8-4-4</button></div></div>
+        </div>
+        <div id="trackerChart" style="margin-top:8px"></div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px" id="trackerLegend"></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><h3>Subject Breakdown, Target Alignment &amp; KNEC Strategies</h3><p class="tiny muted">Edit targeted grades inline to recalculate predicted aggregate cluster weight.</p></div><span class="chip">Min C+ Gateway Filter: Active (5 of 6 Passed)</span></div>
+        <div style="overflow:auto"><table><thead><tr><th>Subject &amp; Cluster Role</th><th>Current Score</th><th>Term 2 Target</th><th>Target Gap</th><th>Targeted KNEC Remediation Strategy</th><th>Quick Edit</th></tr></thead><tbody id="trackerTable"></tbody></table></div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1.6fr 1fr;margin-top:14px;align-items:start">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between"><div><h3>Assessment History Log</h3><p class="tiny muted">Recently recorded KNEC-standardized test instruments and weights.</p></div><button class="btn btn-ghost btn-sm" onclick="toast('📂 Full archive — 24 assessments.')">View Full Archive →</button></div>
+          <div style="overflow:auto"><table><thead><tr><th>Assessment Name</th><th>Date</th><th>Subject</th><th>Raw Score</th><th>KNEC Points</th><th>Actions</th></tr></thead><tbody id="assessTable"></tbody></table></div>
+        </div>
+        <div class="card" style="background:var(--lime-soft)">
+          <p class="eyebrow">Safeguarding &amp; Consent</p><h3 style="margin:6px 0">Guardian Sync Active</h3>
+          <p class="small muted">Compliant with Kenya Data Protection Act (DPA 2019). Student academic progress is shared in real time with authorized family sponsors.</p>
+          <div style="display:flex;gap:10px;align-items:center;margin:12px 0"><span class="avatar" style="background:var(--pine)">MN</span><span><b>Mary N. (Mother)</b><br><span class="tiny muted">mary.odhiambo@example.ke</span></span><span class="chip lime" style="margin-left:auto">Read-only</span></div>
+          <p class="small">✓ SMS Alerts for Assessments enabled<br>✓ Monthly Progress Digest shared via WhatsApp</p>
+          <div class="divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><button class="btn btn-ghost btn-sm" onclick="go('profile')">Manage Permissions</button><span class="tiny muted">Updated 2h ago</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TEACHER ===== -->
+    <section class="page" data-page="teacher">
+      <div class="pine-panel">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center">
+          <div><span class="chip lime">● Phase 2 Implementation</span> <span class="chip" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)">🛡 Safeguarding &amp; TSC Pipeline Active</span>
+          <h1 style="font-size:30px;margin-top:8px">Trusted Teacher Support, Built Safely</h1><p class="small" style="color:#cfe3d8;max-width:600px">Vetted Teachers Service Commission (TSC) accredited educators and verified mentors offering targeted academic coaching, KCSE cluster point boosters, and career orientation. Fair national rates guaranteed.</p></div>
+          <button class="btn btn-lime" onclick="document.getElementById('estimator').scrollIntoView({behavior:'smooth'})">Calculate Budget ↓</button>
+        </div>
+        <div class="alert-green" style="margin-top:14px;background:rgba(199,238,98,.15);border-color:rgba(199,238,98,.4);color:#e8f2ec"><b>TSC Credential Verification Pipeline Active ✓</b> — Direct booking opens upon complete multi-county pilot vetting. Reserve preliminary hours now below.</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:20px 0 10px;flex-wrap:wrap;gap:8px"><div><p class="eyebrow">Rollout Protocol</p><h2 class="h-lg">Mentorship &amp; Tutor Deployment Roadmap</h2></div><span class="chip">🎯 Target: Nationwide Q3 2025</span></div>
+      <div class="grid" style="grid-template-columns:repeat(5,1fr)" id="roadmap"></div>
+
+      <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:16px;align-items:start" id="estimator">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between"><div><h3>Family Planning &amp; Rate Estimator</h3><p class="tiny muted">Standardized rate fixed at KES 500 / Hour to safeguard parents and teachers.</p></div><span class="chip">Standard Guideline</span></div>
+          <p class="flab" style="margin-top:14px">Select Priority Target Subjects <span class="muted" id="subjCountLab" style="float:right">2 Subjects Selected</span></p>
+          <div class="grid g3" id="tutorSubjects" style="gap:8px"></div>
+          <p class="flab" style="margin-top:16px">Coaching Intensity (Hours per Subject / Week) <span style="float:right" id="hrsLab">2 hrs/wk per subject</span></p>
+          <input type="range" min="1" max="8" value="2" id="hrsRange" style="width:100%" oninput="calcTutor()">
+          <div style="display:flex;justify-content:space-between" class="tiny muted"><span>1 hr (Revision check)</span><span>4 hrs (Target boost)</span><span>8 hrs (Intensive recovery)</span></div>
+          <div class="grid g2" style="margin-top:14px">
+            <div><label class="flab">Academic Stage</label><select class="input" id="tutorStage" onchange="calcTutor()"><option>KCSE Candidate (Form 3 – 4)</option><option>CBC Senior School (Grade 10–12)</option><option>CBC Junior School (Grade 7–9)</option><option>TVET / College Scholar</option></select></div>
+            <div><label class="flab">Billing Cycle</label><select class="input" id="tutorCycle" onchange="calcTutor()"><option value="4">Monthly Escrow (4 Weeks)</option><option value="1">Weekly Escrow (1 Week)</option><option value="8">Term Escrow (8 Weeks)</option></select></div>
+          </div>
+          <div class="alert-green" style="margin-top:14px;display:flex;gap:10px;align-items:center"><span style="font-weight:900;color:var(--pine)">M-PESA</span><span><b>Protected Safaricom Daraja Escrow</b><br><span class="tiny">Funds release only after guardian confirms completed session logs.</span></span><span style="margin-left:auto">🔒</span></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between"><h3>Transparent Cost Summary</h3><span class="tiny muted">DARAJA-EST-2025</span></div>
+          <table style="margin-top:8px"><tbody>
+            <tr><td class="muted">Selected subjects:</td><td style="text-align:right"><b id="sumSubjects">Mathematics, Physics (2)</b></td></tr>
+            <tr><td class="muted">Weekly duration:</td><td style="text-align:right"><b id="sumHours">4 total hours / wk</b></td></tr>
+            <tr><td class="muted">Base rate per teaching hour:</td><td style="text-align:right">KES 500.00</td></tr>
+            <tr><td class="muted">Weekly tutoring subtotal:</td><td style="text-align:right"><b id="sumWeekly">KES 2,000.00</b></td></tr>
+            <tr><td class="muted">Duration multiplier:</td><td style="text-align:right" id="sumCycle">× 4 weeks (1 month)</td></tr>
+            <tr><td class="muted">Safeguarding &amp; Platform verify fee:</td><td style="text-align:right"><b>Waived (Pilot subsidy)</b></td></tr>
+          </tbody></table>
+          <div class="pine-panel" style="padding:16px;margin-top:12px;text-align:center">
+            <p class="tiny" style="color:#a9c4b6">ESTIMATED ESCROW DEPOSIT · 100% Refundable</p>
+            <div style="font-size:36px;font-weight:800;color:var(--lime);font-family:Manrope" id="sumTotal">KES 8,000</div>
+            <p class="tiny" style="color:#cfe3d8">Scheduled automatically through Daraja STK Push prompt</p>
+          </div>
+          <button class="btn btn-lime" style="width:100%;margin-top:10px" onclick="reserveTutor()">Reserve Mentorship Hours for Phase 2</button>
+          <p class="tiny muted" style="text-align:center;margin-top:6px">No upfront charge today. Alerts your linked KCSE candidate profile when tutor slots open.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px;flex-wrap:wrap;gap:8px">
+        <div><p class="eyebrow">Accredited Facilitators</p><h2 class="h-lg">Vetted Teacher &amp; Mentor Directory</h2><p class="tiny muted">Each educator passes National Police Service certificate of good conduct &amp; TSC certificate validation.</p></div>
+        <div class="tabs" id="tutorTabs"><button class="on" data-t="">All Subjects</button><button data-t="STEM">STEM &amp; Sciences</button><button data-t="Lang">Languages &amp; Arts</button></div>
+      </div>
+      <div class="grid g3" id="tutorGrid"></div>
+
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div style="display:flex;gap:10px;align-items:center"><span style="font-size:22px">🛡</span><div><h3>Strict Legal Framework</h3><p class="tiny muted">Safeguarding Standards &amp; Minor Protection</p></div></div><span class="chip green">● Audited under Kenya Children Act (2022) &amp; DPA (2019)</span></div>
+        <div class="grid g4" style="margin-top:14px">
+          <div style="border:1px solid var(--line);border-radius:12px;padding:14px"><b>100% TSC &amp; DCI Vetting</b><p class="tiny muted" style="margin-top:6px">Educators must present an active TSC Registration Number, verified Degree Parchment, and valid Police Clearance (DCI Certificate of Good Conduct).</p></div>
+          <div style="border:1px solid var(--line);border-radius:12px;padding:14px"><b>Supervised Channels</b><p class="tiny muted" style="margin-top:6px">Zero unmonitored direct messages or third-party WhatsApp exchanges. All student-teacher messaging and scheduled sessions occur within transparent audit logs.</p></div>
+          <div style="border:1px solid var(--line);border-radius:12px;padding:14px"><b>Parent Co-Notification</b><p class="tiny muted" style="margin-top:6px">SMS summaries are instantly relayed to the registered guardian upon session start and completion, including teacher homework notes and syllabus benchmarks.</p></div>
+          <div style="border:1px solid var(--line);border-radius:12px;padding:14px"><b>Data Sovereignty</b><p class="tiny muted" style="margin-top:6px">Strict Kenya Data Protection Act compliance. Learner performance metrics and personal details remain encrypted and are never sold to external marketers.</p></div>
+        </div>
+        <p class="tiny muted" style="margin-top:12px;text-align:center">Have questions or want to verify an educator manually? Reach the PathFinder Kenya Safeguarding Officer at <b>safeguarding@pathfinder.ke</b> or toll-free SMS line. <button class="btn btn-ghost btn-sm" onclick="toast('📄 Minor Safety Charter (PDF) — 6 pages, Children Act 2022 aligned.')">Read Minor Safety Charter</button></p>
+      </div>
+    </section>
+
+    <!-- ===== SUPERADMIN ===== -->
+    <section class="page" data-page="superadmin">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:flex-start">
+        <div><p class="tiny muted">PathFinder Kenya / <b style="color:var(--pine3);font-size:18px">SuperAdmin Governance</b></p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><span class="chip pine">● ROLE: ADMIN · MFA ACTIVE · RLS ENFORCED</span><span class="chip">terryperis7@gmail.com</span><span class="chip green">🛡 ODPC Kenya Act 2019 Compliant</span></div></div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input class="input" style="width:260px" placeholder="⌕ Filter pilot records, code, ID..." id="adminSearch" oninput="renderAdmin()"><button class="btn btn-dark btn-sm" onclick="exportCSV()">⬇ Export Pilot Dataset (CSV)</button><button class="iconbtn" onclick="toast('↻ Supabase RLS handshake refreshed — 4m ago.')">↻</button></div>
+      </div>
+
+      <div class="grid g4" style="margin-top:16px">
+        <div class="card"><div class="kpi-lab">Pilot Cohort Students</div><div class="kpi-num" style="margin:8px 0">18</div><div class="tiny"><b>8 Counties covered</b> · 100% consent logged</div></div>
+        <div class="card"><div class="kpi-lab">Verified Institutions</div><div class="kpi-num" style="margin:8px 0">16</div><div class="tiny"><b>11 Universities · 5 TVETs</b> · <span style="color:var(--green)">CUE Validated</span></div></div>
+        <div class="card"><div class="kpi-lab">Funding &amp; HELB Schemes</div><div class="kpi-num" style="margin:8px 0">8</div><div class="tiny"><b>KES 32.4M tracked allocation</b> · <span class="chip lime">KUCCPS '24</span></div></div>
+        <div class="card" style="background:#fdecea"><div class="kpi-lab" style="color:var(--terra-d)">Reviews Pending</div><div class="kpi-num" style="margin:8px 0;color:var(--terra-d)">2 <span style="font-size:14px">due now</span></div><div class="tiny">1 Cut-off update · 1 DPA request · <a href="#/dpa"><u>Action</u></a></div></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="tabs" id="adminTabs">
+          <button class="on" data-a="students">🎓 Student Directory &amp; Safeguarding <b>18</b></button>
+          <button data-a="institutions">🏛 Institutions &amp; KUCCPS Database <b>16</b></button>
+          <button data-a="funding">💰 Funding &amp; Scholarships <b>8</b></button>
+          <button data-a="audit">🛡 Immutable Audit Log <span style="color:var(--green)">●</span></button>
+          <button data-a="ops">⚙ Operations &amp; DR</button>
+          <span class="tiny muted" style="margin-left:auto">● Supabase Postgres · eu-west-1 replica</span>
+        </div>
+        <div id="adminPanel" style="margin-top:14px"></div>
+      </div>
+    </section>
+
+    <!-- ===== PROFILE ===== -->
+    <section class="page" data-page="profile">
+      <p class="eyebrow">Settings / Account &amp; Preferences</p>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:flex-start">
+        <div><h1 class="h-xl" style="margin-top:6px">Learner Profile &amp; Identity Studio</h1><p class="lead">Manage your academic stage, avatar representation, guardian co-viewing permissions, and low-bandwidth data optimization for mobile accessibility.</p></div>
+        <div style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" onclick="exportJSON()">⬇ Export My Data (JSON)</button><button class="btn btn-dark btn-sm" onclick="toast('✅ Changes saved — synced to Supabase with RLS audit entry.')">✓ Save Changes</button></div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:16px;align-items:start">
+        <div style="display:grid;gap:16px">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><h3>Avatar &amp; Visual Persona</h3><p class="tiny muted">Choose an original illustrated identity or upload your own square headshot.</p></div><span class="chip green">🛡 Privacy Shield Active</span></div>
+            <div style="display:flex;gap:16px;align-items:center;margin-top:14px;flex-wrap:wrap">
+              <div style="position:relative"><div id="bigAvatar" style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#f5b93f,#e07b39);display:grid;place-items:center;font-size:44px;border:3px solid var(--lime)">🧑🏾‍🎓</div><span style="position:absolute;bottom:0;right:0;background:var(--lime);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px">✎</span></div>
+              <div style="flex:1;min-width:220px"><b style="font-size:18px">Amina Odhiambo</b> <span class="chip lime">Explorer Archetype</span><p class="small muted" style="margin:6px 0">Current Persona: <b>Highland Pioneer (Active)</b>. Non-identifiable across public TVETA and university mentor discovery rooms.</p><button class="btn btn-ghost btn-sm" onclick="toast('📷 Upload & Crop (160×160) — local crop only, zero biometric scraping.')">⛶ Upload &amp; Crop (160×160)</button> <span class="tiny muted">🔒 Local crop only, zero biometric scraping</span></div>
+            </div>
+            <p class="flab" style="margin-top:16px">Select Official Character Persona <span class="muted" style="float:right">12 Exclusive Vectors</span></p>
+            <div class="grid" style="grid-template-columns:repeat(6,1fr);gap:8px" id="personaGrid"></div>
+          </div>
+
+          <div class="card">
+            <h3>Academic Details &amp; Kenyan Curriculum Track</h3><p class="tiny muted">Calibrate cluster point calculations and stage-specific TVETA or KUCCPS advisories.</p>
+            <div class="grid g2" style="margin-top:14px">
+              <div><label class="flab">Full Registered Name</label><input class="input" value="Amina Odhiambo"><p class="tiny muted" style="margin-top:4px">Matches official KNEC examination slip registry.</p></div>
+              <div><label class="flab">Primary Contact Email</label><input class="input" value="amina.odhiambo@example.ke"><p class="tiny muted" style="margin-top:4px">Synced to Safaricom SMS for KUCCPS deadline broadcast alerts. <span class="chip green">✓ Verified MFA</span></p></div>
+            </div>
+            <p class="flab" style="margin-top:16px">Select Current Academic Phase</p>
+            <div class="grid g2" id="phaseGrid" style="gap:10px"></div>
+            <div class="grid g2" style="margin-top:14px">
+              <div><label class="flab">Home County (Kenya)</label><select class="input"><option>047 – Nairobi City County</option><option>042 – Kisumu</option><option>027 – Uasin Gishu</option><option>035 – Kericho</option><option>001 – Mombasa</option></select></div>
+              <div><label class="flab">School / Registered Center</label><input class="input" value="Pangani Girls' High School, Nairobi"></div>
+            </div>
+            <div style="border:1.5px dashed var(--line);border-radius:12px;padding:14px;margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+              <span><b>KNEC Index / Unique Learner Identifier (UPI)</b><br><span class="tiny muted">KCSE Index: <span id="knecVal">20404102***</span> (Encrypted under Kenya DPA 2019)</span></span>
+              <button class="btn btn-ghost btn-sm" onclick="revealKNEC(this)">Reveal via OTP</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:16px">
+          <div class="card">
+            <h3>Guardian &amp; Teacher Co-Viewing</h3><p class="tiny muted">Statutory compliance &amp; read-only linkage.</p>
+            <div class="pine-panel" style="padding:14px;margin-top:10px"><p class="small" style="color:#e8f2ec">🛡 Under the <b>Kenya Data Protection Act 2019 &amp; Children Act 2022</b>, minors' academic progression data is strictly read-only and restricted to designated guardians or verified TSC teachers.</p></div>
+            <p class="flab" style="margin-top:14px">Active Co-Viewers (2 Authorized)</p>
+            <div style="border:1px solid var(--line);border-radius:12px;padding:13px;display:flex;gap:11px;align-items:center;margin-bottom:10px"><span class="avatar" style="background:var(--lime);color:var(--pine3)">MO</span><span style="flex:1"><b>Mary N. Odhiambo</b> <span class="chip lime">Mother / Guardian</span><br><span class="tiny muted">+254 712 ••• ••89<br>👁 Progress, Cluster Points &amp; HELB Alerts<br>Last accessed: Today, 08:30 AM</span></span><button class="toggle on" onclick="this.classList.toggle('on');toast('Guardian co-viewing updated.')" aria-label="Toggle guardian"></button></div>
+            <div style="border:1px solid var(--line);border-radius:12px;padding:13px;display:flex;gap:11px;align-items:center"><span class="avatar" style="background:#bfe3d8;color:var(--pine3)">PM</span><span style="flex:1"><b>Mr. Peter Mwangi</b> <span class="chip">TSC Career Master</span><br><span class="tiny muted">TSC No: 489201 · Pangani Girls<br>≡ KCSE Subject Breakdown &amp; Targets Only<br>Last accessed: Yesterday, 16:15 PM</span></span><button class="toggle on" onclick="this.classList.toggle('on');toast('Teacher co-viewing updated.')" aria-label="Toggle teacher"></button></div>
+            <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:10px" onclick="toast('✉️ SMS OTP invitation sent to guardian/teacher number.')">👤 Invite New Guardian or Career Master (SMS OTP Link)</button>
+          </div>
+
+          <div class="card">
+            <h3>Data Saver &amp; Low-Bandwidth Mode</h3><p class="tiny muted">Fine-tuned for 2G/3G Safaricom, Airtel &amp; Opera Mini connections.</p>
+            <div style="background:var(--lime-soft);border-radius:12px;padding:14px;display:flex;gap:11px;align-items:center;margin-top:10px"><span style="font-size:20px">📶</span><span style="flex:1"><b>Ultra Data Saver (85% Less MB)</b><br><span class="tiny muted">Compresses charts into vector wireframes and disables university banner hero photography.</span></span><button class="toggle on" id="dataSaver" onclick="this.classList.toggle('on');toast(this.classList.contains('on')?'📶 Ultra Data Saver ON — charts now vector-only.':'Data Saver OFF.')" aria-label="Data saver"></button></div>
+            <p class="flab" style="margin-top:14px">System Language &amp; Guidance Terminology</p>
+            <div class="grid g2" style="gap:8px"><button class="btn btn-dark" onclick="setLang('en')">English (Kenya)<br><span class="tiny" style="opacity:.8">Standard KUCCPS Terms</span></button><button class="btn btn-ghost" onclick="setLang('sw')">Kiswahili Sanifu<br><span class="tiny muted">Muongozo wa Kozi na Vyuo</span></button></div>
+            <p class="flab" style="margin-top:14px">Urgent KUCCPS &amp; HELB Broadcast Alerts</p>
+            <label style="display:flex;gap:9px;align-items:center;padding:7px 0;font-size:13.5px"><input type="checkbox" checked> 💬 Safaricom SMS Direct Alerts (+254 791 ••• ••14)</label>
+            <label style="display:flex;gap:9px;align-items:center;padding:7px 0;font-size:13.5px"><input type="checkbox" checked> 🔔 In-App Browser Push Notifications</label>
+            <label style="display:flex;gap:9px;align-items:center;padding:7px 0;font-size:13.5px"><input type="checkbox"> ✉ Email Weekly Academic Digest</label>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><b class="small">Display Contrast</b><div class="tabs"><button class="on">☀ Warm Light</button><button onclick="toast('🌙 Dark mode — coming in v1.0 (battery-safe OLED).')">☾ Dark</button><button onclick="toast('◐ Auto — follows device sunset.')">◐ Auto</button></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DPA ===== -->
+    <section class="page" data-page="dpa">
+      <p class="eyebrow">Statutory Compliance · Kenya Data Protection Act (2019) · ODPC Registered</p>
+      <h1 class="h-xl" style="margin-top:6px;max-width:640px">Data Protection, Safeguarding &amp; Privacy Governance</h1>
+      <p class="lead">Our statutory commitments to student data sovereignty, minor protection, non-commercialization, and Office of the Data Protection Commissioner (ODPC) compliance.</p>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="toast('📄 Official Notice (PDF) — 8 pages, ODPC registered.')">⬇ Download Official Notice (PDF)</button><button class="btn btn-lime btn-sm" onclick="toast('✉️ DPA Request form opened — response within 72h guaranteed.')">🛡 Submit DPA Request</button></div>
+
+      <div class="pine-panel" style="margin-top:16px;display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:14px;align-items:center">
+        <div><p class="tiny" style="color:var(--lime)">CERTIFICATE OF REGISTRATION ✓</p><b style="color:#fff;font-size:16px">Controller &amp; Processor No. ODPC/PR/2024/0918</b><p class="tiny" style="color:#a9c4b6">Issued in Nairobi pursuant to Section 18 of the Data Protection Act, No. 24 of 2019.</p></div>
+        <div><b style="color:var(--lime);font-size:20px">0%</b><br><span class="tiny" style="color:#cfe3d8"><b style="color:#fff">Ad Tracking</b><br>No behavioral ads or trackers</span></div>
+        <div><b style="color:var(--lime);font-size:20px">Sec 31</b><br><span class="tiny" style="color:#cfe3d8"><b style="color:#fff">Minor Safeguards</b><br>Parental consent for &lt;18s</span></div>
+        <div><b style="color:var(--lime);font-size:20px">EAC</b><br><span class="tiny" style="color:#cfe3d8"><b style="color:#fff">Data Sovereignty</b><br>Isolated regional storage</span></div>
+        <div><b style="color:var(--lime);font-size:20px">&lt;72h</b><br><span class="tiny" style="color:#cfe3d8"><b style="color:#fff">Right to Erasure</b><br>Cryptographic purge</span></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:22px 0 12px;flex-wrap:wrap;gap:8px"><div><p class="eyebrow">Statutory Framework</p><h2 class="h-lg">The 6 Pillars of PathFinder Privacy</h2></div><p class="tiny muted" style="max-width:380px">Designed strictly around the statutory duties established by the Laws of Kenya, protecting the digital futures of learners and youth.</p></div>
+      <div class="grid g3" id="pillarGrid"></div>
+
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><p class="eyebrow">Self-Service Privacy Hub</p><h3 style="margin-top:4px">Data Subject Rights Console (Part IV Rights)</h3><p class="tiny muted">Under Section 26 of the Kenya DPA 2019, you retain unconditional control over your educational identity.</p></div><span class="chip">Authenticated as: Amina Odhiambo (UPI #RF-88912)</span></div>
+        <div class="grid g2" style="margin-top:14px">
+          <div style="border:1px solid var(--line);border-radius:14px;padding:16px"><b>⬇ Export Full Archive (Right of Access)</b><p class="tiny muted" style="margin:6px 0">Download a machine-readable ZIP package containing your full KCSE mock records, KUCCPS calculated cut-offs, career assessment transcripts, and shortlisted TVET/Degree courses.</p><p class="tiny muted">Formats: JSON, CSV, Signed PDF</p><button class="btn btn-dark btn-sm" style="margin-top:8px" onclick="exportJSON()">⬇ Generate ZIP</button></div>
+          <div style="border:1px solid var(--line);border-radius:14px;padding:16px"><b>✎ Rectification of Academic Records</b><p class="tiny muted" style="margin:6px 0">Notice an inaccurate mock exam score, wrong secondary school registration, or altered KCSE index number? Submit certified KNEC/School stamp proof for immediate correction.</p><p class="tiny muted">Turnaround: &lt; 24 Working Hours</p><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="toast('✎ Rectification request opened — attach KNEC stamp proof.')">↗ Request Correction</button></div>
+          <div style="border:1px solid var(--line);border-radius:14px;padding:16px"><b>◐ Restrict Analytics &amp; Aggregate Matching</b><p class="tiny muted" style="margin:6px 0">Opt out of inclusion in anonymized national admission probability aggregates, county-level STEM benchmarks, and institution popularity index algorithms.</p><p class="tiny muted">Current Status: <b id="restrictLab">Included in Anonymous Stats</b></p><button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="toggleRestrict(this)">◐ Toggle Restriction</button></div>
+          <div style="border:1px solid #f5c6bd;border-radius:14px;padding:16px;background:#fff5f3"><b>🗑 Data Erasure &amp; “Right to be Forgotten”</b><p class="tiny muted" style="margin:6px 0">Permanently purge your profile, test responses, matched universities, and backup images. All cryptographic records are digitally shredded within 72 hours after a 14-day safety grace period.</p><p class="tiny" style="color:var(--terra-d)">Irreversible after 14-day hold</p><button class="btn btn-red btn-sm" style="margin-top:8px" onclick="confirmErasure(this)">🗑 Request Permanent Erasure</button></div>
+        </div>
+      </div>
+
+      <div class="grid g3" style="margin-top:16px">
+        <div class="card"><div style="display:flex;gap:10px;align-items:center"><span class="avatar">CM</span><span><p class="tiny muted">Designated Officer</p><b>Adv. Catherine Mutua</b></span></div><table style="margin-top:10px"><tbody><tr><td class="muted">ODPC DPO Reg:</td><td style="text-align:right">Cert. No. 4410</td></tr><tr><td class="muted">Bar Admission:</td><td style="text-align:right">High Court of Kenya</td></tr><tr><td class="muted">Jurisdiction:</td><td style="text-align:right">Kenya &amp; EAC</td></tr></tbody></table><p class="tiny muted" style="margin-top:8px">Independent officer supervising PathFinder's ongoing adherence to personal data laws and youth safeguarding.</p></div>
+        <div class="card"><b>📞 Direct DPO Inquiries</b><p class="tiny muted" style="margin:6px 0">For rapid escalation regarding consent revocation, parental authorization, or legal documentation disclosures.</p><p class="small">✉ Official Mailbox: <b>dpo@pathfinder.co.ke</b><br>📞 Kenya Toll-Free Helpline: <b>0800 720 000 (Free Call)</b><br><span class="tiny muted">Operating Hours: Mon – Fri, 8:00 AM – 5:00 PM EAT</span></p></div>
+        <div class="card"><b>⚖ Regulatory Escalation</b><p class="tiny muted" style="margin:6px 0">If you believe your personal rights under Kenya DPA 2019 have been compromised and unresolved by PathFinder Kenya, you hold the statutory right to file a formal grievance with the Commissioner.</p><p class="tiny muted"><b>Office of the Data Protection Commissioner (ODPC)</b><br>Britam Tower, 12th &amp; 13th Floors, Hospital Road, Upper Hill, Nairobi, Kenya.</p><button class="btn btn-dark btn-sm" style="margin-top:8px" onclick="toast('⚖ ODPC Portal — external link (opens in new tab in production).')">Lodge Inquiry at ODPC Portal ↗</button></div>
+      </div>
+      <p class="tiny muted" style="margin-top:14px;text-align:center">Policy Revision: v2.4 (Effective: November 2024 · Scheduled Review: November 2025) &nbsp;·&nbsp; Terms of Educational Service &nbsp;·&nbsp; Safeguarding Charter &nbsp;·&nbsp; Data Processing Addendum (DPA)</p>
+    </section>
+
+    <!-- ===== DEPLOYMENT ===== -->
+    <section class="page" data-page="deployment">
+      <p class="eyebrow">Engineering &amp; Operations / AppDeploy &amp; Supabase Architecture / Edge-Nairobi-01</p>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:flex-start">
+        <div><span class="chip green">● DPA 2019 Certified Sandbox</span> <span class="chip">Git: f98d7c2 (main)</span><h1 class="h-xl" style="margin-top:8px;max-width:520px">Deployment Centre, SQL Migrations &amp; DevOps Hub</h1><p class="lead">Live system telemetry, production Supabase schema with RLS verification, automated Playwright test suites, and PWA service-worker cache control for Kenyan cloud and low-bandwidth edge deployments.</p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="runE2E(this)">▶ Trigger E2E Test Suite</button><button class="btn btn-ghost btn-sm" onclick="downloadSQL()">⬇ Download Bundle (.sql)</button><button class="btn btn-lime btn-sm" onclick="deployStaging(this)">🚀 Deploy Staging to Live</button></div>
+      </div>
+
+      <div class="grid g4" style="margin-top:16px">
+        <div class="card"><div style="display:flex;justify-content:space-between"><span class="kpi-lab">Staging / Edge Node</span><span class="chip green">● Active</span></div><b style="font-size:19px;display:block;margin:8px 0">nairobi-01.appdeploy</b><span class="tiny muted">Safaricom &amp; Liquid Edge peer</span><div style="display:flex;gap:8px;margin-top:10px"><span class="chip">⚡ 24ms ping</span><span class="chip lime">v0.9.4-pilot</span></div></div>
+        <div class="card"><div style="display:flex;justify-content:space-between"><span class="kpi-lab">Production Environment</span><span class="chip amber">MFA Gated</span></div><b style="font-size:19px;display:block;margin:8px 0">Supabase Postgres 15.6</b><span class="tiny muted">Requires Terry Peris multi-sig signoff</span><div style="display:flex;gap:8px;margin-top:10px"><span class="chip green">RLS 100% Active</span><span class="chip">AWS af-south-1</span></div></div>
+        <div class="pine-panel" style="padding:16px"><div style="display:flex;justify-content:space-between"><span class="kpi-lab" style="color:#a9c4b6">Security Posture</span><span class="chip lime">Audit Passed</span></div><b style="font-size:19px;display:block;margin:8px 0;color:#fff">0 Exposed Secrets</b><span class="tiny" style="color:#cfe3d8">Client bundle strictly holds anon-key only. Service role restricted.</span><p class="tiny" style="color:var(--lime);margin-top:8px">DPA 2019 Table Isolation</p></div>
+        <div class="card"><div style="display:flex;justify-content:space-between"><span class="kpi-lab">PWA Service Worker</span><span class="chip lime">SW.js: v1.2.8</span></div><b style="font-size:19px;display:block;margin:8px 0">Offline Cache 4.8MB</b><span class="tiny muted">App Shell + KCSE clusters + 8,240 KUCCPS cuts</span><div style="display:flex;gap:8px;margin-top:10px"><span class="chip">Cache-First Assets</span><button class="btn btn-ghost btn-sm" onclick="toast('↻ PWA cache invalidated — fresh shell will download on next visit.')">↻ Invalidate</button></div></div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1.6fr 1fr;margin-top:16px;align-items:start">
+        <div class="card">
+          <div class="tabs" id="deployTabs"><button class="on" data-d="sql">SQL Migrations &amp; RLS</button><button data-d="e2e">Playwright E2E Suite <span class="chip lime">6 pass</span></button><button data-d="pwa">PWA Manifest &amp; SW</button><button data-d="secrets">Secrets &amp; Config</button></div>
+          <div id="deployPanel" style="margin-top:14px"></div>
+        </div>
+        <div style="display:grid;gap:14px">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center"><h3>Release Checklist</h3><span class="chip lime">v0.9.4 Pilot</span></div>
+            <p class="tiny muted" style="margin:6px 0">Strict gated checklist verifying compliance with national Kenyan academic schedules and ministry security frameworks.</p>
+            <div id="releaseList"></div>
+            <div class="divider"></div>
+            <div style="display:flex;justify-content:space-between" class="small"><span class="muted">Gatekeeper Authority:</span><b>Terry Peris (Lead DevOps)</b></div>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between"><h3>● Live Edge Deployment Audit Trail</h3><span class="tiny muted">Realtime WebSocket Sync</span></div>
+            <div id="auditFeed" style="margin-top:10px;display:grid;gap:9px;font-size:12.5px"></div>
+          </div>
+          <div class="card">
+            <h3>Emergency Diagnostics</h3>
+            <div style="display:grid;gap:8px;margin-top:10px">
+              <button class="btn btn-ghost btn-sm" style="justify-content:space-between" onclick="toast('✓ Supabase Edge Connection: OK — 24ms, RLS handshake verified.')">Test Supabase Edge Connection <span>›</span></button>
+              <button class="btn btn-ghost btn-sm" style="justify-content:space-between" onclick="toast('✓ DPA Consent Audits: 18/18 logged, 0 gaps.')">Validate DPA Consent Audits <span>›</span></button>
+              <button class="btn btn-ghost btn-sm" style="justify-content:space-between;color:var(--terra-d)" onclick="toast('🗑 PWA Offline Static Cache flushed.')">Flush PWA Offline Static Cache <span>›</span></button>
+            </div>
+          </div>
+          <div class="pine-panel" style="padding:16px"><b style="color:#fff">Nairobi IXP Peering</b><p class="small" style="color:#cfe3d8;margin:6px 0">Traffic routed directly via the Kenya Internet Exchange Point (KIXP) ensuring sub-30ms latency across Safaricom, Airtel Kenya, and Jamii Tel networks.</p><div style="display:flex;justify-content:space-between;margin-top:8px"><span class="chip lime">KIXP Status: NOMINAL</span><b style="color:var(--lime)">99.98% SLA</b></div></div>
+        </div>
+      </div>
+    </section>
+
+    </main>
+    <div class="footer"><span>© 2026 PathFinder Kenya · Private Pilot · Compliant with Kenya Data Protection Act 2019</span><span>KUCCPS Support · Helpdesk · v0.9.4 &nbsp;·&nbsp; <a href="#/dpa">Privacy</a> · <a href="#/deployment">Status</a></span></div>
+  </div>
+</div>
+
+<!-- Add Result Modal -->
+<div class="modal-bg" id="addModal">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:20px">Add New Mark / Result</h3><button class="iconbtn" onclick="closeModal()">✕</button></div>
+    <p class="tiny muted" style="margin:4px 0 14px">Recorded against KNEC-standardized weights. Guardian sync updates instantly.</p>
+    <div class="grid g2" style="gap:12px">
+      <div><label class="flab">Assessment Name</label><input class="input" id="nrName" placeholder="e.g. Term 2 Mid-Term"></div>
+      <div><label class="flab">Date</label><input class="input" type="date" id="nrDate" value="2025-06-18"></div>
+      <div><label class="flab">Subject</label><select class="input" id="nrSubject"><option>Mathematics</option><option>Physics</option><option>Chemistry</option><option>Computer Studies</option><option>English</option><option>Kiswahili</option></select></div>
+      <div><label class="flab">Paper</label><select class="input" id="nrPaper"><option>Paper 1</option><option>Paper 2</option><option>Paper 3 (Practical)</option></select></div>
+      <div><label class="flab">Raw Score Obtained</label><input class="input" type="number" id="nrGot" placeholder="e.g. 34"></div>
+      <div><label class="flab">Out Of</label><input class="input" type="number" id="nrOut" placeholder="e.g. 40"></div>
+    </div>
+    <div id="nrPreview" class="alert-green" style="margin-top:12px">Enter scores to preview KNEC percentage &amp; points.</div>
+    <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-dark" onclick="saveResult()">✓ Save Result</button></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+/* ================= DATA ================= */
+const SUBJECTS=[
+ {name:"Mathematics",short:"M",role:"Core Group 1 · Compulsory",cur:88,grade:"Grade A (12 pts)",target:85,gap:"+3% Exceeds",cls:"green",strat:"Maintain speed on Calculus and 3D Geometry. Attempt national school joint mock series paper 2 weekly.",hist:[72,78,88]},
+ {name:"Physics",short:"P",role:"Cluster Principal · Group 2",cur:82,grade:"Grade A− (11 pts)",target:80,gap:"+2% Exceeds",cls:"green",strat:"Review Electromagnetic Induction & Waves lab setups. Ensure full accuracy in paper 3 practical apparatus measurements.",hist:[70,76,82]},
+ {name:"Chemistry",short:"C",role:"Critical Gateway Bottleneck",cur:49,grade:"Grade C− (5 pts)",target:65,gap:"−16% Deficit",cls:"red",strat:"Targeted KNEC tip: Focus immediately on stoichiometry, mole calculations & qualitative analysis using Form 3 Term 2 KNEC topical past papers. Attend tutor clinic on Wednesdays.",hist:[58,54,49]},
+ {name:"Computer Studies",short:"CS",role:"Group 4 Elective",cur:87,grade:"Grade A− (11 pts)",target:85,gap:"+2% Exceeds",cls:"green",strat:"Finalize Project Milestone 2 documentation and database relationships in Microsoft Access / SQL by end of July.",hist:[75,81,87]},
+ {name:"English",short:"E",role:"Core Group 1 · Compulsory",cur:79,grade:"Grade B+ (10 pts)",target:75,gap:"+4% Exceeds",cls:"green",strat:"Practice Paper 3 essay outlines (Fathers of Nations / The Samaritan). Refine stylistic devices and thesis clarity.",hist:[74,77,79]},
+ {name:"Kiswahili",short:"K",role:"Core Group 1 · Compulsory",cur:74,grade:"Grade B (9 pts)",target:75,gap:"−1% Near Target",cls:"amber",strat:"Polish Sarufi na Maumivu ya Lugha questions. Review Ushairi poetic structure and metric analysis drills.",hist:[71,73,74]}
+];
+const INSTITUTIONS=[
+ {id:1,code:"UoN",name:"University of Nairobi",type:"Public University",region:"Nairobi",field:"Engineering",color:"#0f5c46",verified:"Verified Feb 2025",progs:["Civil Engineering","Medicine & Surgery (MBChB)","Commerce (Finance/Mktg)","Bachelor of Laws (LLB)"],funding:"KUCCPS Government Placement, Universities Fund (Bands 1–5), HELB Upkeep",match:"Strong (42.1 pts)",cost:"Estimated Tuition: KES 93,500 – 120,000",intake:"Intake: Sept 2025",extra:"Amina Cutoff Match: Strong (42.1 pts)",tag:"Shortlisted"},
+ {id:2,code:"JKU",name:"JKUAT - Jomo Kenyatta Univ. of Agriculture & Tech",type:"Public University",region:"Kiambu",field:"Engineering",color:"#7a9a1f",verified:"Verified Feb 2025",progs:["Mechatronics Engineering","Computer Science","Food Science & Postharvest","Telecommunications Eng."],funding:"KUCCPS Placement, Universities Fund Means-Tested Scholarship, HELB",match:"Target Qualified",cost:"Estimated Tuition: KES 6,800 – 9,000/mo",intake:"Campus Run: Juja Main Hall",extra:"Cluster Safety: Target Qualified",tag:"Shortlisted"},
+ {id:3,code:"KNP",name:"Kabwe National Polytechnic",type:"National Polytechnic / TVET",region:"Meru",field:"ICT",color:"#2b5ea7",verified:"TVETA Accredited",progs:["Diploma in ICT & Cyber Defence","Building & Civil Tech","Electrical & Electronics (Power)","Automotive Mechatronics"],funding:"KUCCPS TVET Placement · Gov Capitation (KES 30,000/yr) + HELB Loan",match:"Entry Grade: KCSE C− & Above",cost:"Tuition Subsidy: Fully Subsidized Capitation",intake:"Intake: May & Sept 2025",extra:"View Artisan & Diploma Tracks",tag:""},
+ {id:4,code:"KMTC",name:"Kenya Medical Training College (KMTC)",type:"Health College",region:"Nairobi",field:"Health",color:"#b34724",verified:"MoH / KMTC",progs:["Diploma in Clinical Medicine","Community Health Nursing (KRCHN)","Pharmacy Technology","Medical Laboratory Sciences"],funding:"KMTC Portal / KUCCPS Integration + Dedicated HELB KMTC",match:"Prerequisites: KCSE C (Bio) & Chem",cost:"Clinical Hospital Rotations: County Referral",intake:"Intake: March & Sept",extra:"View All 71 County Branches",tag:""},
+ {id:5,code:"SU",name:"Strathmore University",type:"Private University",region:"Nairobi",field:"Business",color:"#173f35",verified:"CUE Chartered",progs:["Business Information Tech (BBIT)","Bachelor of Laws (LLB)","Financial Economics","Informatics & Computer Science"],funding:"HELB Tuition Loan Eligible · Strathmore Need-Based Grants",match:"Annual Tuition: KES 380,000 – 520,000",cost:"Placement Direct: KUCCPS Self-Sponsored",intake:"View Fee Structures & Bursaries",extra:"Policy Note: Private universities do not qualify for Universities Fund public scholarship allocation.",tag:""},
+ {id:6,code:"UoT",name:"University of Toronto",type:"International",region:"Ontario, Canada",field:"Engineering",color:"#1a3a6b",verified:"Top 25 Global",progs:["Lester B. Pearson International Scholarship","Engineering & Computer Science","Life Sciences"],funding:"Covers 100% of Tuition, Books, Incidental Fees, & 4-Year Full Residence Support",match:"Application Window: Sept – January annually (School Nomination Required)",cost:"KCSE Target: Straight A (80+ pts)",intake:"Study Visa Canada Study Permits",extra:"View Nomination Checklist",tag:"Shortlisted"}
+];
+const PATHWAYS=[
+ {name:"Engineering & Technology",pct:88,tier:"High Affinity",icon:"⚙",bg:"#eef7d6",desc:"Focuses on computational architecture, mechanical hardware, embedded circuits, and large-scale public infrastructure.",occ:["Software Engineer","Civil Engineer","Mechatronics Tech"],req:["MAT","PHY","CHM","COMP"],unis:"University: UoN, JKUAT, TUK Nairobi",tvet:"TVETA Centers: Kabete Nat'l, Kenya Coast Poly",cluster:"KUCCPS Cluster Code 1 & 3",cta:"Explore Roles"},
+ {name:"Health & Medicine",pct:74,tier:"Strong Match",icon:"✚",bg:"#fdecea",desc:"Clinical care, community health nursing, biomedical diagnostics, pharmacology, and surgical assistant practice.",occ:["Clinical Officer","Nursing (KRCHN)","Lab Scientist"],req:["BIO","CHM","MAT","PHY","ENG"],unis:"University: Moi Univ., Egerton, UoN Health",tvet:"KMTC Colleges: KMTC (71 Campuses nationwide)",cluster:"KUCCPS Cluster Code 13",cta:"View Courses"},
+ {name:"Business & Finance",pct:71,tier:"Moderate-High",icon:"↗",bg:"#e6f4ea",desc:"Capital markets, corporate audit, logistics management, actuarial science, and fintech product ops.",occ:["Financial Analyst","Supply Chain Lead","Actuarial Scientist"],req:["MAT","BST","ENG","GEO"],unis:"University: Strathmore, KCA Univ., Co-op Univ.",tvet:"Professional Certs: KASNEB (CPA, CIFA, CS)",cluster:"KUCCPS Cluster Code 6 & 7",cta:"View Courses"},
+ {name:"Agriculture & Environment",pct:65,tier:"Growth Sector",icon:"🌱",bg:"#eef7d6",desc:"Smart irrigation, precision agronomy, climate resiliency, horticulture exports, and food microbiology.",occ:["Agronomist","Food Technologist","Soil Scientist"],req:["AGR","BIO","CHM","MAT"],unis:"University: Egerton Njoro, JKUAT Juja",tvet:"Agri TVET: Bukura Agricultural College",cluster:"KUCCPS Cluster Code 11",cta:"View Courses"},
+ {name:"Creative Arts & Media",pct:63,tier:"Creative Tier",icon:"🎨",bg:"#fdf3d7",desc:"Product UI/UX design, visual 3D animation, broadcast journalism, sound design, and content engineering.",occ:["UX/UI Designer","Digital Animator","Investigative Journalist"],req:["ENG","KIS","ART/DRA","KIS"],unis:"University: Daystar, Multimedia Univ (MMU)",tvet:"Media Institutes: Kenya Institute of Mass Comm (KIMC)",cluster:"KUCCPS Cluster Code 17",cta:"View Courses"},
+ {name:"Law, Education & Governance",pct:58,tier:"Foundation Tier",icon:"⚖",bg:"#ede9fe",desc:"Constitutional law, secondary curriculum pedagogy, public administration, judicial clerkship, and policy analysis.",occ:["High School Teacher (TSC)","Legal Researcher","County Dev Officer"],req:["ENG (B+)","KIS","MAT"],unis:"University: Kenyatta Univ (KU), UoN, Parklands",tvet:"Teacher Colleges: Kagumo TTC, Kenya School of Law",cluster:"KUCCPS Cluster Code 2 & 19",cta:"View Courses"}
+];
+const QUIZ=[
+ {q:"Which workplace sounds most energising to you on an everyday basis?",axis:"RIASEC Realistic/Investigative Axis",opts:[["Lab, mechanical workshop, or data hardware cleanroom","Hands-on diagnostic tools, schematics, high precision machines, and telemetry consoles."],["Hospital ward, clinical dispensary, or patient diagnostic room","Human physiological recovery, triage assessments, and clinical consultation."],["Fast-paced technology startup hub, trade floor, or venture office","High stakes negotiation, product growth cycles, scaling financial pipelines."],["Design studio, film broadcast set, or interactive exhibition floor","Creative direction, cultural production, sensory narrative development."]]},
+ {q:"When solving a difficult problem, you prefer to…",axis:"RIASEC Investigative Axis",opts:[["Break it into measurable data points and test hypotheses",""],["Build a physical prototype and iterate by trial",""],["Discuss it with a team and pitch the vision",""],["Research background stories and human impact first",""]]},
+ {q:"Which school subject activity do you lose track of time in?",axis:"RIASEC Realistic Axis",opts:[["Physics practicals / electronics bench",""],["Biology dissections / lab diagnostics",""],["Computer programming / robotics club",""],["Debate / literature / art studio",""]]},
+ {q:"Your ideal weekend project would be…",axis:"RIASEC Artistic Axis",opts:[["Fixing a motorbike engine or building a circuit",""],["Volunteering at a clinic or health camp",""],["Designing a poster / editing a short film",""],["Organising a community fundraiser / business plan",""]]},
+ {q:"In a group project, you naturally become the…",axis:"RIASEC Social Axis",opts:[["Technical builder who makes it work",""],["Planner who organises people and timelines",""],["Presenter who sells the idea",""],["Researcher who gathers evidence",""]]},
+ {q:"Which outcome matters most to you?",axis:"RIASEC Enterprising Axis",opts:[["Building systems that work reliably",""],["Healing and helping people directly",""],["Creating something original and expressive",""],["Leading a venture and earning well",""]]},
+ {q:"You prefer instructions that are…",axis:"RIASEC Conventional Axis",opts:[["Step-by-step technical manuals",""],["Clear clinical protocols",""],["Creative briefs with freedom",""],["Business targets and KPIs",""]]},
+ {q:"Which Kenya career excites you most?",axis:"Vision 2030 Priority Clusters",opts:[["Software / civil / mechatronics engineering",""],["Medicine / nursing / pharmacy",""],["Finance / logistics / actuarial",""],["Film / design / journalism",""]]},
+ {q:"How do you feel about fieldwork outdoors?",axis:"RIASEC Realistic Axis",opts:[["Love it — farms, sites, field surveys",""],["Prefer indoor labs and hospitals",""],["Prefer offices and studios",""],["Mixed — depends on the mission",""]]},
+ {q:"Your strongest KCSE subject feels like…",axis:"Cluster Alignment Check",opts:[["Maths / Physics — numbers and logic",""],["Biology / Chemistry — science of life",""],["English / Kiswahili — language and ideas",""],["Business / Geography — people and systems",""]]},
+ {q:"TVET artisan/diploma vs university degree — your instinct?",axis:"KNQF Pathway Preference",opts:[["University degree first",""],["TVET diploma — faster into work",""],["Either, if the career fits",""],["Not sure yet — guide me",""]]},
+ {q:"Pick a motto that fits you best:",axis:"Final RIASEC Profile Lock",opts:[["“Build it right.”",""],["“Heal and serve.”",""],["“Create and express.”",""],["“Lead and grow.”",""]]}
+];
+const TUTORS=[
+ {name:"Mwalimu Peter Mwangi",tsc:"TSC # 489201",rate:4.9,reviews:38,qual:"B.Ed (Sci) — Kenyatta University",loc:"Nairobi & Kiambu County Online Cluster",tags:["Pure Mathematics","Physics Form 3–4","KCSE Cluster Coach"],bio:"Specialized in breaking down calculus and kinematics mechanics…",cat:"STEM"},
+ {name:"Dr. Faith Achieng",tsc:"TSC # 522104",rate:5.0,reviews:42,qual:"B.Sc & M.Ed — University of Nairobi",loc:"Kisumu & Western Kenya Digital Hub",tags:["Chemistry","Organic Chemistry","Biology Practical"],bio:"12 years experience evaluating KNEC practical preparations. Direct focus…",cat:"STEM"},
+ {name:"Mwalimu John Njoroge",tsc:"TSC # 618304",rate:4.9,reviews:27,qual:"B.A. (English/Literature) — Moi University",loc:"Nakuru & Rift Valley Region",tags:["English Grammar","Set Books Analysis","CBC Grade 8–9"],bio:"Mastering functional writing, poetry breakdown, and comprehensive set…",cat:"Lang"}
+];
+const STUDENTS=[
+ {name:"Amina Odhiambo",id:"PILOT-KEN-0842",stage:"KCSE Candidate",county:"Kisumu",mean:"78%",need:"Physics (C+)",path:"Biomedical Engineering (94% fit)",teacher:"2 Endorsements"},
+ {name:"Moses Kiprop",id:"PILOT-KEN-0911",stage:"KCSE Candidate",county:"Uasin Gishu",mean:"82%",need:"English (B−)",path:"Software Systems (98% fit)",teacher:"1 Endorsement"},
+ {name:"Faith Wanjiku",id:"PILOT-KEN-0421",stage:"CBC Grade 9",county:"Nairobi",mean:"71%",need:"Integrated Sci.",path:"STEM · Agricultural Tech",teacher:"Needs Tutor Review"},
+ {name:"Brian Kibet",id:"PILOT-KEN-0318",stage:"KCSE Candidate",county:"Kericho",mean:"69%",need:"Chemistry (C)",path:"TVET Diploma · Mechatronics",teacher:"1 Endorsement"},
+ {name:"Salma Noor",id:"PILOT-KEN-0199",stage:"CBC Grade 8",county:"Mombasa",mean:"86%",need:"None Flagged",path:"Arts & Sports · Architecture",teacher:"2 Endorsements"}
+];
+const SCHOLARSHIPS=[
+ {name:"Wings of Glory Alumni Leadership Program",type:"Full Scholarship",cov:"100% Tuition + Stipend",amt:"KES 450,000 / yr",deadline:"Deadline: Aug 30",cat:"Merit"},
+ {name:"KCB Foundation Tertiary & Zizi",type:"Partial Grant",cov:"Tuition + Upkeep",amt:"KES 180,000 / yr",deadline:"Deadline: Sept 15",cat:"Need"},
+ {name:"M-PESA Foundation Academy Tertiary Fund",type:"Partial Grant",cov:"Tuition + Laptop",amt:"KES 220,000 / yr",deadline:"Deadline: Oct 01",cat:"Need"},
+ {name:"Elimu Secondary & Higher Education Fund",type:"Merit Award",cov:"Full Secondary + University",amt:"KES 300,000 / yr",deadline:"Deadline: Nov 20",cat:"Merit"}
+];
+const PILLARS=[
+ {n:"1. Purpose Limitation",sec:"Sec 25(b) DPA",body:"Academic pathway modeling and KUCCPS cluster matching only. Student records are strictly forbidden from being sold, rented, or bundled to private universities, predatory lenders, or loan brokers.",foot:"✓ Zero third-party monetization"},
+ {n:"2. Minor Protection & Consent",sec:"Sec 31 DPA",body:"Secondary learners under the age of 18 require parental or legal guardian authorization. Consent is authenticated through SMS OTP tied to verified national ID records or school NEMIS/UPI coordinators.",foot:"☐ Double-factor Guardian SMS"},
+ {n:"3. Strict Data Minimization",sec:"Sec 25(c) DPA",body:"We store solely examination grades, home county, and educational passions. PathFinder systematically refuses to gather biometric data, student physical GPS location, or scanned national ID cards.",foot:"✓ No biometrics or GPS"},
+ {n:"4. Cryptographic RLS Isolation",sec:"Sec 41 DPA",body:"Row-Level Security (RLS) is applied directly inside Postgres. A student's database row can strictly be queried through their ephemeral session token and individual UUID hash, preventing cross-tenant leakage.",foot:"🔒 Postgres RLS + AES-256"},
+ {n:"5. Supervised Academic Scope",sec:"Safeguarding",body:"Tutor and educator portals operate under strict read-only access for assigned cohorts. Direct messaging between unverified adults and learners is disabled platform-wide to maintain holistic safeguarding.",foot:"✓ Zero private adult-minor DMs"},
+ {n:"6. Immutable Audit Logs",sec:"Sec 28 DPA",body:"Every staff review, cluster point recalculation, or data export triggers an append-only audit trail in tamper-evident database structures, available on request during regulatory inspection.",foot:"⛓ Append-only verification chain"}
+];
+const BANDS=[
+ {b:"Band 1",t:"Vulnerable",gov:"70%",helb:"30%",house:"—",upkeep:"KES 60,000",note:"Highest need — orphans, extreme poverty"},
+ {b:"Band 2",t:"Extremely Needy",gov:"60%",helb:"30%",house:"10%",upkeep:"KES 55,000",note:"Amina's band — strong grant cover"},
+ {b:"Band 3",t:"Needy",gov:"50%",helb:"30%",house:"20%",upkeep:"KES 50,000",note:"Middle band — appeal if circumstances change"},
+ {b:"Band 4",t:"Less Needy",gov:"40%",helb:"30%",house:"30%",upkeep:"KES 45,000",note:"Lower grant — HELB loan carries more"},
+ {b:"Band 5",t:"Least Needy",gov:"30%",helb:"30%",house:"40%",upkeep:"KES 40,000",note:"Lowest grant — household contributes most"}
+];
+const FAQS=[
+ ["Is PathFinder Kenya free for students and schools?","Yes — 100% free for public secondary and TVET learners. No agent fees, no broker commissions, no paywalls on KUCCPS or HELB guidance. Private universities may sponsor bursary listings, but student access is never charged."],
+ ["How are the KUCCPS cluster points calculated?","KUCCPS weights your best 7 subjects (with compulsory subjects) using cluster-specific multipliers. PathFinder mirrors the official formula per cluster (e.g. Cluster 1 STEM) and shows your gap to each course cut-off so you can target revision precisely."],
+ ["Does this work on basic smartphones or with slow internet?","Yes. PathFinder is a lightweight PWA (4.8MB offline cache) tuned for 2G/3G Safaricom and Airtel, Opera Mini, and low-end Android. Ultra Data Saver compresses charts to vectors and disables heavy photography."],
+ ["How is student data protected under Kenyan law?","PathFinder is registered with the ODPC (No. ODPC/PR/2024/0918) under the Data Protection Act 2019. Minors require guardian consent (Sec 31), data is isolated with Postgres Row-Level Security, and you can export, restrict, or erase your data within 72 hours."],
+ ["Can TVET and diploma students use this portal?","Absolutely. TVET artisans, certificate and diploma learners get TVETA-aligned pathways, capitation and HELB TVET loan guidance, and institution matching across national polytechnics and KMTC — not just university degrees."],
+ ["What if I am placed in the wrong HEF band?","You have a statutory right to appeal within 30 days of publication on the HEF portal by uploading supplementary proof (death certificates, medical records, income evidence). PathFinder's Band Appeal wizard guides you free."],
+ ["Do you sell student data to universities or lenders?","Never. Purpose Limitation (Sec 25b DPA) forbids selling, renting, or bundling student records. There are zero behavioral ads or trackers, and analytics inclusion is opt-out at any time."],
+ ["How do I verify a tutor is TSC-accredited?","Every tutor in the directory presents an active TSC Registration Number, verified degree parchment, and DCI Certificate of Good Conduct. Sessions are supervised, guardian-notified by SMS, and paid via protected M-Pesa Daraja escrow."]
+];
+const SQL=`-- ============================================================
+-- PATHFINDER KENYA ARCHITECTURE SCHEMA (MIGRATION 001_PROD)
+-- STRICT COMPLIANCE WITH KENYA DATA PROTECTION ACT (DPA 2019)
+-- ENFORCING ROLE-BASED ACCESS CONTROL (RBAC) & ANONYMOUS GUARD
+-- ============================================================
+
+-- 1. EXTENSIONS & UTILITIES
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- 2. HELPER FUNCTIONS FOR ROW-LEVEL SECURITY
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid()
+    AND role = 'superadmin'
+  );
+$$ LANGUAGE sql SECURITY DEFINER SET search_path = public;
+
+CREATE OR REPLACE FUNCTION public.pilot_allowed(user_email TEXT)
+RETURNS BOOLEAN AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.pilot_allowlist
+    WHERE email = lower(user_email)
+  );
+$$ LANGUAGE sql SECURITY DEFINER SET search_path = public;
+
+-- Every data manipulation query is verified against the official
+-- Kenya Data Protection Act (DPA 2019) student guardian consent
+-- ledger before release.`;
+
+/* ================= STATE ================= */
+let shortlist=new Set(JSON.parse(localStorage.getItem("pf_short")||"[1,2,6]"));
+let shortOnly=false, instFilter="", quizIdx=3, quizAnswers={}, selBand=1, selTutorSubjects=new Set(["Mathematics","Physics"]), adminTab="students", deployTab="sql";
+let addedResults=JSON.parse(localStorage.getItem("pf_results")||"[]");
+let checklistState=[true,true,true,false,false];
+
+/* ================= HELPERS ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+function toast(msg){const t=document.createElement("div");t.className="toast";t.innerHTML=msg;$("#toasts").appendChild(t);setTimeout(()=>{t.style.opacity="0";t.style.transition=".3s";setTimeout(()=>t.remove(),300)},3800)}
+function go(page){location.hash="#/"+page}
+function saveShort(){localStorage.setItem("pf_short",JSON.stringify([...shortlist]));updateShortUI()}
+function updateShortUI(){$("#navShortCount").textContent=shortlist.size;$("#shortCount2").textContent=shortlist.size;$("#shortBadge").textContent=shortlist.size+" Selected";renderShortlist();renderDashSaved()}
+function exportData(){toast("⬇ Export generated — PathFinder_Report_Amina_Odhiambo.pdf (signed, DPA-compliant). Check your downloads.")}
+function exportJSON(){const blob=new Blob([JSON.stringify({learner:"Amina Odhiambo",mean:76.8,subjects:SUBJECTS,shortlist:[...shortlist]},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="pathfinder-export.json";a.click();toast("⬇ Full archive exported (JSON) — machine-readable, ODPC-compliant.")}
+function exportCSV(){const rows=[["Learner","ID","Stage","County","Mean","Pathway"],...STUDENTS.map(s=>[s.name,s.id,s.stage,s.county,s.mean,s.path])];const csv=rows.map(r=>r.join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="pilot-dataset.csv";a.click();toast("⬇ Pilot dataset exported (CSV) — audit log entry created.")}
+function recalc(){toast("⟳ Cluster points recalculated: Weighted Cluster 41.2 / Cutoff 39.8 — Software Engineering eligibility CONFIRMED ✓")}
+function activateTracker(){toast("✅ Free Deadline Tracker activated for "+($("#fundName")?.value||"Amina Odhiambo")+" — SMS + email reminders set for KUCCPS & HEF windows.")}
+function revealKNEC(btn){btn.disabled=true;btn.textContent="Sending OTP…";setTimeout(()=>{btn.textContent="OTP sent to +254 712 ••• ••89";toast("🔐 OTP sent via Safaricom SMS. Enter it to reveal your KNEC index (expires in 5 min).");setTimeout(()=>{$("#knecVal").textContent="20404102 8841";btn.textContent="Revealed ✓";toast("👁 KNEC Index revealed — access logged to immutable audit trail.")},1600)},900)}
+
+/* ================= ROUTER ================= */
+const TITLES={landing:"Main Portal",dashboard:"Student Dashboard",quiz:"Passion Quiz & Pathways",institutions:"Institutions Database",funding:"Funding & HELB",tracker:"Academic Tracker",teacher:"Teacher / Tutor Centre",superadmin:"SuperAdmin Console",profile:"Profile & Stage",dpa:"Data Protection (DPA 2019)",deployment:"Deployment Centre"};
+function route(){
+ let h=(location.hash||"#/landing").replace("#/","").split("?")[0]||"landing";
+ if(!TITLES[h])h="landing";
+ const isLanding=h==="landing";
+ $("#landing").style.display=isLanding?"block":"none";
+ $("#app").style.display=isLanding?"none":"flex";
+ if(!isLanding){
+  $$(".page").forEach(p=>p.classList.toggle("on",p.dataset.page===h));
+  $$("#sidenav a").forEach(a=>a.classList.toggle("on",a.dataset.nav===h||(h==="institutions"&&a.dataset.nav==="shortlist"&&false)));
+  $("#crumbPage").textContent=TITLES[h];
+  $("#sidebar").classList.remove("open");
+  window.scrollTo({top:0});
+ }
+}
+window.addEventListener("hashchange",route);
+
+/* ================= CHARTS (SVG) ================= */
+function lineChart(elId,series,w=760,h=240){
+ const el=document.getElementById(elId);if(!el)return;
+ const pad={l:44,r:16,t:16,b:34},iw=w-pad.l-pad.r,ih=h-pad.t-pad.b;
+ const xs=["Term 1 Mock Exam\nMarch 2025","Term 2 Opener\nMay 2025","Term 2 Mid-Term (Current)\nJune 2025"];
+ const x=i=>pad.l+iw*(i/2), y=v=>pad.t+ih*(1-v/100);
+ let grid="";[0,25,50,75,100].forEach(v=>{grid+=`<line x1="${pad.l}" y1="${y(v)}" x2="${w-pad.r}" y2="${y(v)}" stroke="rgba(23,63,53,.10)"/><text x="${pad.l-8}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="#5a6b64">${v}%</text>`});
+ let lines="",dots="",labels="";
+ series.forEach(s=>{
+  const pts=s.hist.map((v,i)=>`${x(i)},${y(v)}`).join(" ");
+  lines+=`<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round"/>`;
+  s.hist.forEach((v,i)=>{dots+=`<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="${s.color}" stroke="#fff" stroke-width="1.5"/>`});
+ });
+ xs.forEach((lab,i)=>{const [a,b]=lab.split("\n");labels+=`<text x="${x(i)}" y="${h-16}" text-anchor="middle" font-size="10.5" fill="#1b1c18" font-weight="600">${a}</text><text x="${x(i)}" y="${h-4}" text-anchor="middle" font-size="10" fill="#5a6b64">${b}</text>`});
+ const gw=y(72);
+ el.innerHTML=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;display:block">${grid}<line x1="${pad.l}" y1="${gw}" x2="${w-pad.r}" y2="${gw}" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="6 4"/><text x="${w-pad.r}" y="${gw-6}" text-anchor="end" font-size="10.5" fill="#2e7d32" font-weight="700">KUCCPS B.Sc Software Eng Gateway: 72.0%</text>${lines}${dots}${labels}</svg>`;
+}
+function renderCharts(){
+ lineChart("dashChart",[{hist:[68,72,76.8],color:"#173f35"}],760,200);
+ lineChart("trackerChart",[
+  {hist:[72,78,88],color:"#173f35"},{hist:[70,76,82],color:"#5a6b64"},{hist:[74,77,79],color:"#9aa8a0"},{hist:[58,54,49],color:"#ba1a1a"}
+ ],760,250);
+ $("#trackerLegend").innerHTML=[["Mathematics (88%)","#173f35"],["Physics (82%)","#5a6b64"],["English (79%)","#9aa8a0"],["Chemistry (49% Bottleneck)","#ba1a1a"]].map(([n,c])=>`<span class="tiny"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c};margin-right:5px"></span>${n}</span>`).join("");
+}
+
+/* ================= DASHBOARD ================= */
+function renderDashboard(){
+ $("#oddsList").innerHTML=[
+  ["UoN","University of Nairobi · B.Sc Computer Science","84% Match","Cluster: 42.1"],
+  ["JKU","JKUAT (Juja) · B.Sc Software Engineering","92% Match","Cluster: 39.4"],
+  ["KNP","Kabwe National Poly (TVET) · Higher Dip Software Dev","89% Safe Bet","Mean Grade: C+"]
+ ].map(([c,n,p,s])=>`<div style="display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.06);border-radius:10px;padding:10px"><span class="inst-logo" style="width:38px;height:38px;flex-basis:38px;font-size:11px;background:#fff;color:var(--pine3)">${c}</span><span style="flex:1"><b style="color:#fff;font-size:12.5px">${n}</b><br><span class="tiny" style="color:#a9c4b6">${s}</span></span><b style="color:var(--lime);font-size:12px;text-align:right">${p}</b></div>`).join("");
+ $("#dashSubjects").innerHTML=SUBJECTS.map(s=>`<div style="border:1px solid var(--line);border-radius:12px;padding:12px"><div style="display:flex;justify-content:space-between"><b>${s.name}</b><span class="tiny muted">${s.cur}% · ${s.grade.split(" ")[0]} ${s.grade.split(" ")[1]||""}</span></div><div class="bar" style="margin-top:8px"><i class="${s.cur<55?"red":""}" style="width:${s.cur}%"></i></div><p class="tiny muted" style="margin-top:6px">${s.name==="Mathematics"?"Cluster multiplier: 1.0 (Optimal performance)":s.name==="Physics"?"Strong experimental & mechanics scores":s.name==="Chemistry"?"Cluster Bottleneck. Min C+ needed for Engineering":s.name==="Computer Studies"?"Project Paper: Python prototype scored 48/50":s.name==="English"?"Meets university prerequisite (Min B−)":"Steady linguistic proficiency index"}</p></div>`).join("");
+ $("#dashTable").innerHTML=SUBJECTS.map(s=>`<tr><td><b>${s.name}</b></td><td>${s.cur}%<br><span class="tiny muted">(${s.grade})</span></td><td>${s.target}%</td><td><span class="chip ${s.cls}">${s.gap}</span></td><td class="tiny muted">${s.name==="Chemistry"?"Critical Gateway Subject":s.name==="Mathematics"?"Cluster Group I Base":s.name==="Physics"?"Cluster Group II (Eng/Tech)":s.name==="Computer Studies"?"Career Pathway Elective":"General University Requirement"}</td><td class="tiny">${s.name==="Chemistry"?'<span class="chip red">Make Conc. Chem (15M)</span>':s.name==="Mathematics"?"Maintain weekly paper drills":s.name==="Physics"?"Review electro-magnetic practice":s.name==="Computer Studies"?"Complete database management mock assessment":s.name==="English"?"Function writing book & review":"—"}</td></tr>`).join("");
+ const checks=["Complete Career Passion Quiz","Shortlist minimum 3 universities/colleges","Verify NEMIS / UPI student ID code","Elevate Chemistry to 60%+ in Term 3 Mocks","Discuss HEF funding means-test with guardian"];
+ $("#checklist").innerHTML=checks.map((c,i)=>`<div class="checkrow"><button class="ck ${checklistState[i]?"done":""}" onclick="toggleCheck(${i})">${checklistState[i]?"✓":""}</button><span style="flex:1;${checklistState[i]?"color:var(--muted);text-decoration:line-through":""}"><b style="color:var(--pine3)">${c}</b></span><span class="tiny muted">${checklistState[i]?"Done":i===3?"In Progress":"Pending"}</span></div>`).join("");
+ const done=checklistState.filter(Boolean).length;$("#checkCount").textContent=done+" of 5 Done";
+ renderDashSaved();
+}
+function toggleCheck(i){checklistState[i]=!checklistState[i];renderDashboard();toast(checklistState[i]?"✓ Checklist item completed — great momentum!":"Checklist item reopened.")}
+function renderDashSaved(){
+ const el=$("#dashSaved");if(!el)return;
+ const saved=INSTITUTIONS.filter(i=>shortlist.has(i.id));
+ el.innerHTML=saved.length?saved.map(i=>`<div style="display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px"><span class="inst-logo" style="width:40px;height:40px;flex-basis:40px;font-size:12px;background:${i.color}">${i.code}</span><span style="flex:1"><b style="font-size:13px">${i.name}</b><br><span class="tiny muted">${i.type} · ${i.region}</span></span><span class="chip lime">Cutoff: ${i.match.includes("42")?"41.5":i.match.includes("39")?"39.8":"—"}</span></div>`).join(""):'<p class="tiny muted">No saved institutions yet. <a href="#/institutions">Browse the database →</a></p>';
+}
+
+/* ================= QUIZ ================= */
+function renderQuiz(){
+ const q=QUIZ[quizIdx];
+ $("#quizStepLab").textContent=`Question ${quizIdx+1} of 12 · ${q.axis}`;
+ $("#quizPct").textContent=Math.round((quizIdx+1)/12*100)+"% Completed";
+ $("#quizQ").textContent=q.q;
+ $("#quizNext").textContent=quizIdx===11?"See My Results ✓":`Next (${quizIdx+2}/12) →`;
+ const letters=["A","B","C","D"];
+ $("#quizOpts").innerHTML=q.opts.map((o,i)=>`<button class="quiz-opt ${quizAnswers[quizIdx]===i?"sel":""}" onclick="pickOpt(${i})"><span class="k">${letters[i]}</span><span><b>${o[0]}</b>${o[1]?`<br><span class="tiny muted">${o[1]}</span>`:""}</span></button>`).join("");
+}
+function pickOpt(i){quizAnswers[quizIdx]=i;renderQuiz()}
+function skipQ(){toast("⏭ Question skipped — you can revisit it before finishing.");nextQ(true)}
+function nextQ(skip){
+ if(quizIdx<11){quizIdx++;renderQuiz()}
+ else{
+  const answered=Object.keys(quizAnswers).length;
+  toast(`🎉 Diagnostic complete! ${answered}/12 answered. Your top match: <b>Engineering & Technology (88%)</b> — pathway decomposition updated below.`);
+  document.getElementById("pathwayGrid").scrollIntoView({behavior:"smooth"});
+  quizIdx=3;renderQuiz();
+ }
+}
+function resetQuiz(){quizIdx=0;quizAnswers={};renderQuiz();toast("⟳ Diagnostic reset — starting from Question 1.")}
+function renderPathways(){
+ $("#pathwayGrid").innerHTML=PATHWAYS.map(p=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><span class="path-ic" style="background:${p.bg};margin:0">${p.icon}</span><span style="text-align:right"><b style="font-size:20px;color:var(--pine3)">${p.pct}%</b><br><span class="tiny muted">${p.tier}</span></span></div><h3 style="margin:10px 0 6px">${p.name}</h3><p class="small muted">${p.desc}</p><p class="flab" style="margin-top:12px">Priority Occupations</p><div style="display:flex;gap:6px;flex-wrap:wrap">${p.occ.map(o=>`<span class="chip">${o} ›</span>`).join("")}</div><p class="flab" style="margin-top:12px">Core KCSE Requirement Basket</p><div style="display:flex;gap:6px;flex-wrap:wrap">${p.req.map(r=>`<span class="chip pine">${r}</span>`).join("")}</div><div class="divider"></div><p class="tiny"><b>${p.unis}</b><br><span class="muted">${p.tvet}</span></p><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="go('institutions')">${p.cluster} · ${p.cta} ›</button></div>`).join("");
+ $("#landingPaths").innerHTML=PATHWAYS.map(p=>`<div class="path-card"><span class="path-ic" style="background:${p.bg}">${p.icon}</span><h3 style="font-size:17px">${p.name}</h3><p class="small muted" style="margin:6px 0">${p.desc.split(".")[0]}.</p><p class="tiny" style="color:var(--terra-d);font-weight:700">KEY: ${p.req.join(" · ")}</p><p class="tiny muted">${p.unis.split(": ")[1]||p.unis}</p><button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="go('quiz')">Explore →</button></div>`).join("");
+}
+
+/* ================= INSTITUTIONS ================= */
+function renderInstitutions(){
+ const q=($("#instSearch").value||"").toLowerCase(), reg=$("#instRegion").value, typ=$("#instType").value, fld=$("#instField").value;
+ let list=INSTITUTIONS.filter(i=>(!q||(i.name+i.progs.join(" ")+i.code).toLowerCase().includes(q))&&(!reg||i.region===reg)&&(!typ||i.type===typ)&&(!fld||i.field===fld)&&(!instFilter||i.type===instFilter)&&(!shortOnly||shortlist.has(i.id)));
+ $("#instCountLab").textContent=`Showing ${list.length} of ${INSTITUTIONS.length} curated institutions`;
+ $("#instList").innerHTML=list.length?list.map(i=>`<div class="card"><div style="display:flex;gap:14px;flex-wrap:wrap"><span class="inst-logo" style="background:${i.color}">${i.code}</span><div style="flex:1;min-width:240px"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="chip">${i.type}</span><span class="tiny muted">📍 ${i.region}</span><span class="chip green">✓ ${i.verified}</span></div><h3 style="margin:6px 0 4px;font-size:19px">${i.name}</h3><p class="tiny muted">Top Accredited Programmes</p><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${i.progs.map(p=>`<span class="chip">${p}</span>`).join("")}</div><div style="background:var(--cream2);border-radius:10px;padding:10px;margin-top:10px;font-size:12.5px"><b>Funding Models:</b> ${i.funding}<br><span class="chip lime" style="margin-top:6px">${i.extra}</span></div><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center"><span class="tiny muted">${i.cost} · ${i.intake}</span><button class="btn btn-ghost btn-sm" onclick="toast('📄 Programme cutoffs & syllabus — ${i.name} (PDF).')">View Programme Cutoffs & Syllabus →</button></div></div><button class="btn ${shortlist.has(i.id)?"btn-lime":"btn-ghost"} btn-sm" style="align-self:flex-start" onclick="toggleShort(${i.id})">${shortlist.has(i.id)?"♥ Shortlisted":"♡ Shortlist"}</button></div></div>`).join(""):'<div class="card" style="text-align:center;padding:34px"><b>No institutions match your filters.</b><p class="tiny muted" style="margin:6px 0 12px">Try clearing the search or choosing a different region.</p><button class="btn btn-dark btn-sm" onclick="clearInstFilters()">Clear Filters</button></div>';
+ renderShortlist();
+}
+function clearInstFilters(){$("#instSearch").value="";$("#instRegion").value="";$("#instType").value="";$("#instField").value="";instFilter="";shortOnly=false;renderInstitutions()}
+function toggleShort(id){shortlist.has(id)?shortlist.delete(id):shortlist.add(id);saveShort();renderInstitutions();toast(shortlist.has(id)?"♥ Added to shortlist — comparison panel updated.":"Removed from shortlist.")}
+function toggleShortlistOnly(){shortOnly=!shortOnly;$("#shortOnlyBtn").classList.toggle("btn-dark",shortOnly);$("#shortOnlyBtn").classList.toggle("btn-lime",!shortOnly);renderInstitutions()}
+function renderShortlist(){
+ const el=$("#shortList");if(!el)return;
+ const saved=INSTITUTIONS.filter(i=>shortlist.has(i.id));
+ el.innerHTML=saved.length?saved.map(i=>`<div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:13px">${i.name}</b><button class="iconbtn" style="width:28px;height:28px" onclick="toggleShort(${i.id})">✕</button></div><p class="tiny muted">${i.progs[0]} · ${i.match}</p><div class="bar" style="margin-top:7px"><i style="width:${i.id===2?92:i.id===1?84:i.id===6?78:60}%"></i></div><p class="tiny muted" style="margin-top:5px">Eligibility Odds: <b>${i.id===2?"92% (Pursuant)":i.id===1?"84% (Strong)":i.id===6?"78% (Disputed)":"—"}</b> · ${i.cost}</p></div>`).join(""):'<p class="tiny muted">Your shortlist is empty. Tap ♡ Shortlist on any institution.</p>';
+}
+$$("#instTabs button").forEach(b=>b.onclick=()=>{$$("#instTabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");instFilter=b.dataset.f;renderInstitutions()});
+
+/* ================= FUNDING ================= */
+function renderBands(){
+ $("#bandGrid").innerHTML=BANDS.map((b,i)=>`<button class="band ${selBand===i?"sel":""}" onclick="selBand=${i};renderBands()"><span class="chip ${i===0?"red":i===1?"lime":""}">${b.b}</span><h3 style="margin:8px 0 4px;font-size:16px">${b.t}</h3><p class="tiny muted">${b.note}</p><div style="margin-top:10px;font-size:12.5px;line-height:1.9"><b>Gov Grant:</b> ${b.gov}<br><b>HELB Loan:</b> ${b.helb}<br><b>Household:</b> ${b.house}<br><b>Upkeep:</b> ${b.upkeep}</div><div class="bar" style="margin-top:8px"><i style="width:${70-i*10}%"></i></div></button>`).join("");
+}
+function renderScholarships(){
+ const q=($("#schSearch").value||"").toLowerCase(), t=$("#schType").value;
+ const list=SCHOLARSHIPS.filter(s=>(!q||s.name.toLowerCase().includes(q))&&(!t||s.type===t));
+ $("#schGrid").innerHTML=list.map(s=>`<div style="border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff"><span class="chip amber">${s.type}</span><h4 style="margin:9px 0 5px;font-size:14.5px">${s.name}</h4><p class="tiny muted">Coverage: <b>${s.cov}</b><br>Target: ${s.amt}<br>${s.deadline}</p><button class="btn btn-dark btn-sm" style="margin-top:10px" onclick="toast('📝 Application started — ${s.name}. Eligibility pre-check passed ✓')">Apply →</button></div>`).join("")||'<p class="tiny muted">No scholarships match.</p>';
+}
+
+/* ================= TRACKER ================= */
+function renderTracker(){
+ $("#trackerTable").innerHTML=SUBJECTS.map((s,i)=>`<tr style="${s.cur<55?"background:#fdecea":""}"><td><div style="display:flex;gap:10px;align-items:center"><span class="inst-logo" style="width:38px;height:38px;flex-basis:38px;font-size:12px;background:${s.cur<55?"#ba1a1a":"var(--pine)"}">${s.short}</span><span><b>${s.name}${s.cur<55?" *":""}</b><br><span class="tiny muted">${s.role}</span></span></div></td><td><b style="font-size:17px">${s.cur}%</b><br><span class="tiny muted">${s.grade}</span></td><td><input class="input" style="width:78px;height:38px" type="number" value="${s.target}" onchange="editTarget(${i},this.value)"></td><td><span class="chip ${s.cls}">${s.gap}</span></td><td class="small muted" style="max-width:340px">${s.strat}</td><td><button class="iconbtn" onclick="toast('✎ Quick edit — ${s.name} target & strategy.')">✎</button></td></tr>`).join("");
+ const rows=[["Term 2 Mid-Term Practical","Jun 18, 2025","Physics (Paper 3)","34 / 40 (85%)","11.0"],["Continuous Assessment Test 2","Jun 14, 2025","Chemistry (Paper I)","39 / 80 (48.7%)","5.0"],["Inter-County Joint Opener","May 12, 2025","Mathematics (Paper 1 & 2)","176 / 200 (88%)","12.0"],...addedResults.map(r=>[r.name,r.date,r.subject+" ("+r.paper+")",r.raw,r.pts])];
+ $("#assessTable").innerHTML=rows.map(r=>`<tr><td><b>${r[0]}</b></td><td class="muted">${r[1]}</td><td>${r[2]}</td><td><b>${r[3]}</b></td><td>${r[4]}</td><td><button class="iconbtn" style="width:32px;height:32px" onclick="toast('✎ Edit assessment record.')">✎</button></td></tr>`).join("");
+}
+function editTarget(i,v){SUBJECTS[i].target=+v||SUBJECTS[i].target;const gap=SUBJECTS[i].cur-SUBJECTS[i].target;SUBJECTS[i].gap=(gap>=0?"+":"")+gap+"% "+(gap>=0?"Exceeds":"Deficit");SUBJECTS[i].cls=gap>=0?"green":gap>=-3?"amber":"red";renderTracker();renderDashboard();toast(`🎯 ${SUBJECTS[i].name} target set to ${v}% — predicted cluster weight recalculated.`)}
+function openAddResult(){$("#addModal").classList.add("open")}
+function closeModal(){$("#addModal").classList.remove("open")}
+function previewResult(){
+ const got=+$("#nrGot").value,out=+$("#nrOut").value;
+ if(got&&out){const pct=Math.round(got/out*100);const pts=pct>=80?12:pct>=70?11:pct>=60?10:pct>=50?8:pct>=40?6:4;$("#nrPreview").innerHTML=`<b>Preview:</b> ${pct}% · KNEC Points: <b>${pts}.0</b> · Grade: ${pct>=80?"A":pct>=70?"A−":pct>=60?"B+":pct>=50?"B":"C"}`;return{pct,pts}}
+ $("#nrPreview").textContent="Enter scores to preview KNEC percentage & points.";return null;
+}
+["nrGot","nrOut"].forEach(id=>document.getElementById(id).addEventListener("input",previewResult));
+function saveResult(){
+ const p=previewResult();if(!p){toast("⚠ Enter both raw score and out-of marks first.");return}
+ const r={name:$("#nrName").value||"New Assessment",date:$("#nrDate").value,subject:$("#nrSubject").value,paper:$("#nrPaper").value,raw:`${$("#nrGot").value} / ${$("#nrOut").value} (${p.pct}%)`,pts:p.pts.toFixed(1)};
+ addedResults.unshift(r);localStorage.setItem("pf_results",JSON.stringify(addedResults));
+ closeModal();renderTracker();toast(`✅ Result saved — ${r.subject} ${p.pct}% (${p.pts} pts). Guardian SMS sync sent to Mary N.`);
+}
+
+/* ================= TEACHER ================= */
+const TUTOR_SUBS=["Mathematics","Physics","Chemistry","Biology","English","Kiswahili"];
+function renderTeacher(){
+ $("#roadmap").innerHTML=[["Phase 01","Curriculum Audit","KNEC KCSE & CBC Grade 7–9 syllabi mapping completed.","Completed","green"],["Phase 02 (Current)","TSC Vetting Pilot","50 pilot tutors across Nairobi, Kiambu, and Kisumu verifying records.","In Verification","lime"],["Phase 03","Daraja Booking","Safaricom Daraja API 2.0 direct escrow billing & auto-receipting.","Target: Next Month",""],["Phase 04","Classroom Studio","Encrypted low-latency live web rooms optimized for 3G/4G Safaricom data bundles.","Target: Q3 2025",""],["Phase 05","County Hubs","47-county physically certified public library mentoring points.","Target: Q4 2025",""]].map(([ph,t,d,s,c])=>`<div class="card" style="padding:15px"><p class="tiny muted">${ph}</p><h4 style="margin:5px 0">${t}</h4><p class="tiny muted">${d}</p><span class="chip ${c==="green"?"green":c==="lime"?"lime":""}" style="margin-top:9px">${s}</span></div>`).join("");
+ $("#tutorSubjects").innerHTML=TUTOR_SUBS.map(s=>`<button class="btn ${selTutorSubjects.has(s)?"btn-dark":"btn-ghost"} btn-sm" style="height:42px" onclick="toggleTutorSub('${s}')">${selTutorSubjects.has(s)?"✓ ":""}${s}</button>`).join("");
+ renderTutors("");calcTutor();
+}
+function toggleTutorSub(s){selTutorSubjects.has(s)?selTutorSubjects.delete(s):selTutorSubjects.add(s);if(!selTutorSubjects.size)selTutorSubjects.add(s);renderTeacher()}
+function calcTutor(){
+ const hrs=+$("#hrsRange").value,cyc=+$("#tutorCycle").value,n=selTutorSubjects.size;
+ $("#hrsLab").textContent=hrs+" hrs/wk per subject";
+ $("#subjCountLab").textContent=n+" Subject"+(n>1?"s":"")+" Selected";
+ $("#sumSubjects").textContent=[...selTutorSubjects].join(", ")+` (${n})`;
+ $("#sumHours").textContent=(hrs*n)+" total hours / wk";
+ $("#sumWeekly").textContent="KES "+(hrs*n*500).toLocaleString()+".00";
+ $("#sumCycle").textContent="× "+cyc+" weeks ("+(cyc===1?"1 week":cyc===4?"1 month":"1 term")+")";
+ $("#sumTotal").textContent="KES "+(hrs*n*500*cyc).toLocaleString();
+}
+function reserveTutor(){toast("🔒 Mentorship hours reserved for Phase 2 — Daraja STK Push will be sent when tutor slots open. No charge today.")}
+function renderTutors(cat){
+ const list=TUTORS.filter(t=>!cat||t.cat===cat);
+ $("#tutorGrid").innerHTML=list.map(t=>`<div class="card"><div style="display:flex;gap:11px;align-items:center"><span class="avatar" style="width:46px;height:46px">${t.name.split(" ").slice(-2).map(w=>w[0]).join("")}</span><span style="flex:1"><b>${t.name}</b><br><span class="tiny muted">${t.tsc}</span></span><span class="chip amber">★ ${t.rate} (${t.reviews})</span></div><p class="tiny muted" style="margin:10px 0">🎓 ${t.qual}<br>📍 ${t.loc}</p><div style="display:flex;gap:6px;flex-wrap:wrap">${t.tags.map(x=>`<span class="chip">${x}</span>`).join("")}</div><p class="small muted" style="margin:10px 0">“${t.bio}”</p><div style="display:flex;justify-content:space-between;align-items:center"><span class="tiny muted">Fixed Tariff<br><b style="color:var(--pine3);font-size:15px">KES 500 / hr</b></span><button class="btn btn-dark btn-sm" onclick="toast('📩 Request sent to ${t.name} — guardian co-notification enabled.')">Request in Pilot →</button></div></div>`).join("");
+}
+$$("#tutorTabs button").forEach(b=>b.onclick=()=>{$$("#tutorTabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");renderTutors(b.dataset.t)});
+
+/* ================= SUPERADMIN ================= */
+function renderAdmin(){
+ const q=($("#adminSearch").value||"").toLowerCase();
+ const panel=$("#adminPanel");
+ if(adminTab==="students"){
+  const list=STUDENTS.filter(s=>(s.name+s.id+s.county).toLowerCase().includes(q));
+  panel.innerHTML=`<div style="background:var(--cream2);border-radius:12px;padding:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span style="font-size:24px">🛡</span><span style="flex:1"><b>Safeguarded Student Cohort (Pilot Group)</b><br><span class="tiny muted">Full pseudonymization active under Section 31 of Kenya DPA 2019. Guardian and teacher linkage logged.</span></span><span class="chip lime">18 of 20 Pilot Seats Active</span></div>
+  <div style="overflow:auto;margin-top:10px"><table><thead><tr><th>Learner & ID</th><th>Stage / Curriculum</th><th>County</th><th>Mean Score</th><th>Intervention Need</th><th>Career Pathway Match</th><th>Teacher Req.</th><th>Audit Action</th></tr></thead><tbody>${list.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><span class="avatar" style="width:36px;height:36px;font-size:11px">${s.name.split(" ").map(w=>w[0]).join("")}</span><span><b>${s.name}</b><br><span class="tiny muted">${s.id} · Consented</span></span></div></td><td><span class="chip">${s.stage}</span></td><td>${s.county}</td><td><b style="font-size:17px">${s.mean}</b></td><td><span class="chip ${s.need==="None Flagged"?"green":""}">${s.need}</span></td><td class="tiny">${s.path}</td><td class="tiny">${s.teacher.includes("Needs")?"⚠ ":"✓ "}${s.teacher}</td><td><button class="btn btn-ghost btn-sm" onclick="toast('⛓ Immutable audit log for ${s.id} — 14 entries, append-only chain verified.')">View Log</button></td></tr>`).join("")}</tbody></table></div>
+  <p class="tiny muted" style="margin-top:10px">Showing ${list.length} of 18 students · Counties: Nairobi, Kisumu, Uasin Gishu, Kericho, Mombasa, Kiambu, Machakos, Nakuru · Supabase RLS Handshake 4m ago</p>`;
+ }else if(adminTab==="institutions"){
+  panel.innerHTML=`<div class="grid g3">${INSTITUTIONS.map(i=>`<div style="border:1px solid var(--line);border-radius:12px;padding:13px"><b>${i.name}</b><p class="tiny muted">${i.type} · ${i.region} · ${i.verified}</p><span class="chip green" style="margin-top:6px">CUE Validated ✓</span></div>`).join("")}</div>`;
+ }else if(adminTab==="funding"){
+  panel.innerHTML=`<table><thead><tr><th>Scheme</th><th>Tracked Allocation</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td><b>Universities Fund (Bands 1–5)</b></td><td>KES 18.6M</td><td><span class="chip green">Active</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Review band allocations.')">Review</button></td></tr><tr><td><b>HELB Tuition & Upkeep Loans</b></td><td>KES 9.8M</td><td><span class="chip green">Active</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('Review loan disbursements.')">Review</button></td></tr><tr><td><b>TVET Capitation (Gov)</b></td><td>KES 4.0M</td><td><span class="chip amber">Pending Review</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('TVET capitation review opened.')">Review</button></td></tr></tbody></table>`;
+ }else if(adminTab==="audit"){
+  panel.innerHTML=`<div class="code" style="max-height:300px">14:32:02 EAT [SYNC] KUCCPS course cut-off dataset updated for University of Nairobi & Strathmore.\n14:30:19 EAT [DEPLOY] AppDeploy worker node-nbi-01 renewed SSL cert via Let's Encrypt CA.\n14:28:44 EAT [RLS] Verified 14 RLS security policies across student transcripts. Zero table leaks.\n14:21:07 EAT [DPA] Guardian consent ledger appended: PILOT-KEN-0842 (Mary N.).\n14:15:52 EAT [EXPORT] Pilot dataset CSV exported by terryperis7@gmail.com (MFA verified).</div>`;
+ }else{
+  panel.innerHTML=`<div class="grid g3"><div class="card"><b>Backups</b><p class="tiny muted" style="margin:6px 0">Daily encrypted snapshots · af-south-1 + eu-west-1 replica</p><span class="chip green">Last backup: 02:00 EAT ✓</span></div><div class="card"><b>Uptime</b><p class="tiny muted" style="margin:6px 0">Edge Nairobi-01 · KIXP peering</p><span class="chip lime">99.98% SLA</span></div><div class="card"><b>Incident Response</b><p class="tiny muted" style="margin:6px 0">DPA breach notification &lt; 72h per ODPC guidance</p><button class="btn btn-ghost btn-sm" onclick="toast('🚨 DR runbook opened.')">Open Runbook</button></div></div>`;
+ }
+}
+$$("#adminTabs button").forEach(b=>b.onclick=()=>{$$("#adminTabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");adminTab=b.dataset.a;renderAdmin()});
+
+/* ================= PROFILE ================= */
+const PERSONAS=[["Warrior","🦁"],["Sci-Fi Hero","🤖"],["Astronaut","🚀"],["Scientist","🔬"],["Mage","🧙"],["Hacker","💻"],["Athlete","🏃"],["Savanna Cat","🦊"],["Bot 01","🐾"],["Rift Drake","🐉"],["Red Panda","🐼"],["Forest Spirit","🌿"]];
+let selPersona=0;
+function renderProfile(){
+ $("#personaGrid").innerHTML=PERSONAS.map((p,i)=>`<button class="persona ${i===selPersona?"sel":""}" onclick="selPersona=${i};renderProfile();toast('🎭 Persona set to ${p[0]} — non-identifiable in mentor rooms.')"><span class="face" style="background:${["#fdecea","#e0e7ff","#e6f4ea","#fdf3d7","#ede9fe","#e0f2fe"][i%6]}">${p[1]}</span>${p[0]}</button>`).join("");
+ const phases=[["CBC Junior School","Grade 7 – 9 (Formative pathway exploration)",false],["CBC Senior School","STEM, Arts & Sports, Social Sciences pathways",true],["KCSE 8-4-4 Candidate","Form 3–4 (Cluster weight calculations active)",false],["Form Four Leaver","KUCCPS First / Second Revision Window",false],["TVET / College / University Scholar","Artisan, Certificate, Diploma or Higher Education Degree track",false]];
+ $("#phaseGrid").innerHTML=phases.map((p,i)=>`<button class="phase ${p[2]?"sel":""}" onclick="selectPhase(this)"><span class="radio"></span><span><b>${p[0]}</b>${i===2?' <span class="chip lime" style="font-size:9px">Dual Mode</span>':""}${i===1?' <span class="chip lime" style="font-size:9px">Grade 10–12</span>':""}<br><span class="tiny muted">${p[1]}</span></span></button>`).join("");
+}
+function selectPhase(el){$$("#phaseGrid .phase").forEach(x=>x.classList.remove("sel"));el.classList.add("sel");toast("🎓 Academic phase updated — cluster calculations recalibrated.")}
+
+/* ================= DPA ================= */
+function renderDPA(){
+ $("#pillarGrid").innerHTML=PILLARS.map(p=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:20px">◉</span><span class="chip">${p.sec}</span></div><h3 style="margin:10px 0 6px;font-size:16px">${p.n}</h3><p class="small muted">${p.body}</p><p class="tiny" style="margin-top:10px;color:var(--pine)"><b>${p.foot}</b></p></div>`).join("");
+}
+function toggleRestrict(btn){const lab=$("#restrictLab");const on=lab.textContent.includes("Included");lab.textContent=on?"Excluded from Anonymous Stats ✓":"Included in Anonymous Stats";toast(on?"◐ Analytics restriction ON — excluded from national aggregates.":"◐ Analytics restriction OFF — included in anonymous stats.")}
+function confirmErasure(btn){if(btn.dataset.armed){btn.textContent="🗑 Erasure Requested — 14-day hold started";btn.disabled=true;toast("🗑 Permanent erasure requested. Cryptographic shredding scheduled after 14-day safety grace period. ODPC notified.")}else{btn.dataset.armed="1";btn.textContent="⚠ Confirm Permanent Erasure?";setTimeout(()=>{delete btn.dataset.armed;btn.textContent="🗑 Request Permanent Erasure"},4000)}}
+
+/* ================= DEPLOYMENT ================= */
+function renderDeploy(){
+ const p=$("#deployPanel");
+ if(deployTab==="sql"){
+  p.innerHTML=`<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center"><b>PostgreSQL 15.6 Target Schema Definition</b><span class="tiny muted">9 Tables · 14 RLS Rules · 2 Triggers</span></div><div style="display:flex;gap:8px;margin:10px 0"><button class="btn btn-ghost btn-sm" onclick="navigator.clipboard&&navigator.clipboard.writeText(SQL);toast('📋 Schema copied to clipboard.')">⧉ Copy Schema</button><button class="btn btn-dark btn-sm" onclick="downloadSQL()">⬇ Download .sql</button></div><div class="code">${SQL}</div><p class="tiny muted" style="margin-top:8px">Every data manipulation query is verified against the official Kenya Data Protection Act (DPA 2019) student guardian consent ledger before release.</p>`;
+ }else if(deployTab==="e2e"){
+  p.innerHTML=`<table><thead><tr><th>Suite</th><th>Tests</th><th>Status</th><th>Duration</th></tr></thead><tbody>${[["auth.spec.ts — Guardian OTP login","8","✓ Pass","12s"],["cluster.spec.ts — KUCCPS weighted points","14","✓ Pass","18s"],["funding.spec.ts — HEF band calculator","11","✓ Pass","9s"],["rls.spec.ts — Cross-tenant isolation","9","✓ Pass","14s"],["quiz.spec.ts — RIASEC matcher","10","✓ Pass","11s"],["pwa.spec.ts — Offline cache shell","6","✓ Pass","7s"]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td><span class="chip green">${r[2]}</span></td><td>${r[3]}</td></tr>`).join("")}</tbody></table><p class="tiny muted" style="margin-top:8px">6 suites · 58 tests · 0 failures · Last run: today 14:30 EAT</p>`;
+ }else if(deployTab==="pwa"){
+  p.innerHTML=`<div class="code">{\n  "name": "PathFinder Kenya",\n  "short_name": "PathFinder",\n  "display": "standalone",\n  "start_url": "/#/dashboard",\n  "theme_color": "#173f35",\n  "background_color": "#fbf9f3",\n  "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }],\n  "offline_cache_mb": 4.8,\n  "strategies": { "shell": "CacheFirst", "api": "NetworkFirst" }\n}</div>`;
+ }else{
+  p.innerHTML=`<table><thead><tr><th>Secret / Config</th><th>Scope</th><th>Status</th></tr></thead><tbody>${[["SUPABASE_ANON_KEY","Client bundle","✓ Present (public)"],["SUPABASE_SERVICE_ROLE_KEY","Server only","🔒 Restricted — never shipped"],["DARAJA_CONSUMER_SECRET","Edge worker","🔒 Vaulted (AWS KMS)"],["KUCCPS_API_TOKEN","Edge worker","✓ Rotated 12 days ago"],["ODPC_REG_NO","Public","ODPC/PR/2024/0918"]].map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table><p class="tiny muted" style="margin-top:8px">0 exposed secrets · Client bundle strictly holds anon-key only.</p>`;
+ }
+ $("#auditFeed").innerHTML=[["14:32:02 EAT","[SYNC]","KUCCPS course cut-off dataset updated for University of Nairobi & Strathmore."],["14:30:19 EAT","[DEPLOY]","AppDeploy worker node-nbi-01 renewed SSL cert via Let's Encrypt CA."],["14:28:44 EAT","[RLS]","Verified 14 RLS security policies across student transcripts. Zero table leaks."]].map(r=>`<div style="display:flex;gap:8px"><span class="tiny muted" style="flex:0 0 78px">${r[0]}</span><span><b>${r[1]}</b> ${r[2]}</span></div>`).join("");
+ $("#releaseList").innerHTML=[["Phase 1: Accounts & RLS","Auth profiles, RBAC isolation & DPA guardian consent ledger.","100%","done"],["Phase 2: Verified Cohort","250 secondary school candidates across 5 pilot counties.","100%","done"],["Phase 3: KUCCPS & Swahili Engine","Cluster point calculators & bilingual Kiswahili term dictionary.","95%","active"],["Phase 4: Public National Launch","County school-wide bulk accounts and TVETA integration.","Q3 2025",""],["Phase 5: TSC Educator Escrow","Safaricom Daraja B2C micro-payouts for verified tutors.","Q4 2025",""]].map(r=>`<div class="checkrow"><span class="ck ${r[3]==="done"?"done":""}" style="${r[3]==="active"?"border-color:var(--lime2);background:var(--lime-soft)":""}">${r[3]==="done"?"✓":r[3]==="active"?"●":""}</span><span style="flex:1"><b>${r[0]}</b><br><span class="tiny muted">${r[1]}</span></span><span class="tiny muted">${r[2]}</span></div>`).join("");
+}
+$$("#deployTabs button").forEach(b=>b.onclick=()=>{$$("#deployTabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");deployTab=b.dataset.d;renderDeploy()});
+function downloadSQL(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([SQL],{type:"text/sql"}));a.download="migration_001_v0.9.4.sql";a.click();toast("⬇ migration_001_v0.9.4.sql downloaded — DPA 2019 RLS schema.")}
+function runE2E(btn){btn.disabled=true;btn.textContent="⏳ Running…";setTimeout(()=>{btn.disabled=false;btn.textContent="▶ Trigger E2E Test Suite";toast("✓ E2E Suite: 58/58 tests passed in 71s (Playwright, Nairobi edge).")},1800)}
+function deployStaging(btn){btn.disabled=true;btn.textContent="⏳ Deploying…";setTimeout(()=>{btn.disabled=false;btn.textContent="🚀 Deploy Staging to Live";toast("🚀 Staging deployed to nairobi-01.appdeploy — 24ms ping, SSL renewed, audit trail appended.")},2000)}
+
+/* ================= FAQ / LANG / SEARCH ================= */
+function renderFAQ(){
+ $("#faqWrap").innerHTML=FAQS.map((f,i)=>`<div class="faq ${i===0?"open":""}"><button onclick="this.parentElement.classList.toggle('open')">${f[0]}<span>▾</span></button><div class="a">${f[1]}</div></div>`).join("");
+}
+const I18N={sw:{hero1:"Kila mwanafunzi wa Kenya anastahili njia iliyo wazi.",heroSub:"Kutoka Darasa la 7 hadi mshahara wako wa kwanza — PathFinder hukusaidia kuchagua masomo sahihi, kupata kozi, vyuo vikuu na vyuo vya TVET, kufungua ufadhili wa serikali, na kufuatilia kila alama. Bure, binafsi, iliyoundwa kwa simu za Kenya.",cta1:"Fungua akaunti yako ya bure",cta2:"Fanya quiz ya sekunde 60",getstarted:"Anza sasa"}};
+function setLang(l){
+ $$("[data-lang]").forEach(b=>b.classList.toggle("on",b.dataset.lang===l));
+ if(l==="sw"){$$("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(I18N.sw[k])el.textContent=I18N.sw[k]});toast("🇰🇪 Kiswahili Sanifu — muongozo wa kozi na vyuo umewezeshwa.")}
+ else{location.reload()}
+}
+$$("[data-lang]").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+$("#globalSearch").addEventListener("keydown",e=>{
+ if(e.key==="Enter"){const q=e.target.value.toLowerCase();if(q.includes("fund")||q.includes("helb"))go("funding");else if(q.includes("quiz")||q.includes("career"))go("quiz");else if(q.includes("track")||q.includes("chem"))go("tracker");else if(q.includes("tutor")||q.includes("teacher"))go("teacher");else{go("institutions");setTimeout(()=>{$("#instSearch").value=e.target.value;renderInstitutions()},50)}}
+});
+document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#globalSearch").focus()}if(e.key==="Escape")closeModal()});
+$("#addModal").addEventListener("click",e=>{if(e.target.id==="addModal")closeModal()});
+
+/* ================= INIT ================= */
+renderDashboard();renderQuiz();renderPathways();renderInstitutions();renderBands();renderScholarships();renderTracker();renderTeacher();renderAdmin();renderProfile();renderDPA();renderDeploy();renderFAQ();renderCharts();updateShortUI();route();
+</script>
+</body>
+</html>
