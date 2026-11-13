@@ -10,7 +10,13 @@
 
 </div>
 
+<<<<<<< HEAD
 ---
+=======
+## Accounts
+- **Demo:** one-click buttons on signin.html (only place mock data appears)
+- **Real students:** start empty → must complete onboarding (results + 12Q×6 quiz, redo anytime)
+>>>>>>> 072d6bfc76d45da0b6f53c81f3bc1e92eb41d74b
 
 ## Table of contents
 [About](#about) · [Features](#features) · [Quick start](#quick-start) · [Connect Supabase](#connect-supabase-real-accounts) · [Deploy](#deploy) · [Project structure](#project-structure) · [Testing](#testing) · [Data](#data--accuracy) · [Security](#security) · [Status & roadmap](#status--roadmap) · [License](#license)
