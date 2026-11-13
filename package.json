@@ -1,0 +1,12 @@
+{
+  "name": "pathfinder-kenya",
+  "version": "5.1.0",
+  "private": true,
+  "description": "Free KUCCPS, HELB, TVET, KCSE & CBC guidance for Kenyan students (static web app, no build step).",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "node tests/app.test.js && python3 tests/check_html.py"
+  },
+  "engines": { "node": ">=18" }
+}

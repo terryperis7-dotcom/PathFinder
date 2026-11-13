@@ -1,24 +1,36 @@
-# PathFinder Kenya — Security Notes
-© 2026 PathFinder Kenya. All rights reserved. See /LICENSE.
+# PathFinder Kenya — Security notes
+
+© 2026 PathFinder Kenya. All rights reserved.
 
 ## What is implemented
-- **XSS-safe rendering**: all user input is escaped (`esc()` in `assets/js/app.js`) and toasts use `textContent`, never `innerHTML` with user data.
-- **Content Security Policy**: meta CSP on every page + `_headers` for Netlify/Cloudflare (see below). Scripts only from `self` + jsDelivr; no inline event handlers are trusted beyond the app's own code.
-- **Security headers** (`_headers`): `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`, `Cross-Origin-Opener-Policy`.
-- **External links**: all `target="_blank"` links carry `rel="noopener noreferrer"` (prevents reverse tabnabbing).
-- **Session hygiene**: 30-minute idle auto sign-out; sign-out clears session + timestamp; suspended accounts are blocked at sign-in.
-- **Input limits**: avatar upload capped at 2 MB; forms use `type="email"`/`required`; search is debounced (120 ms) to avoid abuse.
-- **Privacy**: no third-party trackers; local storage only for session + preferences; DPA 2019 rights honoured (see `/legal/privacy.html`).
+- **XSS-safe rendering**: user-controlled text is escaped with `esc()` before it goes into HTML; toasts use `textContent`.
+- **Content Security Policy** on every page (meta tag) and as an HTTP header (`vercel.json` / `_headers`), restricting scripts to the site itself and jsDelivr.
+- **Security headers**: `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`, `Cross-Origin-Opener-Policy`.
+- **Auth**
+  - With Supabase configured: Supabase Auth (server-side password handling, rate limiting, email confirmation). The role comes from the `profiles` table.
+  - Local demo mode: passwords are salted and hashed with PBKDF2-SHA-256 (150,000 iterations), compared in constant time, with a 30-second lockout after 5 failures.
+  - SuperAdmin accounts can **not** be self-registered.
+- **Database**: Row Level Security everywhere; clients can't change `role`; audit log is insert-only for users. See [`supabase/schema.sql`](../supabase/schema.sql).
+- **Open-redirect protection** on the `?next=` sign-in parameter.
+- **CSV export hardening** against spreadsheet formula injection.
+- **Service worker** only handles same-origin requests, so API responses (private data) are never cached.
+- **External links** use `rel="noopener noreferrer"`; `window.open` calls drop the opener.
+- **Session hygiene**: 30-minute idle sign-out; sign-out also ends the Supabase session.
 
-## Prototype limitations (must fix before production)
-- **Auth is localStorage-based** (demo). Passwords are not hashed server-side. **Before launch, migrate to Supabase Auth** (see `supabase/README.md`): enable email/password auth, Row-Level Security, and remove `checkPassword()` demo logic.
-- **SuperAdmin credentials** are seeded in `assets/js/app.js` for the prototype. In production, create the SuperAdmin via Supabase Auth + a `profiles` row with `role='superadmin'`, and delete the seeded constant.
-- **No rate limiting** on sign-in (local). Supabase Auth provides rate limiting in production.
+## Known limitations (read before launch)
+1. **Front-end page guards are not a security boundary.** Anyone can edit `localStorage` in their own browser. Real protection is Supabase Auth + RLS, so never put sensitive data behind local mode.
+2. **Local demo mode is not secure storage.** Use it for demos only; connect Supabase before collecting real student data.
+3. The demo accounts (`Continue as … (Demo)`) are intentionally password-less and show clearly labelled mock data.
+4. The Supabase script is loaded from jsDelivr using `@2`. For stricter supply-chain control, pin an exact version and add a Subresource Integrity hash.
+5. Tutor and admin workspaces are **previews**: sample data, simulated actions.
+
+## History: credentials that were committed
+Earlier versions of this repository contained a hard-coded SuperAdmin email, phone number, password and access code in `assets/js/app.js`, `signup.html`, `signin.html` and `supabase/README.md`. They were removed, but **they remain in git history**. Treat them as compromised: change that password everywhere it is used, never reuse that access code, and consider rewriting history (e.g. `git filter-repo`) if the repository is public.
 
 ## Reporting
-Found a vulnerability? Email **security@pathfinder.ke** (see `/.well-known/security.txt`). Please do not disclose publicly until we have had a chance to fix it.
+Email the address in [`.well-known/security.txt`](../.well-known/security.txt) (replace the placeholder domain with one you own). Please don't disclose publicly until it is fixed.
 
 ## Deploy headers
-- **Netlify / Cloudflare Pages**: `_headers` in repo root is picked up automatically.
-- **Apache**: add the headers from `_headers` to `.htaccess`.
-- **Nginx**: add equivalent `add_header` directives.
+- **Vercel**: `vercel.json` (this repo).
+- **Netlify / Cloudflare Pages**: `_headers`.
+- **Apache / Nginx**: copy the headers from `vercel.json` into your server config.

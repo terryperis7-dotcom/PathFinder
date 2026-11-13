@@ -10,20 +10,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>Institutions — PathFinder Kenya</title>
 <link rel="manifest" href="../manifest.json">
-<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div id="netStatus" role="status"></div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
     <div class="side-role">🎓 <b data-user-name>Student</b><br><span class="tiny" data-user-role>KCSE Candidate</span></div>
     <nav class="snav">
       <h5>MY PATH</h5>
@@ -49,7 +50,7 @@
     <main class="view">
       <p class="eyebrow">CUE &amp; TVETA verified · 2025/2026 intake</p>
       <h1 style="font-size:32px;margin:8px 0 8px">Institutions &amp; TVET Database</h1>
-      <p class="muted" style="max-width:620px">24 real universities, polytechnics and KMTC campuses with cut-offs, fees and funding — zero agent commissions.</p><p style="margin-top:10px"> <span class="chip real">✓ REAL DATA</span> <span class="tiny muted">Sources: CUE gazette, KUCCPS 2024/2025 portal, TVETA directory. Cut-offs change yearly — confirm on the official portal.</span></p>
+      <p class="muted" style="max-width:620px">24 universities, polytechnics and KMTC campuses with cut-offs, fees and funding — zero agent commissions.</p><p style="margin-top:10px"> <span class="chip real">✓ PUBLIC SOURCES</span> <span class="tiny muted">Sources: CUE gazette, KUCCPS 2024/2025 portal, TVETA directory. Cut-offs change yearly — confirm on the official portal.</span></p>
 
       <div class="card" style="margin-top:22px;padding:20px">
         <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px" class="inst-filters">
@@ -90,12 +91,13 @@
 <script>
 const s=requireRole("student","../signin.html"); if(s)fillUserChip();
 const INSTITUTIONS=window.PF_INSTITUTIONS||[];
-let shortlist=new Set(JSON.parse(localStorage.getItem("pf_short")||'["uon","jkuat","uot"]').map(String)), shortOnly=false, instFilter="";
-function saveShort(){localStorage.setItem("pf_short",JSON.stringify([...shortlist]));renderShortlist()}
+/* Shortlist is per account and starts EMPTY (the old version pre-filled everyone's list). */
+let shortlist=new Set((lsGet(shortlistKey(),[])||[]).map(String)), shortOnly=false, instFilter="";
+function saveShort(){lsSet(shortlistKey(),[...shortlist]);if(window.PF_DB&&PF_DB.live&&!isDemo())PF_DB.syncShortlist([...shortlist]);renderShortlist()}
 function renderInstitutions(){
  const q=(document.getElementById("instSearch").value||"").toLowerCase(), typ=document.getElementById("instType").value, reg=document.getElementById("instRegion").value;
  const list=INSTITUTIONS.filter(i=>(!q||(i.name+i.progs.join(" ")).toLowerCase().includes(q))&&(!typ||i.type===typ)&&(!reg||i.region===reg)&&(!instFilter||i.type===instFilter)&&(!shortOnly||shortlist.has(String(i.id))));
- document.getElementById("instList").innerHTML=list.length?list.map(i=>`<div class="card"><div style="display:flex;gap:14px;flex-wrap:wrap"><span class="inst-logo" style="background:${i.color}">${i.code}</span><div style="flex:1;min-width:240px"><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip">${i.type}</span><span class="tiny muted">📍 ${i.region}</span><span class="chip green">✓ Verified</span></div><h3 style="margin:8px 0 6px;font-size:19px">${i.name}</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${i.progs.map(p=>`<span class="chip">${p}</span>`).join("")}</div><div style="background:var(--cream2);border-radius:12px;padding:12px;margin-top:12px;font-size:13.5px"><b>Funding:</b> ${i.funding}<br><span class="chip lime" style="margin-top:7px">${i.cutoff||i.match}</span></div><p class="tiny muted" style="margin-top:10px">${i.fees||i.cost}</p><button class="btn btn-dark btn-sm" style="margin-top:10px" onclick="showUni('${i.id}')">View full details</button></div><button class="btn ${shortlist.has(String(i.id))?"btn-lime":"btn-ghost"} btn-sm" style="align-self:flex-start" onclick="toggleShort('${i.id}')">${shortlist.has(String(i.id))?"♥ Shortlisted":"♡ Shortlist"}</button></div></div>`).join(""):'<div class="card" style="text-align:center;padding:36px"><b>No institutions match.</b><p class="tiny muted" style="margin:8px 0 14px">Try clearing your search.</p><button class="btn btn-dark btn-sm" onclick="document.getElementById(\'instSearch\').value=\'\';shortOnly=false;renderInstitutions()">Clear filters</button></div>';
+ document.getElementById("instList").innerHTML=list.length?list.map(i=>`<div class="card"><div style="display:flex;gap:14px;flex-wrap:wrap"><span class="inst-logo" style="background:${i.color}">${i.code}</span><div style="flex:1;min-width:240px"><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip">${i.type}</span><span class="tiny muted">📍 ${i.region}</span><span class="chip">Public listing</span></div><h3 style="margin:8px 0 6px;font-size:19px">${esc(i.name)}</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${i.progs.map(p=>`<span class="chip">${p}</span>`).join("")}</div><div style="background:var(--cream2);border-radius:12px;padding:12px;margin-top:12px;font-size:13.5px"><b>Funding:</b> ${i.funding}<br><span class="chip lime" style="margin-top:7px">${i.cutoff||i.match}</span></div><p class="tiny muted" style="margin-top:10px">${i.fees||i.cost}</p><button class="btn btn-dark btn-sm" style="margin-top:10px" onclick="showUni('${i.id}')">View full details</button></div><button class="btn ${shortlist.has(String(i.id))?"btn-lime":"btn-ghost"} btn-sm" style="align-self:flex-start" onclick="toggleShort('${i.id}')">${shortlist.has(String(i.id))?"♥ Shortlisted":"♡ Shortlist"}</button></div></div>`).join(""):'<div class="card" style="text-align:center;padding:36px"><b>No institutions match.</b><p class="tiny muted" style="margin:8px 0 14px">Try clearing your search.</p><button class="btn btn-dark btn-sm" onclick="document.getElementById(\'instSearch\').value=\'\';shortOnly=false;renderInstitutions()">Clear filters</button></div>';
  renderShortlist();
 }
 function toggleShort(id){id=String(id);shortlist.has(id)?shortlist.delete(id):shortlist.add(id);saveShort();renderInstitutions();toast(shortlist.has(id)?"♥ Added to shortlist.":"Removed from shortlist.")}
@@ -112,7 +114,7 @@ function showUni(id){
   document.getElementById("uniTitle").textContent = i.name;
   const progs = i.progs.map(function(p){ return '<span class="chip">' + p + '</span>'; }).join("");
   document.getElementById("uniBody").innerHTML =
-    '<div style="display:flex;gap:14px;align-items:center"><span class="inst-logo" style="background:' + i.color + '">' + i.code + '</span><div><span class="chip">' + i.type + '</span> <span class="tiny muted">' + i.region + '</span><br><span class="chip green" style="margin-top:6px">Verified · ' + (i.accreditation||"Accredited") + '</span></div></div>' +
+    '<div style="display:flex;gap:14px;align-items:center"><span class="inst-logo" style="background:' + i.color + '">' + i.code + '</span><div><span class="chip">' + i.type + '</span> <span class="tiny muted">' + i.region + '</span><br><span class="chip green" style="margin-top:6px">' + (i.accreditation||"Listed") + '</span></div></div>' +
     '<div class="grid g2" style="margin-top:16px;gap:12px">' +
     '<div><label class="flab">Programmes</label><div style="display:flex;gap:6px;flex-wrap:wrap">' + progs + '</div></div>' +
     '<div><label class="flab">Funding</label><p class="small muted">' + i.funding + '</p></div>' +
@@ -124,13 +126,13 @@ function showUni(id){
     '<div><label class="flab">Established · Campuses</label><p class="small muted">' + (i.established||"—") + ' · ' + (i.campuses||i.region) + '</p></div>' +
     '</div>' +
     '<div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">' +
-    (i.website ? '<a class="btn btn-lime btn-sm" href="' + i.website + '" target="_blank" rel="noopener noreferrer" rel="noopener">Official website</a>' : "") +
+    (/^https?:\/\//.test(i.website||"") ? '<a class="btn btn-lime btn-sm" href="' + esc(i.website) + '" target="_blank" rel="noopener noreferrer">Official website</a>' : "") +
     '<button class="btn btn-ghost btn-sm" data-shortid="' + i.id + '">' + (shortlist.has(String(i.id)) ? "Shortlisted" : "Shortlist") + '</button>' +
     '<button class="btn btn-ghost btn-sm" id="prospectusBtn">Prospectus (PDF)</button>' +
     '</div>' +
-    '<p class="tiny muted" style="margin-top:12px">Source: CUE gazette & KUCCPS 2024/2025. Confirm on official website. <span class="chip real">REAL DATA</span></p>';
+    '<p class="tiny muted" style="margin-top:12px">Source: CUE gazette & KUCCPS 2024/2025. Confirm on official website. <span class="chip real">PUBLIC SOURCES</span></p>';
   document.getElementById("uniModal").classList.add("open");
-  const pb=document.getElementById("prospectusBtn"); if(pb) pb.onclick=function(){ toast("Prospectus download started (demo)."); };
+  const pb=document.getElementById("prospectusBtn"); if(pb) pb.onclick=function(){ toast("Prospectus downloads aren't available yet — please use the official website."); };
   const sb=document.querySelector("#uniBody [data-shortid]"); if(sb) sb.onclick=function(){ toggleShort(sb.dataset.shortid); showUni(sb.dataset.shortid); };
 }
 document.getElementById("uniModal").addEventListener("click", function(e){ if(e.target.id === "uniModal") e.target.classList.remove("open"); });
@@ -143,7 +145,7 @@ function showCompare(){
     '<tr><td><b>Cut-off</b></td>' + saved.map(function(i){ return "<td>" + (i.cutoff||"—") + "</td>"; }).join("") + '</tr>' +
     '<tr><td><b>Fees</b></td>' + saved.map(function(i){ return "<td>" + (i.fees||"—") + "</td>"; }).join("") + '</tr>' +
     '<tr><td><b>Funding</b></td>' + saved.map(function(i){ return "<td class=\"tiny\">" + i.funding + "</td>"; }).join("") + '</tr>' +
-    '<tr><td><b>Website</b></td>' + saved.map(function(i){ return '<td><a href="' + (i.website||"#") + '" target="_blank" rel="noopener noreferrer" rel="noopener">Visit ↗</a></td>'; }).join("") + '</tr>' +
+    '<tr><td><b>Website</b></td>' + saved.map(function(i){ return '<td><a href="' + (/^https?:\/\//.test(i.website||"") ? esc(i.website) : "#") + '" target="_blank" rel="noopener noreferrer">Visit ↗</a></td>'; }).join("") + '</tr>' +
     '</tbody></table></div>';
   document.getElementById("compareModal").classList.add("open");
 }

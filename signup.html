@@ -10,18 +10,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>Create account — PathFinder Kenya</title>
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <nav class="pnav"><div class="container pnav-in">
-  <a class="brand" href="index.html"><span class="brand-mark">S</span>PathFinder <small>KENYA</small></a>
+  <a class="brand" href="index.html"><span class="brand-mark">P</span>PathFinder <small>KENYA</small></a>
   <div style="margin-left:auto;display:flex;gap:10px"><a class="btn btn-ghost btn-sm" href="index.html">← Back home</a><a class="btn btn-dark btn-sm" href="signin.html">Sign in</a></div>
 </div></nav>
 
@@ -33,28 +34,26 @@
     <div style="display:grid;gap:12px;margin-top:26px;max-width:440px">
       <div class="card" style="padding:18px"><b>🎓 Students</b><p class="tiny muted" style="margin-top:4px">Pathway quiz, mark tracker, institutions, HELB funding guide.</p></div>
       <div class="card" style="padding:18px"><b>👩‍🏫 Tutors</b><p class="tiny muted" style="margin-top:4px">Verified profile, student sessions, M-Pesa escrow payments.</p></div>
-      <div class="card" style="padding:18px"><b>🛡 SuperAdmins</b><p class="tiny muted" style="margin-top:4px">Pilot governance, safeguarding audits, deployment centre. Invite-only.</p></div>
     </div>
     <p class="tiny muted" style="margin-top:18px">🛡 Protected under Kenya Data Protection Act 2019 · No data selling · Guardian consent for minors<br>🎓 <b>Students:</b> after signing up you'll enter your real results + take the quiz (2 min) before your dashboard unlocks.</p>
   </div>
 
   <div class="auth-card">
     <h2 style="font-size:24px">I am joining as…</h2>
-    <div class="role-grid" id="roleGrid">
+    <div class="role-grid" id="roleGrid" style="grid-template-columns:repeat(2,1fr)">
       <button type="button" class="role-card sel" data-role="student"><span class="ic">🎓</span><b>Student</b><span class="tiny muted">Learner</span></button>
       <button type="button" class="role-card" data-role="tutor"><span class="ic">👩‍🏫</span><b>Tutor</b><span class="tiny muted">Teacher</span></button>
-      <button type="button" class="role-card" data-role="superadmin"><span class="ic">🛡</span><b>SuperAdmin</b><span class="tiny muted">Admin</span></button>
     </div>
 
     <form id="signupForm">
       <label class="flab">Full name</label>
       <input class="input" id="suName" placeholder="e.g. Amina Odhiambo" required style="margin-bottom:13px">
       <label class="flab">Email address</label>
-      <input class="input" type="email" id="suEmail" placeholder="you@example.ke" required style="margin-bottom:13px">
+      <input class="input" type="email" id="suEmail" autocomplete="email" placeholder="you@example.ke" required style="margin-bottom:13px">
       <label class="flab">Mobile number (Safaricom)</label>
       <input class="input" id="suPhone" placeholder="+254 7XX XXX XXX" required style="margin-bottom:13px">
       <label class="flab">Password</label>
-      <input class="input" type="password" id="suPass" placeholder="Minimum 6 characters" minlength="6" required style="margin-bottom:13px">
+      <input class="input" type="password" id="suPass" placeholder="Minimum 8 characters" minlength="8" autocomplete="new-password" required style="margin-bottom:13px">
 
       <!-- Student fields -->
       <div id="fields-student">
@@ -75,13 +74,6 @@
         <p class="tiny muted" style="margin-top:10px">Your TSC number and DCI clearance will be verified before your profile goes live. Sessions are guardian-notified.</p>
       </div>
 
-      <!-- SuperAdmin fields -->
-      <div id="fields-superadmin" style="display:none">
-        <label class="flab">Admin access code</label>
-        <input class="input" id="suCode" placeholder="Invite code from the pilot lead">
-        <p class="tiny muted" style="margin-top:10px">SuperAdmin accounts are invite-only for the private pilot. MFA is required. (Pilot admin: use access code <b>888888</b>.)</p>
-      </div>
-
       <label class="tiny" style="display:flex;gap:8px;margin:16px 0"><input type="checkbox" required style="margin-top:3px"> I agree to the Terms of Educational Service and the Kenya Data Protection Act 2019 privacy notice. <span class="muted">(Under 18? A guardian will be asked to consent.)</span></label>
       <button class="btn btn-lime btn-block btn-lg" type="submit">Create my free account →</button>
       <p id="suError" class="tiny" style="color:var(--red);margin-top:10px;display:none"></p>
@@ -98,33 +90,36 @@
 <script src="assets/js/app.js"></script>
 <script src="assets/js/shell.js"></script>
 <script>
-let role="student";
-const params=new URLSearchParams(location.search);
-if(["student","tutor","superadmin"].includes(params.get("role")))role=params.get("role");
-function setRole(r){
-  role=r;
-  $$("#roleGrid .role-card").forEach(b=>b.classList.toggle("sel",b.dataset.role===r));
-  ["student","tutor","superadmin"].forEach(x=>document.getElementById("fields-"+x).style.display=x===r?"block":"none");
+let role = "student";
+const qRole = new URLSearchParams(location.search).get("role");
+if (["student", "tutor"].includes(qRole)) role = qRole;
+function setRole(r) {
+  role = r;
+  $$("#roleGrid .role-card").forEach(b => b.classList.toggle("sel", b.dataset.role === r));
+  ["student", "tutor"].forEach(x => document.getElementById("fields-" + x).style.display = x === r ? "block" : "none");
 }
-$$("#roleGrid .role-card").forEach(b=>b.onclick=()=>setRole(b.dataset.role));
+$$("#roleGrid .role-card").forEach(b => b.onclick = () => setRole(b.dataset.role));
 setRole(role);
-document.getElementById("signupForm").addEventListener("submit",e=>{
+document.getElementById("signupForm").addEventListener("submit", async function (e) {
   e.preventDefault();
-  const name=document.getElementById("suName").value.trim();
-  const email=document.getElementById("suEmail").value.trim();
-  const phone=document.getElementById("suPhone").value.trim();
-  const err=document.getElementById("suError");
-  const users=getUsers();
-  if(users.some(u=>u.email.toLowerCase()===email.toLowerCase())){err.textContent="An account with this email already exists. Please sign in.";err.style.display="block";return}
-  if(role==="superadmin" && document.getElementById("suCode").value.trim()!=="888888"){err.textContent="Invalid admin access code. SuperAdmin is invite-only — contact the pilot lead.";err.style.display="block";return}
-  const roleLabel=role==="student"?"KCSE Candidate":role==="tutor"?"TSC Tutor":"SuperAdmin · MFA Active";
-  const user={name,email,phone,role,roleLabel,
-    extra: role==="student"?{county:document.getElementById("suCounty").value,stage:document.getElementById("suStage").value,school:document.getElementById("suSchool").value}
-          : role==="tutor"?{tsc:document.getElementById("suTsc").value,subject:document.getElementById("suSubject").value}
-          : {}};
-  users.push(user);saveUsers(users);setSession(user);
-  toast("🎉 Welcome to PathFinder, "+name.split(" ")[0]+"! Setting up your "+role+" workspace…");
-  setTimeout(()=>location.href=(role==="student"?"student/onboarding.html":homeFor(role)),700);
+  const err = document.getElementById("suError"), btn = e.target.querySelector("button[type=submit]");
+  err.style.display = "none"; btn.disabled = true;
+  const val = id => document.getElementById(id).value.trim();
+  try {
+    const res = await registerAccount({
+      role, name: val("suName"), email: val("suEmail"), phone: val("suPhone"), password: document.getElementById("suPass").value,
+      extra: role === "student"
+        ? { county: val("suCounty"), stage: val("suStage"), school: val("suSchool") }
+        : { tsc: val("suTsc"), subject: val("suSubject") }
+    });
+    if (res.error) { err.textContent = res.error; err.style.display = "block"; return; }
+    if (res.pending) { toast(res.pending); err.style.color = "var(--green)"; err.textContent = res.pending; err.style.display = "block"; return; }
+    setSession(res.user);
+    toast("🎉 Welcome to PathFinder, " + res.user.name.split(" ")[0] + "! Setting up your workspace…");
+    setTimeout(() => location.href = (role === "student" ? "student/onboarding.html" : homeFor(role)), 700);
+  } catch (ex) {
+    err.textContent = "Something went wrong. Please try again."; err.style.display = "block";
+  } finally { btn.disabled = false; }
 });
 </script>
 </body>

@@ -10,20 +10,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>My Students — PathFinder Kenya</title>
 <link rel="manifest" href="../manifest.json">
-<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div id="netStatus" role="status"></div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · TUTOR</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · TUTOR</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
     <div class="side-role">👩‍🏫 <b data-user-name>Tutor</b><br><span class="tiny" data-user-role>TSC Tutor</span></div>
     <nav class="snav">
       <h5>TEACHING</h5>
@@ -80,7 +81,7 @@ let filter="";
 function renderStudents(){
  const q=(document.getElementById("stuSearch").value||"").toLowerCase();
  const list=STUDENTS.filter(x=>(!q||x.name.toLowerCase().includes(q))&&(!filter||(filter==="flag"?x.flag:x.stage.includes(filter))));
- document.getElementById("stuTable").innerHTML=list.map(x=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:38px;height:38px;font-size:12px">${x.name.split(" ").map(w=>w[0]).join("")}</span><b>${x.name}</b></div></td><td><span class="chip">${x.stage}</span></td><td>${x.county}</td><td><b>${x.mean}</b></td><td>${x.focus}</td><td class="tiny muted">${x.guardian}</td><td><button class="btn btn-ghost btn-sm" onclick="toast('📩 Supervised message sent to ${x.name} + guardian (audit logged).')">Message</button></td></tr>`).join("")||'<tr><td colspan="7" class="muted" style="text-align:center;padding:24px">No students match.</td></tr>';
+ document.getElementById("stuTable").innerHTML=list.map(x=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:38px;height:38px;font-size:12px">${x.name.split(" ").map(w=>w[0]).join("")}</span><b>${x.name}</b></div></td><td><span class="chip">${x.stage}</span></td><td>${x.county}</td><td><b>${x.mean}</b></td><td>${x.focus}</td><td class="tiny muted">${x.guardian}</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Preview only — messaging isn\'t live yet.')">Message</button></td></tr>`).join("")||'<tr><td colspan="7" class="muted" style="text-align:center;padding:24px">No students match.</td></tr>';
 }
 document.querySelectorAll("#stuTabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#stuTabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");filter=b.dataset.f;renderStudents()});
 renderStudents();

@@ -10,20 +10,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>Tutor Dashboard — PathFinder Kenya</title>
 <link rel="manifest" href="../manifest.json">
-<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div id="netStatus" role="status"></div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · TUTOR</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · TUTOR</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
     <div class="side-role">👩‍🏫 <b data-user-name>Tutor</b><br><span class="tiny" data-user-role>TSC Tutor</span></div>
     <nav class="snav">
       <h5>TEACHING</h5>
@@ -42,7 +43,7 @@
       <button class="iconbtn hamb" onclick="toggleSidebar()" aria-label="Open or close menu" aria-expanded="false">☰</button>
       <div class="crumb"><span>Tutor</span> / Dashboard</div>
       <div class="search">⌕ <input id="globalSearch" placeholder="Search students, subjects…"></div>
-      <button class="iconbtn" onclick="toast('🔔 1 new session request from a guardian in Nairobi.')">🔔<span class="n">1</span></button>
+      <button class="iconbtn" onclick="toast('🔔 No new notifications.')" aria-label="Notifications">🔔</button>
       <div class="lang" style="display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:#fff"><button data-lang="en" class="on" style="border:0;background:#7c5cff;color:#fff;padding:8px 11px;font-weight:800;font-size:12px">EN</button><button data-lang="sw" style="border:0;background:#fff;padding:8px 11px;font-weight:800;font-size:12px;color:var(--muted)">SW</button></div><div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Tutor</b><small data-user-role>TSC Tutor</small></span><span class="avatar" data-user-initials>TT</span></div>
     </header>
     <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Demo data.</b> Tutor workspace sample data is illustrative (mock) until connected to live student records. <span class="chip mock">⚠ MOCK DATA</span></div>
@@ -103,7 +104,6 @@
 <script src="../assets/js/shell.js"></script>
 <script>
 const s=requireRole("tutor","../signin.html"); if(s)fillUserChip();
-try{ attachAutocomplete(document.getElementById('globalSearch'), function(q){ return globalSearchItems(q); }, function(it){ toast('Searching: ' + it.title); }); }catch(e){}
 function calcEst(){const h=+document.getElementById("estHrs").value||0;document.getElementById("estTotal").textContent="KES "+(h*500*4).toLocaleString()}
 calcEst();
 const TUTORS=window.PF_TUTORS||[];

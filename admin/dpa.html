@@ -10,21 +10,22 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>Data Protection (DPA 2019) — PathFinder Kenya</title>
 <link rel="manifest" href="../manifest.json">
-<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div id="netStatus" role="status"></div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · ADMIN</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
-    <div class="side-role">🛡 <b data-user-name>SuperAdmin</b><br><span class="tiny" data-user-role>SuperAdmin · MFA Active</span></div>
+    <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · ADMIN</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-role">🛡 <b data-user-name>SuperAdmin</b><br><span class="tiny" data-user-role>SuperAdmin</span></div>
     <nav class="snav">
       <h5>GOVERNANCE</h5>
       <a href="dashboard.html">⌂ &nbsp;Console</a>
@@ -34,7 +35,7 @@
       <a href="../index.html">← &nbsp;Public homepage</a>
       <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
     </nav>
-    <div class="side-foot"><b>● ROLE: ADMIN · MFA ACTIVE · RLS ENFORCED</b><br>ODPC Kenya Act 2019 Compliant<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
+    <div class="side-foot"><b>● ROLE: ADMIN</b><br>Built around the Kenya Data Protection Act 2019<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
   </aside>
   <div class="main">
     <header class="topbar">
@@ -43,11 +44,11 @@
       <div class="search">⌕ <input placeholder="Search requests…"></div>
       <div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>SuperAdmin</b><small data-user-role>SuperAdmin</small></span><span class="avatar" data-user-initials>SA</span></div>
     </header>
-    <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Pilot demo data.</b> Cohort &amp; telemetry shown are illustrative (mock) for the private pilot. <span class="chip mock">⚠ MOCK DATA</span></div>
-      <p class="eyebrow">Statutory compliance · ODPC Registered · Controller No. ODPC/PR/2024/0918</p>
+    <main class="view">
+      <p class="eyebrow">Statutory compliance · Kenya Data Protection Act, 2019</p>
       <h1 style="font-size:32px;margin:8px 0 8px">Data Protection, Safeguarding &amp; Privacy</h1>
       <p class="muted" style="max-width:640px">Our commitments to student data sovereignty, minor protection, and non-commercialisation under the Kenya Data Protection Act 2019.</p>
-      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="window.open('https://www.odpc.go.ke','_blank')">⬇ Official notice (PDF)</button><button class="btn btn-lime btn-sm" onclick="toast('✉️ DPA request form opened — 72h response guaranteed.')">🛡 Submit DPA request</button></div>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="window.open('https://www.odpc.go.ke','_blank','noopener,noreferrer')">⬇ Official notice (PDF)</button><button class="btn btn-lime btn-sm" onclick="toast('✉️ DPA request form opened — 72h response guaranteed.')">🛡 Submit DPA request</button></div>
 
       <div class="pine-panel" style="margin-top:22px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
         <div><b style="color:var(--lime);font-size:22px">0%</b><br><span class="tiny" style="color:#d6d0ff"><b style="color:#fff">Ad tracking</b><br>No behavioural ads</span></div>
@@ -71,7 +72,7 @@
       </div>
 
       <div class="grid g3" style="margin-top:20px">
-        <div class="card"><div style="display:flex;gap:12px;align-items:center"><span class="avatar">CM</span><span><p class="tiny muted">Designated Officer</p><b>Adv. Catherine Mutua</b></span></div><p class="tiny muted" style="margin-top:12px">ODPC DPO Cert. 4410 · High Court of Kenya<br>Independent supervisor of data &amp; youth safeguarding.</p></div>
+        <div class="card"><div style="display:flex;gap:12px;align-items:center"><span class="avatar">DP</span><span><p class="tiny muted">Designated Data Protection Officer</p><b>[Add your DPO’s name here]</b></span></div><p class="tiny muted" style="margin-top:12px">ODPC DPO Cert. 4410 · High Court of Kenya<br>Independent supervisor of data &amp; youth safeguarding.</p></div>
         <div class="card"><b>📞 Direct DPO inquiries</b><p class="small muted" style="margin-top:10px">✉ dpo@pathfinder.co.ke<br>📞 0800 720 000 (toll-free)<br><span class="tiny">Mon–Fri · 8:00 AM–5:00 PM EAT</span></p></div>
         <div class="card"><b>⚖ Regulatory escalation</b><p class="tiny muted" style="margin-top:10px">Unresolved grievances may be filed with the Office of the Data Protection Commissioner, Britam Tower, Upper Hill, Nairobi.</p><button class="btn btn-dark btn-sm" style="margin-top:12px" onclick="toast('⚖ ODPC portal — external link in production.')">Lodge inquiry at ODPC ↗</button></div>
       </div>
@@ -89,12 +90,12 @@
 <script>
 const s=requireRole("superadmin","../signin.html"); if(s)fillUserChip();
 const PILLARS=[
- ["1. Purpose Limitation","Sec 25(b)","Pathway modelling & cluster matching only. Records are never sold, rented or bundled to universities, lenders or brokers.","✓ Zero third-party monetisation"],
- ["2. Minor Protection & Consent","Sec 31","Learners under 18 need parental/guardian authorisation via SMS OTP tied to verified ID or NEMIS/UPI.","☐ Double-factor guardian SMS"],
- ["3. Strict Data Minimisation","Sec 25(c)","We store only grades, county and passions. No biometrics, no GPS, no scanned ID cards.","✓ No biometrics or GPS"],
- ["4. Cryptographic RLS Isolation","Sec 41","Row-Level Security inside Postgres. Rows queryable only via ephemeral session token + UUID hash.","🔒 Postgres RLS + AES-256"],
- ["5. Supervised Academic Scope","Safeguarding","Tutors have read-only cohort access. Private adult–minor DMs are disabled platform-wide.","✓ Zero private DMs"],
- ["6. Immutable Audit Logs","Sec 28","Every review, recalculation or export appends to a tamper-evident audit trail for inspection.","⛓ Append-only chain"]
+ ["1. Purpose Limitation","Sec 25(b)","Pathway modelling & cluster matching only. Records are never sold, rented or bundled to universities, lenders or brokers.","Policy commitment"],
+ ["2. Minor Protection & Consent","Sec 31","Learners under 18 should need guardian authorisation. This is planned and not yet enforced in the app.","Planned — not built yet"],
+ ["3. Strict Data Minimisation","Sec 25(c)","We store only grades, county and passions. No biometrics, no GPS, no scanned ID cards.","✓ Implemented (nothing else is collected)"],
+ ["4. Cryptographic RLS Isolation","Sec 41","Row-Level Security inside Postgres: each user can read and change only their own rows.","Implemented in supabase/schema.sql (needs Supabase)"],
+ ["5. Supervised Academic Scope","Safeguarding","Tutor access to student data is planned as read-only. There is no private messaging between adults and minors.","✓ No direct-message feature exists"],
+ ["6. Immutable Audit Logs","Sec 28","Sign-ins and data saves are appended to an audit log that only SuperAdmins can read.","Partly: audit_logs table, insert-only for users"]
 ];
 document.getElementById("pillarGrid").innerHTML=PILLARS.map(p=>`<div class="card"><div style="display:flex;justify-content:space-between"><span style="font-size:20px">◉</span><span class="chip">${p[1]}</span></div><h3 style="margin:12px 0 8px;font-size:16px">${p[0]}</h3><p class="small muted">${p[2]}</p><p class="tiny" style="margin-top:10px;color:var(--pine)"><b>${p[3]}</b></p></div>`).join("");
 function toggleRestrict(){const l=document.getElementById("restrictLab");const on=l.textContent==="Included";l.textContent=on?"Excluded ✓":"Included";toast(on?"◐ Analytics restriction ON.":"◐ Analytics restriction OFF.")}

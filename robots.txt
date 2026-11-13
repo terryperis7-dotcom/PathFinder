@@ -3,6 +3,3 @@ Allow: /
 Disallow: /student/
 Disallow: /tutor/
 Disallow: /admin/
-Disallow: /archive/
-
-Sitemap: /sitemap.xml

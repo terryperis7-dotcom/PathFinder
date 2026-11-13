@@ -10,20 +10,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>Profile & Stage — PathFinder Kenya</title>
 <link rel="manifest" href="../manifest.json">
-<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div id="netStatus" role="status"></div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
     <div class="side-role">🎓 <b data-user-name>Student</b><br><span class="tiny" data-user-role>KCSE Candidate</span></div>
     <nav class="snav">
       <h5>MY PATH</h5>
@@ -56,10 +57,10 @@
       <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:24px;align-items:start">
         <div style="display:grid;gap:20px">
           <div class="card">
-            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><h3>Avatar &amp; persona</h3><p class="tiny muted">Pick an illustrated identity — non-identifiable in mentor rooms.</p></div><span class="chip green">🛡 Privacy Shield Active</span></div>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><h3>Avatar &amp; persona</h3><p class="tiny muted">Pick an illustrated identity or upload a photo (kept on this device only).</p></div></div>
             <div style="display:flex;gap:16px;align-items:center;margin-top:16px;flex-wrap:wrap">
-              <div id="bigAvatar" style="width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#f5b93f,#e07b39);display:grid;place-items:center;font-size:42px;border:3px solid var(--lime)">🧑🏾‍🎓</div>
-              <div style="flex:1;min-width:220px"><b style="font-size:18px" data-user-name>Student</b> <span class="chip lime">Explorer Archetype</span><p class="small muted" style="margin:6px 0">Current persona: <b>Highland Pioneer (Active)</b>.</p><input type="file" id="avatarFile" accept="image/*" style="display:none"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('avatarFile').click()">⛶ Upload &amp; crop</button></div>
+              <div id="bigAvatar" style="width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#f5b93f,#e07b39);display:grid;place-items:center;font-size:42px;border:3px solid var(--lime);overflow:hidden">🧑🏾‍🎓</div>
+              <div style="flex:1;min-width:220px"><b style="font-size:18px" data-user-name>Student</b> <p class="small muted" style="margin:6px 0">Current persona: <b id="personaName">—</b>.</p><input type="file" id="avatarFile" accept="image/*" style="display:none"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('avatarFile').click()">⛶ Upload &amp; crop</button></div>
             </div>
             <p class="flab" style="margin-top:18px">Choose a persona — anime &amp; realistic portraits</p>
             <div class="grid" style="grid-template-columns:repeat(6,1fr);gap:8px" id="personaGrid"></div>
@@ -68,38 +69,28 @@
           <div class="card">
             <h3>Academic details</h3>
             <div class="grid g2" style="margin-top:16px;gap:14px">
-              <div><label class="flab">Full registered name</label><input class="input" id="pfName" value="Amina Odhiambo"><p class="tiny muted" style="margin-top:5px">Matches your KNEC slip.</p></div>
-              <div><label class="flab">Email</label><input class="input" value="amina@example.ke"><p class="tiny muted" style="margin-top:5px">Synced to Safaricom SMS alerts. <span class="chip green">✓ Verified MFA</span></p></div>
+              <div><label class="flab" for="pfName">Full name</label><input class="input" id="pfName" autocomplete="name"><p class="tiny muted" style="margin-top:5px">Use the name on your KNEC slip.</p></div>
+              <div><label class="flab" for="pfEmail">Email</label><input class="input" id="pfEmail" readonly><p class="tiny muted" style="margin-top:5px">Your sign-in email can't be changed here.</p></div>
             </div>
             <p class="flab" style="margin-top:18px">Current academic phase</p>
             <div class="grid g2" style="gap:10px" id="phaseGrid"></div>
             <div class="grid g2" style="margin-top:14px;gap:14px">
-              <div><label class="flab">Home county</label><select class="input"><option>047 – Nairobi City County</option><option>042 – Kisumu</option><option>001 – Mombasa</option></select></div>
-              <div><label class="flab">School / centre</label><input class="input" value="Pangani Girls' High School, Nairobi"></div>
+              <div><label class="flab" for="pfCounty">Home county</label><select class="input" id="pfCounty"></select></div>
+              <div><label class="flab" for="pfSchool">School / centre</label><input class="input" id="pfSchool"></div>
             </div>
-            <div style="border:1.5px dashed var(--line);border-radius:14px;padding:16px;margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-              <span><b>KNEC Index / UPI</b><br><span class="tiny muted">KCSE Index: <span id="knecVal">20404102***</span> (encrypted, DPA 2019)</span></span>
-              <button class="btn btn-ghost btn-sm" id="knecBtn" onclick="revealKNEC()">Reveal via OTP</button>
+            <div style="border:1.5px dashed var(--line);border-radius:14px;padding:16px;margin-top:16px">
+              <b>🔒 We don't ask for your KNEC index number</b><br><span class="tiny muted">PathFinder stores only your subject scores, county, school and quiz answers (data minimisation, Data Protection Act 2019).</span>
             </div>
           </div>
         </div>
 
         <div style="display:grid;gap:20px">
+          <div class="card" id="guardianCard"></div>
           <div class="card">
-            <h3>Guardian &amp; teacher co-viewing</h3>
-            <p class="tiny muted" style="margin:6px 0 12px">Read-only access for designated guardians &amp; verified TSC teachers (Children Act 2022).</p>
-            <div style="border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;margin-bottom:10px"><span class="avatar" style="background:var(--lime);color:var(--pine3)">MO</span><span style="flex:1"><b>Mary N. Odhiambo</b> <span class="chip lime">Mother</span><br><span class="tiny muted">+254 712 ••• ••89 · Last seen today 08:30</span></span><button class="toggle on" onclick="this.classList.toggle('on');toast('Guardian access updated.')"></button></div>
-            <div style="border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center"><span class="avatar" style="background:#bfe3d8;color:var(--pine3)">PM</span><span style="flex:1"><b>Mr. Peter Mwangi</b> <span class="chip">TSC Career Master</span><br><span class="tiny muted">TSC 489201 · Pangani Girls</span></span><button class="toggle on" onclick="this.classList.toggle('on');toast('Teacher access updated.')"></button></div>
-            <button class="btn btn-ghost btn-sm btn-block" style="margin-top:12px" onclick="toast('✉️ SMS OTP invitation sent.')">👤 Invite guardian or teacher (SMS OTP)</button>
-          </div>
-          <div class="card">
-            <h3>Data saver &amp; alerts</h3>
-            <div style="background:var(--lime-soft);border-radius:14px;padding:16px;display:flex;gap:12px;align-items:center;margin-top:12px"><span style="font-size:20px">📶</span><span style="flex:1"><b>Ultra Data Saver (85% less MB)</b><br><span class="tiny muted">Vector charts, no heavy photos. For 2G/3G.</span></span><button class="toggle on" onclick="this.classList.toggle('on');toast('📶 Data Saver toggled.')"></button></div>
-            <p class="flab" style="margin-top:16px">Language</p>
+            <h3>Language &amp; alerts</h3>
+            <p class="flab" style="margin-top:12px">Language</p>
             <div class="grid g2" style="gap:8px"><button class="btn btn-dark btn-sm" onclick="setLang('en')">English (Kenya)</button><button class="btn btn-ghost btn-sm" onclick="setLang('sw')">Kiswahili Sanifu</button></div>
-            <label class="tiny" style="display:flex;gap:8px;margin-top:14px"><input type="checkbox" checked> 💬 Safaricom SMS deadline alerts</label>
-            <label class="tiny" style="display:flex;gap:8px;margin-top:8px"><input type="checkbox" checked> 🔔 In-app push notifications</label>
-            <label class="tiny" style="display:flex;gap:8px;margin-top:8px"><input type="checkbox"> ✉ Email weekly digest</label>
+            <p class="tiny muted" style="margin-top:14px">SMS deadline alerts, push notifications and the weekly email digest are <b>coming soon</b>. We'll ask before enabling anything.</p>
           </div>
         </div>
       </div>
@@ -115,48 +106,80 @@
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
-const s=requireRole("student","../signin.html"); if(s)fillUserChip();
+const s=requireRole("student","../signin.html"); if(s){fillUserChip();requireOnboarded();}
+ensureDemoData();
+const me=getSession()||{};
+let sdata=getStudentData()||{results:[],quiz:{answers:{}}};
+const emailKey=me.email||"guest";
+
+/* ---------- Personas (avatar) ---------- */
 const PERSONAS=[["Anime Star","../assets/avatars/anime-girl.jpg"],["Anime Hero","../assets/avatars/anime-boy.jpg"],["Anime Explorer","../assets/avatars/anime-explorer.jpg"],["Anime Scientist","../assets/avatars/anime-scientist.jpg"],["Chibi Girl","../assets/avatars/anime-2-girl.jpg"],["Chibi Boy","../assets/avatars/anime-2-boy.jpg"],["Anime Hero 2","../assets/avatars/anime-2-hero.jpg"],["Cat Girl","../assets/avatars/anime-2-cat.jpg"],["Anime Mage","../assets/avatars/anime-2-mage.jpg"],["Panda DJ","../assets/avatars/anime-2-panda.jpg"],["Real Portrait A","../assets/avatars/real-girl.jpg"],["Real Portrait B","../assets/avatars/real-boy.jpg"]];
-let selP=0;
+let selP=+(localStorage.getItem("pf_persona_"+emailKey)||0); if(!(selP>=0&&selP<PERSONAS.length))selP=0;
 function renderPersonas(){
- document.getElementById("personaGrid").innerHTML=PERSONAS.map((p,i)=>{
-  const isImg=p[1].endsWith(".jpg");
-  const face=isImg?`<img src="${p[1]}" alt="${p[0]}">`:`<span style="font-size:26px;display:grid;place-items:center;height:100%">${p[1]}</span>`;
-  return `<button class="persona ${i===selP?"sel":""}" onclick="selP=${i};renderPersonas();setBigAvatar(${i});toast('🎭 Persona: ${p[0]}')"><span class="face">${face}</span>${p[0]}</button>`;
- }).join("");
+ document.getElementById("personaGrid").innerHTML=PERSONAS.map((p,i)=>`<button type="button" class="persona ${i===selP?"sel":""}" data-i="${i}"><span class="face"><img src="${p[1]}" alt="${esc(p[0])}"></span>${esc(p[0])}</button>`).join("");
+ document.querySelectorAll("#personaGrid .persona").forEach(b=>b.onclick=function(){selP=+b.dataset.i;try{localStorage.setItem("pf_persona_"+emailKey,selP);localStorage.removeItem("pf_avatar_"+emailKey)}catch(e){}renderPersonas();setBigAvatar(selP);toast("🎭 Persona: "+PERSONAS[selP][0])});
+ document.getElementById("personaName").textContent=PERSONAS[selP][0];
 }
-function setBigAvatar(i){
- const p=PERSONAS[i]; const el=document.getElementById("bigAvatar");
- if(p[1].endsWith(".jpg")){el.innerHTML=`<img src="${p[1]}" style="width:100%;height:100%;object-fit:cover" alt="${p[0]}">`}
- else{el.textContent=p[1]}
-}
-renderPersonas();
-const PHASES=[["CBC Junior School","Grade 7–9 · Formative exploration",false],["CBC Senior School","STEM, Arts & Sports, Social Sciences",true],["KCSE 8-4-4 Candidate","Form 3–4 · Cluster weights active",false],["Form Four Leaver","KUCCPS revision window",false],["TVET / College Scholar","Artisan, Certificate, Diploma or Degree",false]];
-document.getElementById("phaseGrid").innerHTML=PHASES.map(p=>`<button class="phase ${p[2]?"sel":""}" onclick="document.querySelectorAll('#phaseGrid .phase').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');toast('🎓 Phase updated — calculations recalibrated.')"><span class="radio"></span><span><b>${p[0]}</b><br><span class="tiny muted">${p[1]}</span></span></button>`).join("");
-document.getElementById("avatarFile").addEventListener("change", function(e){
-  const f = e.target.files[0]; if(!f) return;
-  if(f.size > 2*1024*1024){ toast("⚠ Image too large (max 2MB). Please choose a smaller photo."); return; }
-  const r = new FileReader();
-  r.onload = function(ev){
-    const url = ev.target.result;
-    const el = document.getElementById("bigAvatar");
-    el.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover" alt="Your photo">';
-    try{ localStorage.setItem("pf_avatar_" + (getSession()?.email||"guest"), url); }catch(err){}
-    toast("✅ Photo uploaded — saved on this device. No biometric scraping.");
-  };
-  r.readAsDataURL(f);
+function setBigAvatar(i){document.getElementById("bigAvatar").innerHTML=`<img src="${PERSONAS[i][1]}" style="width:100%;height:100%;object-fit:cover" alt="${esc(PERSONAS[i][0])}">`}
+document.getElementById("avatarFile").addEventListener("change",function(e){
+ const f=e.target.files[0]; if(!f)return;
+ if(!/^image\/(png|jpe?g|webp|gif)$/.test(f.type)){toast("⚠ Please choose a PNG, JPG, WebP or GIF image.");return}
+ if(f.size>2*1024*1024){toast("⚠ Image too large (max 2MB). Please choose a smaller photo.");return}
+ const r=new FileReader();
+ r.onload=function(ev){
+  const img=document.createElement("img"); img.src=ev.target.result; img.alt="Your photo"; img.style.cssText="width:100%;height:100%;object-fit:cover";
+  const el=document.getElementById("bigAvatar"); el.textContent=""; el.appendChild(img);
+  try{localStorage.setItem("pf_avatar_"+emailKey,ev.target.result)}catch(err){toast("⚠ Couldn't save the photo on this device (storage full).");return}
+  toast("✅ Photo saved on this device only — it is never uploaded.");
+ };
+ r.readAsDataURL(f);
 });
-/* Restore saved photo on load */
-try{ const saved = localStorage.getItem("pf_avatar_" + (getSession()?.email||"guest")); if(saved){ document.getElementById("bigAvatar").innerHTML = '<img src="' + saved + '" style="width:100%;height:100%;object-fit:cover" alt="Your photo">'; } }catch(e){}
-function saveProfile(){
-  const s = getSession(); if(!s) return;
-  const name = document.getElementById("pfName").value.trim();
-  if(name){ s.name = name; setSession(s); fillUserChip(); }
-  toast("✅ Profile saved — synced to Supabase (background).");
+(function restoreAvatar(){
+ let saved=null; try{saved=localStorage.getItem("pf_avatar_"+emailKey)}catch(e){}
+ if(saved&&/^data:image\//.test(saved)){const img=document.createElement("img");img.src=saved;img.alt="Your photo";img.style.cssText="width:100%;height:100%;object-fit:cover";const el=document.getElementById("bigAvatar");el.textContent="";el.appendChild(img)}
+ else if(localStorage.getItem("pf_persona_"+emailKey)!=null)setBigAvatar(selP);
+})();
+renderPersonas();
+
+/* ---------- Academic details (real values only) ---------- */
+const PHASES=[["CBC Junior School (Grade 7–9)","CBC Junior School","Grade 7–9 · Formative exploration"],["CBC Senior School (Grade 10–12)","CBC Senior School","STEM, Arts & Sports, Social Sciences"],["KCSE Candidate (Form 3–4)","KCSE 8-4-4 Candidate","Form 3–4 · Cluster weights active"],["Form Four Leaver","Form Four Leaver","KUCCPS revision window"],["TVET / College Scholar","TVET / College Scholar","Artisan, Certificate, Diploma or Degree"]];
+let selPhase=sdata.stage||(me.extra&&me.extra.stage)||"";
+function renderPhases(){
+ document.getElementById("phaseGrid").innerHTML=PHASES.map(p=>`<button type="button" class="phase ${p[0]===selPhase?"sel":""}" data-v="${esc(p[0])}"><span class="radio"></span><span><b>${esc(p[1])}</b><br><span class="tiny muted">${esc(p[2])}</span></span></button>`).join("");
+ document.querySelectorAll("#phaseGrid .phase").forEach(b=>b.onclick=function(){selPhase=b.dataset.v;renderPhases()});
 }
-function revealKNEC(){
- const b=document.getElementById("knecBtn");b.disabled=true;b.textContent="Sending OTP…";
- setTimeout(()=>{b.textContent="OTP sent to +254 712 ••• ••89";toast("🔐 OTP sent via Safaricom SMS (demo).");setTimeout(()=>{document.getElementById("knecVal").textContent="20404102 8841";b.textContent="Revealed ✓";toast("👁 KNEC index revealed — access logged to audit trail.")},1500)},900);
+renderPhases();
+document.getElementById("pfName").value=(me.name||"").replace(" (Demo)","");
+document.getElementById("pfEmail").value=me.email||"";
+document.getElementById("pfCounty").innerHTML=(window.PF_COUNTIES||[]).map(c=>"<option>"+esc(c)+"</option>").join("");
+(function(){const want=sdata.county||(me.extra&&me.extra.county)||"";const el=document.getElementById("pfCounty");const o=[...el.options].find(o=>o.text===want)||[...el.options].find(o=>want&&o.text.toLowerCase().startsWith(want.toLowerCase()));if(o)el.value=o.value})();
+document.getElementById("pfSchool").value=(sdata.school&&sdata.school!=="—"?sdata.school:(me.extra&&me.extra.school))||"";
+
+/* ---------- Guardian card ---------- */
+document.getElementById("guardianCard").innerHTML = isDemo()
+ ? `<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><h3>Guardian &amp; teacher co-viewing</h3>${mockBadge()}</div>
+    <p class="tiny muted" style="margin:6px 0 12px">Sample of the planned read-only access for guardians &amp; verified TSC teachers.</p>
+    <div style="border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center"><span class="avatar" style="background:var(--lime);color:var(--pine3)">MO</span><span style="flex:1"><b>Mary N. Odhiambo</b> <span class="chip lime">Mother</span><br><span class="tiny muted">Sample guardian (mock)</span></span></div>`
+ : `<h3>Guardian &amp; teacher co-viewing</h3>
+    <p class="small muted" style="margin-top:8px">Guardian and teacher access is <b>coming soon</b>. Until then, <b>only you</b> can see your results.</p>`;
+
+/* ---------- Save ---------- */
+function saveProfile(){
+ const sess=getSession(); if(!sess)return;
+ const name=document.getElementById("pfName").value.trim();
+ const county=document.getElementById("pfCounty").value, school=document.getElementById("pfSchool").value.trim();
+ if(!name){toast("⚠ Please enter your name.");return}
+ if(sess.demo){toast("Demo accounts don't save changes. Create a free account to keep your profile.");return}
+ sess.name=name; sess.extra=Object.assign({},sess.extra,{county,school,stage:selPhase}); sess.roleLabel=selPhase||sess.roleLabel;
+ const d=getStudentData()||{results:[],quiz:{answers:{}}};
+ d.stage=selPhase||d.stage; d.county=county; d.school=school||"—";
+ saveStudentData(d);
+ if(!(window.PF_DB&&PF_DB.live)){   // keep the local account record in step with the session
+  const users=getUsers(); const u=users.find(x=>(x.email||"").toLowerCase()===(sess.email||"").toLowerCase());
+  if(u){u.name=sess.name;u.extra=sess.extra;u.roleLabel=sess.roleLabel;saveUsers(users)}
+ }
+ setSession(sess); fillUserChip();
+ toast(window.PF_DB&&PF_DB.live?"✅ Profile saved and syncing to your account.":"✅ Profile saved on this device.");
 }
 </script>
 </body>

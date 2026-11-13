@@ -10,20 +10,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>Funding & HELB — PathFinder Kenya</title>
 <link rel="manifest" href="../manifest.json">
-<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div id="netStatus" role="status"></div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
     <div class="side-role">🎓 <b data-user-name>Student</b><br><span class="tiny" data-user-role>KCSE Candidate</span></div>
     <nav class="snav">
       <h5>MY PATH</h5>
@@ -50,7 +51,7 @@
       <div class="alert-red" style="margin-bottom:18px"><b>Broker alert:</b> Never pay a cyber-café agent to create your HEF account. PathFinder is free and official. Report fraud to the Ministry of Education.</div>
       <p class="eyebrow">Government funding · Higher Education Financing (HEF)</p>
       <h1 style="font-size:32px;margin:8px 0 8px">Funding &amp; HELB Scholarship Hub</h1>
-      <p class="muted" style="max-width:620px">Understand means testing, avoid broker traps, and never miss a deadline.</p><p style="margin-top:10px"><span class="chip real">✓ REAL DATA</span> <span class="tiny muted">Sources: Universities Act (2012), HELB Act, HEF portal (hef.co.ke). Bands &amp; amounts per official HEF framework.</span></p>
+      <p class="muted" style="max-width:620px">Understand means testing, avoid broker traps, and never miss a deadline.</p><p style="margin-top:10px"><span class="chip real">✓ PUBLIC SOURCES</span> <span class="tiny muted">Sources: Universities Act (2012), HELB Act, HEF portal (hef.co.ke). Bands, percentages and amounts are indicative and change — confirm on hef.co.ke before you decide.</span></p>
 
       <div class="grid g3" style="margin-top:24px">
         <div class="card"><span class="chip pine">1</span><h3 style="margin:12px 0 8px">Universities Fund (UF)</h3><p class="small muted">Government scholarship via Means Testing (MTI). Covers 30–70% of tuition, paid directly to your university.</p></div>
@@ -61,7 +62,7 @@
       <h2 style="font-size:26px;margin:36px 0 6px">HEF Bands 1 to 5 — tap to explore</h2>
       <p class="muted small" style="margin-bottom:16px">Your band decides your grant. Wrong band? You can appeal free within 30 days.</p>
       <div class="grid" style="grid-template-columns:repeat(5,1fr)" id="bandGrid"></div>
-      <div class="alert-green" style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span><b>Placed in the wrong band?</b> Appeal free on the HEF portal with supporting proof.</span><button class="btn btn-dark btn-sm" onclick="window.open('https://www.hef.co.ke','_blank')">File band appeal</button></div>
+      <div class="alert-green" style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span><b>Placed in the wrong band?</b> Appeal free on the HEF portal with supporting proof.</span><button class="btn btn-dark btn-sm" onclick="window.open('https://www.hef.co.ke','_blank','noopener,noreferrer')">File band appeal</button></div>
 
       <div class="grid" style="grid-template-columns:1.4fr 1fr;margin-top:24px;align-items:start">
         <div class="card">
@@ -74,15 +75,16 @@
             <li>Register your M-Pesa number for upkeep payments.</li>
             <li>Complete the financial literacy quiz &amp; loan consent.</li>
           </ol>
-          <p class="tiny muted" style="margin-top:10px">Average completion: 45 minutes · 100% paperless · USSD fallback: *642#</p>
+          <p class="tiny muted" style="margin-top:10px">Steps can change — always follow the instructions on the official HEF portal.</p>
         </div>
         <div class="card" style="background:var(--lime-soft)">
-          <h3>Free deadline tracker</h3>
-          <p class="tiny muted" style="margin:8px 0 14px">Get SMS + email reminders for every funding window.</p>
-          <label class="flab">Full name</label><input class="input" id="fundName" value="Amina Odhiambo" style="margin-bottom:10px">
-          <label class="flab">Mobile (Safaricom)</label><input class="input" value="+254 712 ••• ••89" style="margin-bottom:10px">
-          <label class="flab">Email</label><input class="input" value="amina@example.ke" style="margin-bottom:14px">
-          <button class="btn btn-dark btn-block" onclick="toast('✅ Deadline tracker activated for '+document.getElementById('fundName').value+' — SMS + email set.')">✓ Activate free tracker</button>
+          <h3>Deadlines &amp; official portals</h3>
+          <p class="tiny muted" style="margin:8px 0 14px">Automatic SMS / email reminders are <b>coming soon</b>. Until then, check the official sites each term — dates change every year.</p>
+          <div style="display:grid;gap:8px">
+            <a class="btn btn-dark btn-block" href="https://www.hef.co.ke" target="_blank" rel="noopener noreferrer">HEF portal (hef.co.ke) ↗</a>
+            <a class="btn btn-ghost btn-block" href="https://www.helb.co.ke" target="_blank" rel="noopener noreferrer">HELB (helb.co.ke) ↗</a>
+            <a class="btn btn-ghost btn-block" href="https://www.kuccps.net" target="_blank" rel="noopener noreferrer">KUCCPS (kuccps.net) ↗</a>
+          </div>
         </div>
       </div>
 
@@ -101,7 +103,6 @@
 <script src="../assets/js/shell.js"></script>
 <script>
 const s=requireRole("student","../signin.html"); if(s)fillUserChip();
-try{ attachAutocomplete(document.getElementById('globalSearch'), function(q){ return globalSearchItems(q); }, function(it){ toast('Searching: ' + it.title); }); }catch(e){}
 const BANDS=[
  {b:"Band 1",t:"Vulnerable",gov:"70%",helb:"30%",house:"—",upkeep:"KES 60,000"},
  {b:"Band 2",t:"Extremely Needy",gov:"60%",helb:"30%",house:"10%",upkeep:"KES 55,000"},
@@ -115,7 +116,7 @@ function renderBands(){
 }
 renderBands();
 const SCH=window.PF_SCHOLARSHIPS||[];
-document.getElementById("schGrid").innerHTML=SCH.map(x=>`<div class="card" style="padding:20px"><span class="chip amber">${x.type}</span><h4 style="margin:10px 0 6px;font-size:15px">${x.name}</h4><p class="tiny muted">${x.cov}<br>${x.amt} · Deadline ${x.deadline}</p><button class="btn btn-dark btn-sm" style="margin-top:12px" onclick="window.open('${x.url||'https://www.helb.co.ke'}','_blank')">Apply ↗</button></div>`).join("");
+document.getElementById("schGrid").innerHTML=SCH.map(x=>`<div class="card" style="padding:20px"><span class="chip amber">${x.type}</span><h4 style="margin:10px 0 6px;font-size:15px">${esc(x.name)}</h4><p class="tiny muted">${esc(x.cov)}<br>${esc(x.amt)} · Deadline ${esc(x.deadline)}</p><a class="btn btn-dark btn-sm" style="margin-top:12px" href="${esc(x.url||'https://www.helb.co.ke')}" target="_blank" rel="noopener noreferrer">Apply ↗</a></div>`).join("");
 </script>
 </body>
 </html>

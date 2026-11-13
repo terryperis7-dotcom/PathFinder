@@ -10,19 +10,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>PathFinder Kenya — Every Kenyan Student Deserves a Clear Path</title>
 <meta name="description" content="Free KUCCPS, HELB, TVET, KCSE & CBC guidance for Kenyan students, parents and tutors.">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <nav class="pnav"><div class="container pnav-in">
-  <a class="brand" href="index.html"><span class="brand-mark">S</span>PathFinder <small>KENYA</small></a>
+  <a class="brand" href="index.html"><span class="brand-mark">P</span>PathFinder <small>KENYA</small></a>
   <div class="pnav-links"><a href="#about">About</a><a href="#who">Who it's for</a><a href="#features">Features</a><a href="#how">How it works</a><a href="#stories">Stories</a><a href="#faq">FAQ</a></div>
   <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
     <a class="btn btn-ghost btn-sm" href="signin.html">Sign in</a>
@@ -56,8 +57,8 @@
       <div style="position:absolute;bottom:16px;right:16px;background:#fff;border-radius:14px;padding:13px 15px;display:flex;gap:11px;align-items:center;box-shadow:var(--shadow2)"><span style="width:38px;height:38px;border-radius:50%;border:3px solid var(--amber);display:grid;place-items:center;font-weight:900;color:#b97e00">◷</span><span><b style="font-size:13.5px">Funding guide</b><br><span class="tiny muted">Universities Fund · HELB · TVET</span></span></div>
     </div>
     <div class="card" style="margin-top:14px;display:flex;gap:12px;align-items:center;padding:18px">
-      <span class="avatar" style="background:var(--lime);color:var(--pine3)">AO</span>
-      <div style="flex:1"><b>Amina Odhiambo</b> <span class="chip lime">KCSE Candidate</span><div class="tiny muted">Software Engineering track · 88% match · Nairobi</div></div>
+      <span class="avatar" style="background:var(--lime);color:var(--pine3)">EX</span>
+      <div style="flex:1"><b>Example student</b> <span class="chip lime">KCSE Candidate</span><div class="tiny muted">Sample result: Engineering &amp; Technology · 88% match</div></div>
       <a class="btn btn-dark btn-sm" href="signup.html">Try it free</a>
     </div>
   </div>
@@ -98,8 +99,8 @@
   <h2 style="font-size:32px;margin:8px 0 22px">Built for everyone in the journey</h2>
   <div class="grid g3">
     <div class="card"><span style="font-size:30px">🎓</span><h3 style="margin:10px 0 8px">Students</h3><p class="small muted">CBC Grade 7–12, KCSE Form 3–4, Form Four leavers and TVET scholars. Get your pathway, track marks, and never miss a KUCCPS or HELB deadline.</p><a class="btn btn-dark btn-sm" style="margin-top:14px" href="signup.html?role=student">Join as a student →</a></div>
-    <div class="card"><span style="font-size:30px">👨‍👩‍👧</span><h3 style="margin:10px 0 8px">Parents &amp; Guardians</h3><p class="small muted">See your child's progress in real time, understand funding bands, and approve tutor sessions — all read-only and safe under the Children Act.</p><a class="btn btn-dark btn-sm" style="margin-top:14px" href="signup.html?role=student">Create a student account →</a></div>
-    <div class="card"><span style="font-size:30px">👩‍🏫</span><h3 style="margin:10px 0 8px">Tutors &amp; Teachers</h3><p class="small muted">TSC-accredited educators get verified profiles, supervised student messaging, and protected M-Pesa escrow payments at KES 500/hour.</p><a class="btn btn-dark btn-sm" style="margin-top:14px" href="signup.html?role=tutor">Join as a tutor →</a></div>
+    <div class="card"><span style="font-size:30px">👨‍👩‍👧</span><h3 style="margin:10px 0 8px">Parents &amp; Guardians</h3><p class="small muted">Understand funding bands and help your child plan. Guardian co-viewing of progress is coming soon.</p><a class="btn btn-dark btn-sm" style="margin-top:14px" href="signup.html?role=student">Create a student account →</a></div>
+    <div class="card"><span style="font-size:30px">👩‍🏫</span><h3 style="margin:10px 0 8px">Tutors &amp; Teachers</h3><p class="small muted">TSC-registered educators can create a profile. Verification, supervised sessions and payments are coming soon.</p><a class="btn btn-dark btn-sm" style="margin-top:14px" href="signup.html?role=tutor">Join as a tutor →</a></div>
   </div>
 </div></section>
 
@@ -109,12 +110,12 @@
   <h2 style="font-size:32px;margin:8px 0 8px">Everything you need, nothing you don't</h2>
   <p class="lead" style="margin-bottom:24px">Each tool is clean and focused — open it, use it, done.</p>
   <div class="grid g3">
-    <div class="card"><h3>🧭 Passion Quiz</h3><p class="small muted" style="margin-top:8px">12 questions → your top 2 of 6 career pathways with real KUCCPS cluster codes.</p></div>
+    <div class="card"><h3>🧭 Passion Quiz</h3><p class="small muted" style="margin-top:8px">12 questions → your ranked career pathways, matched against your real scores.</p></div>
     <div class="card"><h3>📊 Academic Tracker</h3><p class="small muted" style="margin-top:8px">Log mocks, set targets, and watch Chemistry (or any subject) before it becomes a bottleneck.</p></div>
-    <div class="card"><h3>🏛 Institutions Database</h3><p class="small muted" style="margin-top:8px">Search 24+ verified universities, TVETs and KMTC campuses with cut-offs, fees and funding.</p></div>
-    <div class="card"><h3>💰 Funding &amp; HELB Guide</h3><p class="small muted" style="margin-top:8px">Bands 1–5 explained, step-by-step application walkthrough, and free deadline alerts.</p></div>
-    <div class="card"><h3>👩‍🏫 Tutor Centre</h3><p class="small muted" style="margin-top:8px">Vetted TSC teachers, transparent pricing, and guardian-notified sessions.</p></div>
-    <div class="card"><h3>🛡 Privacy First</h3><p class="small muted" style="margin-top:8px">DPA 2019 compliant. Export, restrict or erase your data anytime. Zero data selling.</p></div>
+    <div class="card"><h3>🏛 Institutions Database</h3><p class="small muted" style="margin-top:8px">Search 24 universities, TVETs and KMTC campuses with indicative cut-offs, fees and funding.</p></div>
+    <div class="card"><h3>💰 Funding &amp; HELB Guide</h3><p class="small muted" style="margin-top:8px">Bands 1–5 explained, a step-by-step application walkthrough, and links to the official portals.</p></div>
+    <div class="card"><h3>👩‍🏫 Tutor Centre</h3><p class="small muted" style="margin-top:8px">Tutor profiles and scheduling (preview — verification and booking are coming soon).</p></div>
+    <div class="card"><h3>🛡 Privacy First</h3><p class="small muted" style="margin-top:8px">Built around the Data Protection Act 2019. Export your data any time. We never sell data.</p></div>
   </div>
 </div></section>
 
@@ -130,14 +131,14 @@
   <div style="text-align:center;margin-top:28px"><a class="btn btn-lime btn-lg" href="signup.html">Start free — it takes 1 minute</a></div>
 </div></section>
 
-<!-- STORIES -->
+<!-- WHAT YOU CAN DO -->
 <section class="section" id="stories"><div class="container">
-  <p class="eyebrow" style="color:var(--terra-d)">From real Kenyan students</p>
-  <h2 style="font-size:32px;margin:8px 0 22px">One app, many turning points</h2>
+  <p class="eyebrow" style="color:var(--terra-d)">Built around real decisions</p>
+  <h2 style="font-size:32px;margin:8px 0 22px">Questions PathFinder helps you answer</h2>
   <div class="grid g3">
-    <div class="testi"><div class="stars">★★★★★</div><p style="margin:12px 0">“The quiz matched me to engineering. The funding guide showed my mother exactly how the HEF portal works — we never paid the broker who quoted KES 8,000.”</p><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="background:#0f5c46">BO</span><span><b>Brian Otieno</b><br><span class="tiny muted">Form 4, Kisumu → now at JKUAT</span></span></div></div>
-    <div class="testi"><div class="stars">★★★★★</div><p style="margin:12px 0">“As a parent I finally see her Chemistry slipping below 50% before it ruins her term. The targets and the graph say more than report cards ever did.”</p><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="background:#b34724">GW</span><span><b>Grace Wanjiru</b><br><span class="tiny muted">Parent &amp; guardian, Nyeri</span></span></div></div>
-    <div class="testi"><div class="stars">★★★★★</div><p style="margin:12px 0">“Senior school pathways felt random until this. My son now knows exactly why he is doing Physics and how it leads to an aviation career.”</p><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="background:#6d28d9">AH</span><span><b>Amina Hassan</b><br><span class="tiny muted">Parent of a Grade 10 learner, Mombasa</span></span></div></div>
+    <div class="card"><h3>“Which course fits me — and can I qualify?”</h3><p class="small muted" style="margin-top:8px">Combine your personality quiz with your real subject scores to rank six career pathways and see exactly which grades to raise.</p></div>
+    <div class="card"><h3>“How do I pay for it?”</h3><p class="small muted" style="margin-top:8px">Understand HEF bands, HELB loans and scholarships, with links straight to the official portals — never pay an agent to create your account.</p></div>
+    <div class="card"><h3>“Is my child on track?”</h3><p class="small muted" style="margin-top:8px">Log every exam, set targets and watch weak subjects early. Guardian co-viewing is on the roadmap.</p></div>
   </div>
 </div></section>
 
@@ -170,11 +171,11 @@
 <script>
 const FAQS=[
  ["Is PathFinder Kenya free for students and schools?","Yes — 100% free for public secondary and TVET learners. No agent fees, no broker commissions, no paywalls on KUCCPS or HELB guidance."],
- ["How are the KUCCPS cluster points calculated?","KUCCPS weights your best 7 subjects using cluster-specific multipliers. PathFinder mirrors the official formula per cluster and shows your gap to each course cut-off."],
- ["Does this work on basic smartphones or with slow internet?","Yes. PathFinder is a lightweight app (4.8MB offline cache) tuned for 2G/3G Safaricom and Airtel, Opera Mini, and low-end Android."],
- ["How is student data protected under Kenyan law?","PathFinder is registered with the ODPC (No. ODPC/PR/2024/0918) under the Data Protection Act 2019. Minors require guardian consent, and you can export, restrict, or erase your data within 72 hours."],
+ ["How are the KUCCPS cluster points calculated?","Official cluster points are calculated by KUCCPS. PathFinder gives you an estimate of which career pathways you can realistically qualify for by comparing your subject scores with typical cluster requirements — always confirm cut-offs on kuccps.net."],
+ ["Does this work on basic smartphones or with slow internet?","PathFinder is a lightweight web app with no heavy frameworks. Once loaded it is cached on your phone, so the pages you have visited keep working when your connection drops."],
+ ["How is student data protected under Kenyan law?","PathFinder is built around the Kenya Data Protection Act, 2019: we collect only what we need (scores, county, school and quiz answers), and you can export your data from your profile. Read the full privacy policy for how to request correction or deletion."],
  ["Can TVET and diploma students use this portal?","Absolutely. TVET learners get TVETA-aligned pathways, capitation and HELB TVET loan guidance across national polytechnics and KMTC."],
- ["Do you sell student data to universities or lenders?","Never. There are zero behavioral ads or trackers, and analytics inclusion is opt-out at any time."]
+ ["Do you sell student data to universities or lenders?","Never. There are no ads and no third-party trackers."]
 ];
 document.getElementById("faqWrap").innerHTML=FAQS.map((f,i)=>`<div class="faq ${i===0?"open":""}"><button onclick="this.parentElement.classList.toggle('open')">${f[0]}<span>▾</span></button><div class="a">${f[1]}</div></div>`).join("");
 </script>

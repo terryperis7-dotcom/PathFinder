@@ -120,11 +120,4 @@
       navigator.serviceWorker.register("/sw.js").catch(function () { /* file:// or unsupported — app still works */ });
     });
   }
-
-  /* ---------- Security: block right-click on sensitive? No — keep accessible.
-     Instead: warn on paste into password fields is annoying; we do the opposite:
-     allow paste (good UX), rely on hashing + Supabase Auth in production. ---------- */
-
-  /* ---------- Prevent horizontal scroll bounce on iOS ---------- */
-  document.addEventListener("touchmove", function () {}, { passive: true });
 })();

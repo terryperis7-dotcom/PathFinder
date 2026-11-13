@@ -10,20 +10,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>Sessions & Schedule — PathFinder Kenya</title>
 <link rel="manifest" href="../manifest.json">
-<link rel="icon" href="../assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div id="netStatus" role="status"></div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="side-logo"><span class="brand-mark">S</span><span><b>PathFinder</b><small>KENYA · TUTOR</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
+    <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · TUTOR</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
     <div class="side-role">👩‍🏫 <b data-user-name>Tutor</b><br><span class="tiny" data-user-role>TSC Tutor</span></div>
     <nav class="snav">
       <h5>TEACHING</h5>
@@ -101,19 +102,18 @@ const SESS=[
 ];
 function setAvailability(){
   const days = prompt("Set your teaching days (comma separated, e.g. Mon, Wed, Sat):", "Mon, Wed, Sat");
-  if(days) toast("🗓 Availability saved: " + days + " — students can now book these windows.");
+  if(days) toast("🗓 Availability noted: " + days + " (preview only — booking isn't live yet).");
 }
 function bookSession(){
-  const days=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const day=days[Math.floor(Math.random()*days.length)];
-  const stu=["Amina Odhiambo","Moses Kiprop","Faith Wanjiku","Brian Kibet"][Math.floor(Math.random()*4)];
+  const stu=(prompt("Student name:")||"").trim(); if(!stu)return;
+  const day=(prompt("Day (e.g. Monday):","Monday")||"").trim(); if(!day)return;
   SESS.push([day,"4:00 PM",stu,"Mathematics","Online Studio","Pending guardian"]);
-  renderSched(); toast("🗓 Session booked: " + stu + " · " + day + " 4:00 PM — guardian notified via SMS.");
+  renderSched(); toast("🗓 Sample session added for "+stu+" (preview only — nobody is notified).");
 }
 function renderSched(){
-  document.getElementById("schedTable").innerHTML=SESS.map(function(x){ return '<tr><td><b>' + x[0] + '</b></td><td>' + x[1] + '</td><td>' + x[2] + '</td><td>' + x[3] + '</td><td>' + x[4] + '</td><td><span class="chip ' + (x[5]==="Confirmed"?"green":"amber") + '">' + x[5] + '</span></td><td><button class="btn btn-dark btn-sm" onclick="toast(\'Studio link sent to student + guardian.\')">Join</button></td></tr>'; }).join("");
+  document.getElementById("schedTable").innerHTML=SESS.map(function(x){ return '<tr><td><b>'+esc(x[0])+'</b></td><td>'+esc(x[1])+'</td><td>'+esc(x[2])+'</td><td>'+esc(x[3])+'</td><td>'+esc(x[4])+'</td><td><span class="chip '+(x[5]==="Confirmed"?"green":"amber")+'">'+esc(x[5])+'</span></td><td><button class="btn btn-dark btn-sm" onclick="toast(\'Preview only — no studio link is sent.\')">Join</button></td></tr>'; }).join("");
 }
-document.getElementById("schedTable").innerHTML=SESS.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td>${x[4]}</td><td><span class="chip ${x[5]==="Confirmed"?"green":"amber"}">${x[5]}</span></td><td><button class="btn btn-dark btn-sm" onclick="toast('🎥 Studio link sent to student + guardian.')">Join</button></td></tr>`).join("");
+renderSched();
 </script>
 </body>
 </html>

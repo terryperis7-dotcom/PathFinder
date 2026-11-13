@@ -10,18 +10,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PathFinder">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>Sign in — PathFinder Kenya</title>
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="assets/avatars/anime-girl.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <nav class="pnav"><div class="container pnav-in">
-  <a class="brand" href="index.html"><span class="brand-mark">S</span>PathFinder <small>KENYA</small></a>
+  <a class="brand" href="index.html"><span class="brand-mark">P</span>PathFinder <small>KENYA</small></a>
   <div style="margin-left:auto;display:flex;gap:10px"><a class="btn btn-ghost btn-sm" href="index.html">← Back home</a><a class="btn btn-dark btn-sm" href="signup.html">Create account</a></div>
 </div></nav>
 
@@ -46,8 +47,8 @@
       <label class="flab">Password</label>
       <input class="input" type="password" id="siPass" placeholder="••••••••" required style="margin-bottom:8px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-        <label class="tiny"><input type="checkbox" checked> Remember me</label>
-        <a class="tiny" href="#" onclick="toast('🔑 Password reset link sent to your email (demo).');return false">Forgot password?</a>
+        <span></span>
+        <a class="tiny" href="#" id="forgotLink">Forgot password?</a>
       </div>
       <button class="btn btn-dark btn-block btn-lg" type="submit">Sign in →</button>
       <p id="siError" class="tiny" style="color:var(--red);margin-top:10px;display:none"></p>
@@ -59,7 +60,7 @@
       <button class="btn btn-ghost btn-block" onclick="demoSignin('tutor')">👩‍🏫 Continue as Tutor (Demo)</button>
       <button class="btn btn-ghost btn-block" onclick="demoSignin('superadmin')">🛡 Continue as SuperAdmin (Demo)</button>
     </div>
-    <p class="tiny muted" style="text-align:center;margin-top:16px">New here? <a href="signup.html"><b>Create a free account →</b></a><br><span class="tiny">SuperAdmin? Sign in with <b>emmanuelmwangi88@gmail.com</b></span></p>
+    <p class="tiny muted" style="text-align:center;margin-top:16px">New here? <a href="signup.html"><b>Create a free account →</b></a><br><span class="tiny muted">SuperAdmin accounts are created by the project owner (see supabase/README.md).</span></p>
   </div>
 </div>
 <footer class="footer"><div class="container footer-in"><span>© 2026 PathFinder Kenya · DPA 2019 Compliant · All rights reserved</span><span><a href="index.html">Home</a> · <a href="signup.html">Sign up</a> · <a href="legal/privacy.html">Privacy</a> · <a href="legal/terms.html">Terms</a></span></div></footer>
@@ -71,22 +72,30 @@
 <script src="assets/js/app.js"></script>
 <script src="assets/js/shell.js"></script>
 <script>
-function demoSignin(role){setSession(DEMO_USERS[role]);ensureDemoData();toast("✓ Demo signed in — mock data clearly labelled. Taking you to your workspace…");setTimeout(()=>location.href=homeFor(role),600)}
-document.getElementById("signinForm").addEventListener("submit",e=>{
+document.getElementById("forgotLink").addEventListener("click", async function (e) {
   e.preventDefault();
-  const email=document.getElementById("siEmail").value.trim();
-  const pass=document.getElementById("siPass").value;
-  const user=findUser(email);
-  const err=document.getElementById("siError");
-  if(!user){err.textContent="No account found for this email. Please sign up first.";err.style.display="block";return}
-  if(user.suspended){err.textContent="⛔ This account is suspended. Contact support@pathfinder.ke";err.style.display="block";return}
-  if(!checkPassword(user,pass)){err.textContent="Incorrect password. Please try again.";err.style.display="block";return}
-  setSession(user);
-  const next=new URLSearchParams(location.search).get("next");
-  let dest=next||homeFor(user.role);
-  if(user.role==="student"&&!user.demo){const d=getStudentData();if(!d||!d.onboarded)dest="student/onboarding.html"}
-  toast("✓ Welcome back, "+user.name+"!");
-  setTimeout(()=>location.href=dest,600);
+  const email = document.getElementById("siEmail").value.trim();
+  if (!(window.PF_DB && PF_DB.live)) { toast("Password reset needs Supabase to be configured. In local demo mode, create a new account."); return; }
+  if (!email) { toast("Type your email above first, then tap “Forgot password?”."); return; }
+  try { await PF_DB.client.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/signin.html" }); } catch (err) {}
+  toast("If that email has an account, a reset link is on its way.");
+});
+document.getElementById("signinForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const err = document.getElementById("siError"), btn = e.target.querySelector("button[type=submit]");
+  err.style.display = "none"; btn.disabled = true;
+  try {
+    const res = await loginAccount(document.getElementById("siEmail").value, document.getElementById("siPass").value);
+    if (res.error) { err.textContent = res.error; err.style.display = "block"; return; }
+    const user = res.user;
+    setSession(user);
+    let dest = safeNext(new URLSearchParams(location.search).get("next"), homeFor(user.role));
+    if (user.role === "student" && !user.demo) { const d = getStudentData(); if (!d || !d.onboarded) dest = "student/onboarding.html"; }
+    toast("✓ Welcome back, " + user.name + "!");
+    setTimeout(function () { location.href = dest; }, 600);
+  } catch (ex) {
+    err.textContent = "Something went wrong. Please try again."; err.style.display = "block";
+  } finally { btn.disabled = false; }
 });
 </script>
 </body>
