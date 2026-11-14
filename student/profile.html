@@ -29,6 +29,7 @@
     <nav class="snav">
       <h5>MY PATH</h5>
       <a href="dashboard.html">⌂ &nbsp;Dashboard</a>
+      <a href="cluster.html">🧮 &nbsp;Cluster Points</a>
       <a href="quiz.html">🧭 &nbsp;Passion Quiz</a>
       <a href="institutions.html">🏛 &nbsp;Institutions</a>
       <a href="funding.html">💰 &nbsp;Funding &amp; HELB</a>
@@ -57,13 +58,14 @@
       <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:24px;align-items:start">
         <div style="display:grid;gap:20px">
           <div class="card">
-            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><h3>Avatar &amp; persona</h3><p class="tiny muted">Pick an illustrated identity or upload a photo (kept on this device only).</p></div></div>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><h3>Avatar &amp; persona</h3><p class="tiny muted">Pick a generated avatar, or upload your own photo (kept on this device only).</p></div></div>
             <div style="display:flex;gap:16px;align-items:center;margin-top:16px;flex-wrap:wrap">
-              <div id="bigAvatar" style="width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#f5b93f,#e07b39);display:grid;place-items:center;font-size:42px;border:3px solid var(--lime);overflow:hidden">🧑🏾‍🎓</div>
-              <div style="flex:1;min-width:220px"><b style="font-size:18px" data-user-name>Student</b> <p class="small muted" style="margin:6px 0">Current persona: <b id="personaName">—</b>.</p><input type="file" id="avatarFile" accept="image/*" style="display:none"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('avatarFile').click()">⛶ Upload &amp; crop</button></div>
+              <div id="bigAvatar" style="width:92px;height:92px;flex:0 0 92px;border-radius:50%;overflow:hidden;border:3px solid var(--lime);background:var(--cream2)"></div>
+              <div style="flex:1;min-width:200px"><b style="font-size:18px" data-user-name>Student</b> <p class="small muted" style="margin:6px 0">Current persona: <b id="personaName">—</b>.</p><input type="file" id="avatarFile" accept="image/*" style="display:none"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('avatarFile').click()">⛶ Upload a photo</button></div>
             </div>
-            <p class="flab" style="margin-top:18px">Choose a persona — anime &amp; realistic portraits</p>
-            <div class="grid" style="grid-template-columns:repeat(6,1fr);gap:8px" id="personaGrid"></div>
+            <p class="flab" style="margin-top:18px">Choose a persona</p>
+            <div class="persona-grid" id="personaGrid"></div>
+            <p class="tiny muted" style="margin-top:12px">Every avatar here is drawn by PathFinder as simple shapes — no photographs, no licensed artwork, no third-party images.</p>
           </div>
 
           <div class="card">
@@ -97,12 +99,13 @@
     </main>
   </div>
 </div>
-<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="cluster.html"><span class="bic">🧮</span>Points</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
 <div class="toast-wrap" id="toasts"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
@@ -112,15 +115,31 @@ const me=getSession()||{};
 let sdata=getStudentData()||{results:[],quiz:{answers:{}}};
 const emailKey=me.email||"guest";
 
-/* ---------- Personas (avatar) ---------- */
-const PERSONAS=[["Anime Star","../assets/avatars/anime-girl.jpg"],["Anime Hero","../assets/avatars/anime-boy.jpg"],["Anime Explorer","../assets/avatars/anime-explorer.jpg"],["Anime Scientist","../assets/avatars/anime-scientist.jpg"],["Chibi Girl","../assets/avatars/anime-2-girl.jpg"],["Chibi Boy","../assets/avatars/anime-2-boy.jpg"],["Anime Hero 2","../assets/avatars/anime-2-hero.jpg"],["Cat Girl","../assets/avatars/anime-2-cat.jpg"],["Anime Mage","../assets/avatars/anime-2-mage.jpg"],["Panda DJ","../assets/avatars/anime-2-panda.jpg"],["Real Portrait A","../assets/avatars/real-girl.jpg"],["Real Portrait B","../assets/avatars/real-boy.jpg"]];
-let selP=+(localStorage.getItem("pf_persona_"+emailKey)||0); if(!(selP>=0&&selP<PERSONAS.length))selP=0;
+/* ---------- Personas (generated avatars — assets/js/avatar.js) ---------- */
+/* Fall back to a persona derived from the name so nobody is left on a
+   blank avatar, and a returning user always gets the one they chose. */
+let selP=(function(){
+ try{
+  const stored=Number(localStorage.getItem("pf_persona_"+emailKey));
+  if(isFinite(stored)&&stored>=0&&stored<PF_PERSONAS.length)return stored;
+ }catch(e){}
+ return avatarForName(me.name||emailKey);
+})();
 function renderPersonas(){
- document.getElementById("personaGrid").innerHTML=PERSONAS.map((p,i)=>`<button type="button" class="persona ${i===selP?"sel":""}" data-i="${i}"><span class="face"><img src="${p[1]}" alt="${esc(p[0])}"></span>${esc(p[0])}</button>`).join("");
- document.querySelectorAll("#personaGrid .persona").forEach(b=>b.onclick=function(){selP=+b.dataset.i;try{localStorage.setItem("pf_persona_"+emailKey,selP);localStorage.removeItem("pf_avatar_"+emailKey)}catch(e){}renderPersonas();setBigAvatar(selP);toast("🎭 Persona: "+PERSONAS[selP][0])});
- document.getElementById("personaName").textContent=PERSONAS[selP][0];
+ document.getElementById("personaGrid").innerHTML=PF_PERSONAS.map((p,i)=>
+  '<button type="button" class="persona '+(i===selP?"sel":"")+'" data-i="'+i+'" aria-pressed="'+(i===selP?"true":"false")+'">'+
+  '<span class="face">'+avatarSVG(i)+'</span>'+esc(p.name)+'</button>').join("");
+ document.querySelectorAll("#personaGrid .persona").forEach(b=>b.onclick=function(){
+  selP=+b.dataset.i;
+  try{localStorage.setItem("pf_persona_"+emailKey,selP);localStorage.removeItem("pf_avatar_"+emailKey)}catch(e){}
+  renderPersonas();setBigAvatar(selP);updateChips();
+  toast("Persona: "+PF_PERSONAS[selP].name);
+ });
+ document.getElementById("personaName").textContent=PF_PERSONAS[selP].name;
 }
-function setBigAvatar(i){document.getElementById("bigAvatar").innerHTML=`<img src="${PERSONAS[i][1]}" style="width:100%;height:100%;object-fit:cover" alt="${esc(PERSONAS[i][0])}">`}
+function setBigAvatar(i){document.getElementById("bigAvatar").innerHTML=avatarSVG(i)}
+/* Keep the header chips in step with the persona just chosen. */
+function updateChips(){ if(window.fillUserChip) fillUserChip(); }
 document.getElementById("avatarFile").addEventListener("change",function(e){
  const f=e.target.files[0]; if(!f)return;
  if(!/^image\/(png|jpe?g|webp|gif)$/.test(f.type)){toast("⚠ Please choose a PNG, JPG, WebP or GIF image.");return}
@@ -137,7 +156,7 @@ document.getElementById("avatarFile").addEventListener("change",function(e){
 (function restoreAvatar(){
  let saved=null; try{saved=localStorage.getItem("pf_avatar_"+emailKey)}catch(e){}
  if(saved&&/^data:image\//.test(saved)){const img=document.createElement("img");img.src=saved;img.alt="Your photo";img.style.cssText="width:100%;height:100%;object-fit:cover";const el=document.getElementById("bigAvatar");el.textContent="";el.appendChild(img)}
- else if(localStorage.getItem("pf_persona_"+emailKey)!=null)setBigAvatar(selP);
+ else setBigAvatar(selP);
 })();
 renderPersonas();
 

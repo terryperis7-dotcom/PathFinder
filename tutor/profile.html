@@ -45,49 +45,61 @@
       <div class="search">⌕ <input placeholder="Search…"></div>
       <div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Tutor</b><small data-user-role>TSC Tutor</small></span><span class="avatar" data-user-initials>TT</span></div>
     </header>
-    <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Demo data.</b> Tutor workspace sample data is illustrative (mock) until connected to live student records. <span class="chip mock">⚠ MOCK DATA</span></div>
-      <p class="eyebrow">Public directory profile · Verified</p>
+    <main class="view">
+      <div id="tutorBanner"></div>
+      <p class="eyebrow">Public directory profile</p>
       <h1 style="font-size:32px;margin:8px 0 8px">Tutor Profile</h1>
-      <p class="muted" style="max-width:620px">This is what students and guardians see. Keep it accurate — verification is renewed yearly.</p>
+      <p class="muted" style="max-width:620px">This is what students and guardians would see. Everything below is saved to your account — nothing here is sample data.</p>
 
       <div class="grid" style="grid-template-columns:1.4fr 1fr;margin-top:24px;align-items:start">
         <div style="display:grid;gap:20px">
           <div class="card">
             <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
               <span class="avatar" style="width:76px;height:76px;font-size:24px" data-user-initials>TT</span>
-              <div style="flex:1;min-width:220px"><b style="font-size:20px" data-user-name>Mwalimu Peter Mwangi</b> <span class="chip amber">★ 4.9 (38)</span><p class="small muted" style="margin-top:4px">TSC # 489201 · B.Ed (Sci) — Kenyatta University<br>Nairobi &amp; Kiambu · Online Cluster</p></div>
-              <span class="chip amber">Verification pending</span>
+              <div style="flex:1;min-width:220px">
+                <b style="font-size:20px" data-user-name>Tutor</b>
+                <p class="small muted" style="margin-top:4px" id="tpSummary"></p>
+              </div>
+              <span id="tpVerdict"></span>
             </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><span class="chip">Pure Mathematics</span><span class="chip">Physics Form 3–4</span><span class="chip lime">KCSE Cluster Coach</span></div>
-            <p class="small muted" style="margin-top:14px">“Specialised in breaking down calculus and kinematics mechanics into step-by-step confidence builders. 8 years KCSE marking experience.”</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px" id="tpSubjects"></div>
+            <p class="small muted" style="margin-top:14px" id="tpBio"></p>
           </div>
+
           <div class="card">
             <h3>Edit profile</h3>
             <div class="grid g2" style="margin-top:14px;gap:14px">
-              <div><label class="flab">Display name</label><input class="input" id="tpName" value="Mwalimu Peter Mwangi"></div>
-              <div><label class="flab">TSC Registration No.</label><input class="input" value="489201"></div>
-              <div><label class="flab">Main subjects</label><input class="input" value="Mathematics, Physics"></div>
-              <div><label class="flab">Coverage</label><input class="input" value="Nairobi & Kiambu (Online)"></div>
+              <div><label class="flab">Display name</label><input class="input" id="tpName"></div>
+              <div><label class="flab">TSC Registration No.</label><input class="input" id="tpTsc" placeholder="e.g. 489201"></div>
+              <div><label class="flab">Main subjects</label><input class="input" id="tpSubjectsIn" placeholder="Mathematics, Physics"></div>
+              <div><label class="flab">County / coverage</label><input class="input" id="tpCounty" placeholder="e.g. Nairobi"></div>
             </div>
             <label class="flab" style="margin-top:14px">Bio</label>
-            <textarea class="input" rows="3">Specialised in breaking down calculus and kinematics mechanics into step-by-step confidence builders. 8 years KCSE marking experience.</textarea>
-            <button class="btn btn-dark" style="margin-top:16px" onclick="saveTutorProfile()">Save profile</button>
+            <textarea class="input" id="tpBioIn" rows="3" placeholder="How you teach, your experience, the levels you cover."></textarea>
+            <div class="grid g2" style="margin-top:14px;gap:14px">
+              <div><label class="flab">Years of experience</label><input class="input" id="tpExp" type="number" min="0" max="60" placeholder="e.g. 8"></div>
+              <div><label class="flab">Hourly rate (KES)</label><input class="input" id="tpRate" type="number" min="0" step="50"></div>
+            </div>
+            <button class="btn btn-dark" style="margin-top:16px" onclick="saveProfile()">Save profile</button>
           </div>
         </div>
+
         <div style="display:grid;gap:20px">
           <div class="card">
-            <h3>Verification documents</h3>
-            <div style="margin-top:10px">
-              <div class="checkrow"><span class="ck done">✓</span><span><b>TSC Registration</b><br><span class="tiny muted">Verified · Expires Dec 2026</span></span></div>
-              <div class="checkrow"><span class="ck done">✓</span><span><b>DCI Good Conduct</b><br><span class="tiny muted">Verified · Police clearance</span></span></div>
-              <div class="checkrow"><span class="ck done">✓</span><span><b>Degree parchment</b><br><span class="tiny muted">Kenyatta University</span></span></div>
-              <div class="checkrow"><span class="ck done">✓</span><span><b>Safeguarding training</b><br><span class="tiny muted">Children Act 2022 · Completed</span></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+              <h3>Verification</h3>
+              <span class="chip" id="vCount"></span>
             </div>
+            <p class="tiny muted" style="margin:6px 0 12px">
+              Submitting a document records it as <b>awaiting review</b>. Only a PathFinder reviewer can mark it
+              verified — the app never claims a check it has not carried out.
+            </p>
+            <div id="verifyList"></div>
           </div>
           <div class="card" style="background:var(--lime-soft)">
-            <h3>Fixed rate: KES 500 / hour</h3>
-            <p class="tiny muted" style="margin:8px 0 12px">National standard rate. Platform verify fee waived during pilot. Paid via Daraja escrow.</p>
-            <button class="btn btn-dark btn-sm" onclick="toast('Payouts are not live yet.')">View payout account</button>
+            <h3>Fixed rate: KES <span id="rateLabel">500</span> / hour</h3>
+            <p class="tiny muted" style="margin:8px 0 12px">National pilot rate. No commission during the pilot. Payments are not live yet — no money moves through this app.</p>
+            <p class="tiny muted" id="tpHours"></p>
           </div>
         </div>
       </div>
@@ -100,16 +112,102 @@
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/tutor.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
-function saveTutorProfile(){
-  const s = getSession(); if(!s) return;
-  s.name = document.getElementById("tpName").value.trim() || s.name;
-  setSession(s); fillUserChip();
-  toast("✅ Profile name saved on this device.");
-}
 const s=requireRole("tutor","../signin.html"); if(s)fillUserChip();
+
+let P = loadTutorProfile();
+
+function renderVerification(){
+  const v = tutorVerification(P);
+  document.getElementById("vCount").textContent = v.submitted + " of " + v.total + " submitted";
+  document.getElementById("verifyList").innerHTML = v.steps.map(function(st){
+    const chip = st.status==="verified" ? '<span class="chip green">✓ Verified</span>'
+      : st.status==="submitted" ? '<span class="chip amber">◷ Awaiting review</span>'
+      : '<span class="chip">Not submitted</span>';
+    const cls = st.status==="verified" ? "done" : "";
+    const mark = st.status==="verified" ? "✓" : (st.status==="submitted" ? "◷" : "○");
+    return '<div class="checkrow">' +
+      '<span class="ck ' + cls + '">' + mark + '</span>' +
+      '<div style="flex:1"><b>' + esc(st.label) + '</b>' +
+      '<div class="tiny muted">' + esc(st.hint) + '</div></div>' +
+      '<div style="text-align:right">' + chip +
+      (st.status==="submitted"
+        ? '<br><button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="withdrawDoc(\'' + st.id + '\')">Withdraw</button>'
+        : (st.status==="missing"
+            ? '<br><button class="btn btn-dark btn-sm" style="margin-top:6px" onclick="submitDoc(\'' + st.id + '\')">I have this</button>'
+            : "")) +
+      '</div></div>';
+  }).join("");
+
+  const v2 = tutorVerification(P);
+  document.getElementById("tpVerdict").innerHTML = v2.complete
+    ? '<span class="chip green">✓ Verified tutor</span>'
+    : '<span class="chip amber">Not yet verified</span>';
+}
+
+function submitDoc(id){ P = submitTutorDoc(id); renderAll(); toast("Recorded as awaiting review."); }
+function withdrawDoc(id){ P = withdrawTutorDoc(id); renderAll(); toast("Submission withdrawn."); }
+
+function saveProfile(){
+  const sess = getSession();
+  const name = document.getElementById("tpName").value.trim();
+  if(!name){ toast("Please enter your display name."); return; }
+  if(sess){ sess.name = name; setSession(sess); }
+
+  P = updateTutorProfile({
+    tsc: document.getElementById("tpTsc").value.trim(),
+    subjects: document.getElementById("tpSubjectsIn").value.split(",").map(x=>x.trim()).filter(Boolean),
+    county: document.getElementById("tpCounty").value.trim(),
+    bio: document.getElementById("tpBioIn").value.trim(),
+    experience: document.getElementById("tpExp").value.trim(),
+    rate: Math.max(0, Number(document.getElementById("tpRate").value) || TUTOR_RATE)
+  });
+  renderAll();
+  fillUserChip();
+  toast("✅ Profile saved on this device.");
+}
+
+function renderAll(){
+  P = loadTutorProfile();
+  const sess = getSession();
+  document.getElementById("tpName").value = (sess && sess.name) || "";
+  document.getElementById("tpTsc").value = P.tsc || "";
+  document.getElementById("tpSubjectsIn").value = (P.subjects||[]).join(", ");
+  document.getElementById("tpCounty").value = P.county || "";
+  document.getElementById("tpBioIn").value = P.bio || "";
+  document.getElementById("tpExp").value = P.experience || "";
+  document.getElementById("tpRate").value = P.rate || TUTOR_RATE;
+  document.getElementById("rateLabel").textContent = (P.rate || TUTOR_RATE).toLocaleString();
+
+  document.getElementById("tpSummary").innerHTML =
+    (P.tsc ? "TSC # " + esc(P.tsc) + "<br>" : '<span class="tiny muted">No TSC number added yet</span><br>') +
+    esc(P.county || "Coverage not set") +
+    (P.experience ? " · " + esc(P.experience) + " yrs experience" : "");
+
+  document.getElementById("tpSubjects").innerHTML = (P.subjects||[]).length
+    ? P.subjects.map(x=>'<span class="chip">'+esc(x)+'</span>').join("")
+    : '<span class="tiny muted">Add the subjects you teach.</span>';
+
+  document.getElementById("tpBio").textContent = P.bio || "Add a short bio so students know how you teach.";
+
+  const hrs = tutorWeeklyHours(P);
+  document.getElementById("tpHours").innerHTML = hrs > 0
+    ? "Your availability totals <b>" + hrs.toFixed(1) + " hours per week</b> across " + P.availability.length + " slot(s)."
+    : "You have not set any availability yet — add slots on the Schedule page.";
+
+  renderVerification();
+}
+
+document.getElementById("tutorBanner").innerHTML =
+  '<div class="alert-green" style="margin-bottom:18px"><b>Your real data.</b> ' +
+  'This workspace saves to your account on this device. Verification, booking, messaging and payments are ' +
+  'not live yet — nothing here is sample data, and no invented student records are shown.</div>';
+
+renderAll();
 </script>
 </body>
 </html>

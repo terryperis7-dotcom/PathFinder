@@ -15,7 +15,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <title>PathFinder Kenya — Every Kenyan Student Deserves a Clear Path</title>
-<meta name="description" content="Free KUCCPS, HELB, TVET, KCSE & CBC guidance for Kenyan students, parents and tutors.">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -110,6 +109,7 @@
   <h2 style="font-size:32px;margin:8px 0 8px">Everything you need, nothing you don't</h2>
   <p class="lead" style="margin-bottom:24px">Each tool is clean and focused — open it, use it, done.</p>
   <div class="grid g3">
+    <div class="card"><h3>🧮 Cluster Points Calculator</h3><p class="small muted" style="margin-top:8px">Enter your KCSE grades and get your real KUCCPS weighted cluster points for 14 course clusters — plus the one subject that lifts you most.</p></div>
     <div class="card"><h3>🧭 Passion Quiz</h3><p class="small muted" style="margin-top:8px">12 questions → your ranked career pathways, matched against your real scores.</p></div>
     <div class="card"><h3>📊 Academic Tracker</h3><p class="small muted" style="margin-top:8px">Log mocks, set targets, and watch Chemistry (or any subject) before it becomes a bottleneck.</p></div>
     <div class="card"><h3>🏛 Institutions Database</h3><p class="small muted" style="margin-top:8px">Search 24 universities, TVETs and KMTC campuses with indicative cut-offs, fees and funding.</p></div>
@@ -166,12 +166,13 @@
 <script src="assets/js/supabase-config.js"></script>
 <script src="assets/js/supabase.js"></script>
 <script src="assets/js/data.js"></script>
+<script src="assets/js/avatar.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/shell.js"></script>
 <script>
 const FAQS=[
  ["Is PathFinder Kenya free for students and schools?","Yes — 100% free for public secondary and TVET learners. No agent fees, no broker commissions, no paywalls on KUCCPS or HELB guidance."],
- ["How are the KUCCPS cluster points calculated?","Official cluster points are calculated by KUCCPS. PathFinder gives you an estimate of which career pathways you can realistically qualify for by comparing your subject scores with typical cluster requirements — always confirm cut-offs on kuccps.net."],
+ ["How are the KUCCPS cluster points calculated?","PathFinder applies the official KUCCPS formula — <b>w = √(( r / 48 ) × ( t / 84 )) × 48</b> — where <b>r</b> is your points in the four cluster subjects required by the course (max 48) and <b>t</b> is your points across your best seven subjects (max 84). Enter your grades in the Cluster Points Calculator and we pick your strongest valid subject combination, check the KUCCPS minimum subject grades, and show which single subject would lift your score the most. KUCCPS still calculates your official figure on students.kuccps.net — always confirm cut-offs there."],
  ["Does this work on basic smartphones or with slow internet?","PathFinder is a lightweight web app with no heavy frameworks. Once loaded it is cached on your phone, so the pages you have visited keep working when your connection drops."],
  ["How is student data protected under Kenyan law?","PathFinder is built around the Kenya Data Protection Act, 2019: we collect only what we need (scores, county, school and quiz answers), and you can export your data from your profile. Read the full privacy policy for how to request correction or deletion."],
  ["Can TVET and diploma students use this portal?","Absolutely. TVET learners get TVETA-aligned pathways, capitation and HELB TVET loan guidance across national polytechnics and KMTC."],

@@ -29,6 +29,7 @@
     <nav class="snav">
       <h5>MY PATH</h5>
       <a href="dashboard.html">⌂ &nbsp;Dashboard</a>
+      <a href="cluster.html">🧮 &nbsp;Cluster Points</a>
       <a href="quiz.html">🧭 &nbsp;Passion Quiz</a>
       <a href="institutions.html">🏛 &nbsp;Institutions</a>
       <a href="funding.html">💰 &nbsp;Funding &amp; HELB</a>
@@ -64,13 +65,13 @@
       <div class="card" style="margin-top:18px">
         <h3>Subject targets &amp; remediation</h3>
         <p class="tiny muted" style="margin:4px 0 12px">Edit a target and your gap updates instantly.</p>
-        <div style="overflow:auto"><table><thead><tr><th>Subject</th><th>Current</th><th>Target %</th><th>Gap</th><th>Strategy</th></tr></thead><tbody id="trackerTable"></tbody></table></div>
+        <div style="overflow:auto"><table class="stack"><thead><tr><th>Subject</th><th class="num">Current</th><th>Target %</th><th>Gap</th><th>Strategy</th></tr></thead><tbody id="trackerTable"></tbody></table></div>
       </div>
 
       <div class="grid" style="grid-template-columns:1.6fr 1fr;margin-top:18px;align-items:start">
         <div class="card">
           <h3>Assessment history</h3>
-          <div style="overflow:auto;margin-top:10px"><table><thead><tr><th>Assessment</th><th>Date</th><th>Subject</th><th>Score</th><th>Points</th></tr></thead><tbody id="assessTable"></tbody></table></div>
+          <div style="overflow:auto;margin-top:10px"><table class="stack"><thead><tr><th>Assessment</th><th>Date</th><th>Subject</th><th class="num">Score</th><th class="num">Points</th></tr></thead><tbody id="assessTable"></tbody></table></div>
         </div>
         <div class="card" style="background:var(--lime-soft)">
           <p class="eyebrow">Privacy</p>
@@ -99,12 +100,13 @@
     <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end"><button class="btn btn-ghost" onclick="document.getElementById('addModal').classList.remove('open')">Cancel</button><button class="btn btn-dark" onclick="saveResult()">✓ Save result</button></div>
   </div>
 </div>
-<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="cluster.html"><span class="bic">🧮</span>Points</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
 <div class="toast-wrap" id="toasts"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
@@ -129,7 +131,7 @@ function renderKpis(){
 function renderTracker(){
  document.getElementById("trackerTable").innerHTML=sdata.results.map((r,i)=>{
   const g=gapOf(r), pl=planBySubject[r.subject];
-  return `<tr style="${r.score<55?"background:#fdecea":""}"><td><b>${esc(r.subject)}</b></td><td><b>${r.score}%</b></td><td><input class="input t-target" data-i="${i}" style="width:80px;height:40px" type="number" min="0" max="100" value="${r.target||r.score}" aria-label="Target for ${esc(r.subject)}"></td><td><span class="chip ${g.cls}">${g.label}</span></td><td class="small muted" style="max-width:320px">${esc(pl?pl.focus:"Past-paper practice for your weakest topics.")}</td></tr>`;
+  return `<tr style="${r.score<55?"background:#fdecea":""}"><td data-label="Subject"><b>${esc(r.subject)}</b></td><td class="num" data-label="Current"><b>${r.score}%</b></td><td data-label="Target %"><input class="input t-target" data-i="${i}" style="width:80px;height:40px" type="number" min="0" max="100" value="${r.target||r.score}" aria-label="Target for ${esc(r.subject)}"></td><td data-label="Gap"><span class="chip ${g.cls}">${g.label}</span></td><td class="small muted" data-label="Strategy" style="max-width:320px">${esc(pl?pl.focus:"Past-paper practice for your weakest topics.")}</td></tr>`;
  }).join("");
  document.querySelectorAll(".t-target").forEach(inp=>inp.addEventListener("change",function(){
   const r=sdata.results[+inp.dataset.i], v=Math.max(0,Math.min(100,Math.round(+inp.value)));
@@ -138,7 +140,7 @@ function renderTracker(){
   toast("🎯 "+r.subject+" target updated to "+v+"%.");
  }));
  document.getElementById("assessTable").innerHTML=sdata.assessments.length
-  ? sdata.assessments.map(a=>`<tr><td><b>${esc(a.name)}</b></td><td class="muted">${esc(a.date)}</td><td>${esc(a.subject)}</td><td><b>${esc(a.raw)}</b></td><td>${esc(a.pts)}</td></tr>`).join("")
+  ? sdata.assessments.map(a=>`<tr><td data-label="Assessment"><b>${esc(a.name)}</b></td><td class="muted" data-label="Date">${esc(a.date)}</td><td data-label="Subject">${esc(a.subject)}</td><td class="num" data-label="Score"><b>${esc(a.raw)}</b></td><td class="num" data-label="Points">${esc(a.pts)}</td></tr>`).join("")
   : '<tr><td colspan="5" class="muted" style="text-align:center;padding:20px">No assessments logged yet — tap “Add new result”.</td></tr>';
 }
 function preview(){

@@ -29,6 +29,7 @@
     <nav class="snav">
       <h5>MY PATH</h5>
       <a href="dashboard.html" class="on">⌂ &nbsp;Dashboard</a>
+      <a href="cluster.html">🧮 &nbsp;Cluster Points</a>
       <a href="quiz.html">🧭 &nbsp;Passion Quiz</a>
       <a href="institutions.html">🏛 &nbsp;Institutions</a>
       <a href="funding.html">💰 &nbsp;Funding &amp; HELB</a>
@@ -55,12 +56,14 @@
     </main>
   </div>
 </div>
-<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="cluster.html"><span class="bic">🧮</span>Points</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
 <div class="toast-wrap" id="toasts"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
+<script src="../assets/js/cluster.js"></script>
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
@@ -95,6 +98,7 @@ if(!data||!data.results||!data.results.length){
     <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="kpi-lab">Strongest subject</div><span class="tile peach">🏆</span></div><div class="kpi-num" style="margin:10px 0">${strong.score}%</div><p class="tiny muted">${esc(strong.subject)} · Grade ${gradeOf(strong.score)}</p></div>
     <div class="card warm-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="kpi-lab" style="color:var(--terra-d)">Focus first</div><span class="tile pink">♥</span></div><div class="kpi-num" style="margin:10px 0;color:var(--terra-d)">${weak.score}%</div><p class="tiny">${esc(weak.subject)} — needs +${Math.max(0,weak.gap)} pts</p><a class="tiny" href="tracker.html"><b>Improvement plan →</b></a></div>
   </div>
+  <div id="clusterCard" style="margin-top:20px"></div>
   <div class="pine-panel" style="margin-top:20px;display:grid;grid-template-columns:1.2fr .8fr;gap:24px">
     <div>
       <span class="chip lime">● Your top match: ${top.overall}%</span>
@@ -132,6 +136,56 @@ if(!data||!data.results||!data.results.length){
  document.getElementById("progressChart").innerHTML=renderScoreChart(data.results);
 document.getElementById("dashSubjects").innerHTML=data.results.map(r=>`<div style="border:1px solid var(--line);border-radius:14px;padding:14px"><div style="display:flex;justify-content:space-between"><b>${esc(r.subject)}</b><span class="tiny muted">${r.score}% · ${gradeOf(r.score)}</span></div><div class="bar" style="margin-top:9px"><i class="${r.score<50?"red":""}" style="width:${r.score}%"></i></div><p class="tiny muted" style="margin-top:7px">Target ${r.target||"—"}%${r.target&&r.score<r.target?` · <span style="color:var(--terra-d)">+${r.target-r.score} pts needed</span>`:" · On track ✓"}</p></div>`).join("");
 }
+
+/* ---------- Cluster points card ----------
+   Reuses the student's tracker marks (percentage -> KCSE letter grade)
+   so the dashboard shows a real KUCCPS figure without any retyping. */
+function renderClusterCard(){
+  const box=document.getElementById("clusterCard");
+  if(!box||typeof gradesFromResults!=="function") return;
+  const d=getStudentData();
+  const conv=gradesFromResults((d&&d.results)||[]);
+  const graded=Object.keys(conv.grades).length;
+  if(graded<4){ box.innerHTML=""; return; }
+
+  const all=computeAllClusters(conv.grades).slice(0,4);
+  const best=all[0];
+  const warn=conv.unmatched.length
+    ? '<p class="tiny muted" style="margin-top:10px">'+conv.unmatched.length+' tracker subject'+
+      (conv.unmatched.length===1?'':'s')+' could not be matched to a KCSE subject — '+
+      'check them in the <a href="cluster.html">calculator</a>.</p>'
+    : "";
+  const convNote=(d&&d.mock)
+    ? '<span class="chip mock" style="margin-left:8px">MOCK DATA</span>'
+    : "";
+
+  box.innerHTML=
+   '<div class="card" style="padding:24px">'+
+    '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start">'+
+      '<div>'+
+        '<p class="eyebrow">KUCCPS cluster points</p>'+
+        '<h3 style="font-size:22px;margin:6px 0 4px">Your estimated points, from your tracker marks</h3>'+
+        '<p class="tiny muted">Converted '+conv.matched+' of your subject marks to KCSE grades using the official formula '+
+        'w = √(( r / 48 ) × ( t / 84 )) × 48.'+convNote+'</p>'+
+      '</div>'+
+      '<a class="btn btn-dark btn-sm" href="cluster.html">Open calculator →</a>'+
+    '</div>'+
+    '<div class="grid g4" style="margin-top:18px">'+
+      all.map(function(r){
+        return '<div style="border:1px solid var(--line);border-radius:16px;padding:14px">'+
+          '<div class="tiny muted" style="min-height:30px">'+esc(r.cluster.icon+" "+r.cluster.name)+'</div>'+
+          '<div class="kpi-num" style="font-size:26px;margin:8px 0 2px">'+r.points.toFixed(3)+'</div>'+
+          '<span class="bar" style="margin-top:6px"><i style="width:'+Math.round(r.points/48*100)+'%"></i></span>'+
+        '</div>';
+      }).join("")+
+    '</div>'+
+    '<p class="tiny muted" style="margin-top:14px">Your strongest cluster is <b>'+esc(best.cluster.name)+
+    '</b> at <b>'+best.points.toFixed(3)+' / 48</b>. The same KCSE results score differently for every course — '+
+    'open the calculator to see all 14 clusters, check the KUCCPS minimum subject grades, and find the one subject that would lift you most.</p>'+
+    warn+
+   '</div>';
+}
+renderClusterCard();
 </script>
 </body>
 </html>

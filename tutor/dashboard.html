@@ -46,52 +46,48 @@
       <button class="iconbtn" onclick="toast('🔔 No new notifications.')" aria-label="Notifications">🔔</button>
       <div class="lang" style="display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:#fff"><button data-lang="en" class="on" style="border:0;background:#7c5cff;color:#fff;padding:8px 11px;font-weight:800;font-size:12px">EN</button><button data-lang="sw" style="border:0;background:#fff;padding:8px 11px;font-weight:800;font-size:12px;color:var(--muted)">SW</button></div><div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Tutor</b><small data-user-role>TSC Tutor</small></span><span class="avatar" data-user-initials>TT</span></div>
     </header>
-    <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Demo data.</b> Tutor workspace sample data is illustrative (mock) until connected to live student records. <span class="chip mock">⚠ MOCK DATA</span></div>
-      <p class="eyebrow">Phase 2 · TSC vetting pilot · Safeguarding pipeline active</p>
+    <main class="view">
+      <div class="alert-green" style="margin-bottom:18px"><b>Your real workspace.</b> Every figure on this page comes from your own
+        saved profile, availability and sessions. Student matching, messaging and payments are not live yet, so those numbers stay at zero
+        rather than showing invented activity.</div>
+      <p class="eyebrow">TSC vetting pilot · Safeguarding pipeline not yet active</p>
       <h1 style="font-size:32px;margin:8px 0 8px">Karibu, <span data-user-name>Tutor</span> 👋</h1>
-      <p class="muted" style="max-width:620px">Your verified teaching workspace. Sessions are supervised, guardian-notified, and paid via protected M-Pesa escrow.</p>
+      <p class="muted" style="max-width:620px">Your teaching workspace. Complete verification, publish your availability, and log the sessions you arrange.</p>
 
       <div class="grid g4" style="margin-top:24px">
-        <div class="card"><div class="kpi-lab">Active students</div><div class="kpi-num" style="margin:10px 0">12</div><p class="tiny muted">Nairobi &amp; Kiambu cohorts</p></div>
-        <div class="card"><div class="kpi-lab">Sessions this week</div><div class="kpi-num" style="margin:10px 0">8</div><p class="tiny muted">4 hrs · Maths &amp; Physics</p></div>
-        <div class="card"><div class="kpi-lab">Escrow earnings</div><div class="kpi-num" style="margin:10px 0">KES 16,000</div><p class="tiny muted">Releases after guardian confirms</p></div>
-        <div class="card"><div class="kpi-lab">Rating</div><div class="kpi-num" style="margin:10px 0">★ 4.9</div><p class="tiny muted">38 guardian reviews</p></div>
+        <div class="card"><div class="kpi-lab">Sessions logged</div><div class="kpi-num" style="margin:10px 0" id="dSessions">0</div><p class="tiny muted" id="dSessNote">None yet</p></div>
+        <div class="card"><div class="kpi-lab">Weekly availability</div><div class="kpi-num" style="margin:10px 0" id="dHours">0</div><p class="tiny muted" id="dSlots">No slots set</p></div>
+        <div class="card"><div class="kpi-lab">Est. monthly</div><div class="kpi-num" style="margin:10px 0" id="dMoney">KES 0</div><p class="tiny muted">Estimate only — payments not live</p></div>
+        <div class="card warm-card"><div class="kpi-lab" style="color:var(--terra-d)">Verification</div><div class="kpi-num" style="margin:10px 0;color:var(--terra-d)" id="dVerify">0/4</div><p class="tiny" id="dVerifyNote">Nothing submitted yet</p></div>
       </div>
 
       <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:20px;align-items:start">
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center"><h3>Upcoming sessions</h3><a class="tiny" href="schedule.html"><b>Full schedule →</b></a></div>
-          <div style="overflow:auto;margin-top:10px"><table><thead><tr><th>Student</th><th>Subject</th><th>When</th><th>Status</th><th></th></tr></thead><tbody>
-            <tr><td><b>Amina Odhiambo</b><br><span class="tiny muted">KCSE · Pangani Girls</span></td><td>Physics</td><td>Wed · 4:00 PM</td><td><span class="chip green">Confirmed</span></td><td><button class="btn btn-dark btn-sm" onclick="toast('🎥 Classroom studio link sent to student + guardian.')">Join studio</button></td></tr>
-            <tr><td><b>Moses Kiprop</b><br><span class="tiny muted">KCSE · Uasin Gishu</span></td><td>Mathematics</td><td>Thu · 5:30 PM</td><td><span class="chip amber">Pending guardian</span></td><td><button class="btn btn-ghost btn-sm" onclick="toast('✉️ Guardian notified via SMS.')">Nudge</button></td></tr>
-            <tr><td><b>Faith Wanjiku</b><br><span class="tiny muted">CBC Gr. 9 · Nairobi</span></td><td>Integrated Science</td><td>Sat · 10:00 AM</td><td><span class="chip green">Confirmed</span></td><td><button class="btn btn-dark btn-sm" onclick="toast('🎥 Classroom studio link sent.')">Join studio</button></td></tr>
-          </tbody></table></div>
-          <div class="alert-green" style="margin-top:14px">🔒 Every session start &amp; completion is SMS-notified to the registered guardian with homework notes.</div>
+          <div style="display:flex;justify-content:space-between;align-items:center"><h3>Your sessions</h3><a class="tiny" href="schedule.html"><b>Manage schedule →</b></a></div>
+          <div style="overflow:auto;margin-top:10px"><table><thead><tr><th>Student</th><th>Subject</th><th>When</th><th>Status</th></tr></thead><tbody id="dSessionTable"></tbody></table></div>
+          <div class="alert-mock" style="margin-top:14px">🔒 <b>Safeguarding:</b> when sessions go live, every start and completion must be notified to the
+            registered guardian, and contact with a learner outside PathFinder must be impossible. That pipeline is not built yet, so no student
+            can be matched to you.</div>
         </div>
         <div style="display:grid;gap:20px">
           <div class="pine-panel" style="padding:24px">
             <h3>Verification status</h3>
-            <p class="small" style="color:#d6d0ff;margin-top:8px">✓ TSC Registration verified<br>✓ DCI Certificate of Good Conduct<br>✓ Degree parchment verified<br>✓ Safeguarding training complete</p>
-            <a class="btn btn-lime btn-sm" style="margin-top:14px" href="profile.html">View public profile →</a>
+            <div id="dVerifyList" style="margin-top:10px"></div>
+            <a class="btn btn-lime btn-sm" style="margin-top:14px" href="profile.html">Complete verification →</a>
           </div>
           <div class="card">
             <h3>Rate estimator</h3>
-            <p class="tiny muted" style="margin:6px 0 12px">Fixed national rate: <b>KES 500/hour</b>. No negotiation, no hidden fees.</p>
+            <p class="tiny muted" style="margin:6px 0 12px">Based on your saved hourly rate and the availability you have published.</p>
             <div class="grid g2" style="gap:10px">
-              <div><label class="flab">Subjects</label><select class="input" id="estSubj"><option>2 subjects</option><option>1 subject</option><option>3 subjects</option></select></div>
-              <div><label class="flab">Hours / week</label><input class="input" type="number" id="estHrs" value="4" min="1" max="20" oninput="calcEst()"></div>
+              <div><label class="flab">Hourly rate (KES)</label><input class="input" type="number" id="estRate" min="0" step="50" oninput="calcEst()"></div>
+              <div><label class="flab">Hours / week</label><input class="input" type="number" id="estHrs" min="0" max="40" step="0.5" oninput="calcEst()"></div>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><span class="tiny muted">Monthly escrow (4 wks)</span><b style="font-size:22px" id="estTotal">KES 8,000</b></div>
-            <button class="btn btn-dark btn-block btn-sm" style="margin-top:12px" onclick="toast('🔒 Escrow estimate shared with guardian — no charge until confirmed.')">Share estimate with guardian</button>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><span class="tiny muted">Monthly estimate (4 wks)</span><b style="font-size:22px" id="estTotal">KES 0</b></div>
+            <p class="tiny muted" style="margin-top:10px">No money moves through PathFinder yet — this is a planning figure only.</p>
           </div>
         </div>
       </div>
-    <div class="card" style="margin-top:20px">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3>Tutor directory (pilot)</h3><span class="chip mock">⚠ MOCK DATA — pilot sample</span></div>
-        <p class="tiny muted" style="margin:6px 0 14px">Verified TSC tutors across Kenya. Fixed rate KES 500/hour via M-Pesa escrow.</p>
-        <div class="grid g3" id="tutorDir"></div>
-      </div>
-    </main>
+</main>
   </div>
 </div>
 <nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="students.html"><span class="bic">🎓</span>Students</a><a href="schedule.html"><span class="bic">🗓</span>Schedule</a><a href="profile.html"><span class="bic">👤</span>Profile</a><a href="../index.html"><span class="bic">←</span>Site</a></nav>
@@ -100,14 +96,62 @@
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/tutor.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
 const s=requireRole("tutor","../signin.html"); if(s)fillUserChip();
-function calcEst(){const h=+document.getElementById("estHrs").value||0;document.getElementById("estTotal").textContent="KES "+(h*500*4).toLocaleString()}
-calcEst();
-const TUTORS=window.PF_TUTORS||[];
-document.getElementById("tutorDir").innerHTML=TUTORS.slice(0,6).map(x=>`<div style="border:1px solid var(--line);border-radius:14px;padding:16px"><b>${x.name}</b><br><span class="tiny muted">${x.tsc} · ${x.qual}</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${x.tags.map(g=>`<span class="chip">${g}</span>`).join("")}</div><p class="tiny muted" style="margin-top:8px">★ ${x.rate} (${x.reviews}) · ${x.loc}</p></div>`).join("");
+let P = loadTutorProfile();
+
+function calcEst(){
+  const r = Math.max(0, Number(document.getElementById("estRate").value) || 0);
+  const h = Math.max(0, Number(document.getElementById("estHrs").value) || 0);
+  document.getElementById("estTotal").textContent = "KES " + Math.round(r*h*4).toLocaleString();
+}
+
+function renderAll(){
+  P = loadTutorProfile();
+  const est = tutorMonthlyEstimate(P);
+  const hrs = tutorWeeklyHours(P);
+  const v   = tutorVerification(P);
+
+  document.getElementById("dSessions").textContent = est.sessions;
+  document.getElementById("dSessNote").textContent = est.sessions
+    ? est.hours + " teaching hour" + (est.hours===1?"":"s") + " per week"
+    : "Add sessions on the Schedule page";
+  document.getElementById("dHours").textContent = hrs ? hrs.toFixed(1) : "0";
+  document.getElementById("dSlots").textContent = P.availability.length
+    ? P.availability.length + " slot" + (P.availability.length===1?"":"s") + " published"
+    : "No slots set";
+  document.getElementById("dMoney").textContent = "KES " + est.amount.toLocaleString();
+  document.getElementById("dVerify").textContent = v.verified + "/" + v.total;
+  document.getElementById("dVerifyNote").textContent = v.submitted
+    ? v.submitted + " awaiting review"
+    : "Nothing submitted yet";
+
+  document.getElementById("dVerifyList").innerHTML = v.steps.map(function(st){
+    const mark = st.status==="verified" ? "✓" : (st.status==="submitted" ? "◷" : "○");
+    return '<div style="display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:4px 0;color:#e9e2ff">'+
+      '<span>'+mark+' '+esc(st.label)+'</span>'+
+      '<span style="opacity:.8">'+(st.status==="verified"?"Verified":(st.status==="submitted"?"Awaiting":"Not sent"))+'</span></div>';
+  }).join("");
+
+  const list = tutorSessionsSorted(P).slice(0, 5);
+  document.getElementById("dSessionTable").innerHTML = list.length
+    ? list.map(function(x){
+        return '<tr><td><b>'+esc(x.student)+'</b></td><td>'+esc(x.subject)+'</td>'+
+          '<td>'+esc(x.day)+' · '+esc(x.time)+'</td>'+
+          '<td><span class="chip amber">'+esc(x.status)+'</span></td></tr>';
+      }).join("")
+    : '<tr><td colspan="4" class="muted" style="text-align:center;padding:26px">No sessions yet. '+
+      'Student matching is not live, so nothing is pre-filled here.</td></tr>';
+
+  document.getElementById("estRate").value = P.rate || TUTOR_RATE;
+  document.getElementById("estHrs").value  = hrs || 0;
+  calcEst();
+}
+renderAll();
 </script>
 </body>
 </html>

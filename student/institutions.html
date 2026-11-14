@@ -29,6 +29,7 @@
     <nav class="snav">
       <h5>MY PATH</h5>
       <a href="dashboard.html">⌂ &nbsp;Dashboard</a>
+      <a href="cluster.html">🧮 &nbsp;Cluster Points</a>
       <a href="quiz.html">🧭 &nbsp;Passion Quiz</a>
       <a href="institutions.html" class="on">🏛 &nbsp;Institutions</a>
       <a href="funding.html">💰 &nbsp;Funding &amp; HELB</a>
@@ -74,18 +75,19 @@
           <button class="btn btn-ghost btn-block btn-sm" style="margin-top:8px" onclick="exportData()">⬇ Export to PDF</button>
         </aside>
       </div>
-      <p class="tiny muted" style="margin-top:18px;text-align:center">Source: Commission for University Education (CUE), KUCCPS 2025/2026 portal, TVETA directory.</p>
+      <p class="tiny muted" style="margin-top:18px">Source: Commission for University Education (CUE), KUCCPS 2025/2026 portal, TVETA directory.</p>
     </main>
   </div>
 </div>
 <div class="modal-bg" id="uniModal"><div class="modal" style="max-width:640px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><h3 id="uniTitle" style="font-size:22px"></h3><button class="iconbtn" onclick="document.getElementById('uniModal').classList.remove('open')">X</button></div><div id="uniBody" style="margin-top:14px"></div></div></div>
 <div class="modal-bg" id="compareModal"><div class="modal" style="max-width:720px"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Shortlist comparison</h3><button class="iconbtn" onclick="document.getElementById('compareModal').classList.remove('open')">X</button></div><div id="compareBody" style="margin-top:14px"></div></div></div>
-<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="cluster.html"><span class="bic">🧮</span>Points</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
 <div class="toast-wrap" id="toasts"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>

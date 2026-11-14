@@ -7,14 +7,42 @@
    - Pages (navigations): network-first, falling back to the cached copy, then to the homepage.
    - Static assets (css/js/images/icons): stale-while-revalidate.
    Bump CACHE when you change the precache list. */
-const CACHE = "pathfinder-v6";
+const CACHE = "pathfinder-v8";
 const CORE = [
-  "/index.html", "/signin.html", "/signup.html",
+  "/admin/dashboard.html",
+  "/admin/deployment.html",
+  "/admin/dpa.html",
+  "/index.html",
+  "/legal/privacy.html",
+  "/legal/terms.html",
+  "/signin.html",
+  "/signup.html",
+  "/student/cluster.html",
+  "/student/dashboard.html",
+  "/student/funding.html",
+  "/student/institutions.html",
+  "/student/onboarding.html",
+  "/student/profile.html",
+  "/student/quiz.html",
+  "/student/tracker.html",
+  "/tutor/dashboard.html",
+  "/tutor/profile.html",
+  "/tutor/schedule.html",
+  "/tutor/students.html",
   "/assets/css/style.css",
-  "/assets/js/app.js", "/assets/js/data.js",
-  "/assets/js/supabase.js", "/assets/js/supabase-config.js", "/assets/js/shell.js",
-  "/assets/icons/icon-192.png", "/assets/icons/icon-512.png",
-  "/manifest.json"
+  "/assets/icons/apple-touch-icon.png",
+  "/assets/icons/favicon-32.png",
+  "/assets/icons/icon-192.png",
+  "/assets/icons/icon-512.png",
+  "/assets/icons/icon-maskable-512.png",
+  "/assets/js/app.js",
+  "/assets/js/avatar.js",
+  "/assets/js/cluster.js",
+  "/assets/js/data.js",
+  "/assets/js/shell.js",
+  "/assets/js/supabase-config.js",
+  "/assets/js/supabase.js",
+  "/assets/js/tutor.js"
 ];
 
 self.addEventListener("install", (e) => {

@@ -29,6 +29,7 @@
     <nav class="snav">
       <h5>MY PATH</h5>
       <a href="dashboard.html">⌂ &nbsp;Dashboard</a>
+      <a href="cluster.html">🧮 &nbsp;Cluster Points</a>
       <a href="quiz.html">🧭 &nbsp;Passion Quiz</a>
       <a href="institutions.html">🏛 &nbsp;Institutions</a>
       <a href="funding.html" class="on">💰 &nbsp;Funding &amp; HELB</a>
@@ -62,6 +63,7 @@
       <h2 style="font-size:26px;margin:36px 0 6px">HEF Bands 1 to 5 — tap to explore</h2>
       <p class="muted small" style="margin-bottom:16px">Your band decides your grant. Wrong band? You can appeal free within 30 days.</p>
       <div class="grid" style="grid-template-columns:repeat(5,1fr)" id="bandGrid"></div>
+      <div class="card" style="padding:24px;margin-top:16px" id="bandDetail"></div>
       <div class="alert-green" style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span><b>Placed in the wrong band?</b> Appeal free on the HEF portal with supporting proof.</span><button class="btn btn-dark btn-sm" onclick="window.open('https://www.hef.co.ke','_blank','noopener,noreferrer')">File band appeal</button></div>
 
       <div class="grid" style="grid-template-columns:1.4fr 1fr;margin-top:24px;align-items:start">
@@ -93,26 +95,62 @@
     </main>
   </div>
 </div>
-<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
+<nav class="bottom-nav" aria-label="Quick navigation"><a href="dashboard.html"><span class="bic">⌂</span>Home</a><a href="cluster.html"><span class="bic">🧮</span>Points</a><a href="quiz.html"><span class="bic">🧭</span>Quiz</a><a href="institutions.html"><span class="bic">🏛</span>Unis</a><a href="funding.html"><span class="bic">💰</span>Funding</a><a href="profile.html"><span class="bic">👤</span>Profile</a></nav>
 <div class="toast-wrap" id="toasts"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
 const s=requireRole("student","../signin.html"); if(s)fillUserChip();
+/* HEF bands — scholarship / loan / household split as published by the
+   Universities Fund and the Ministry of Education. Income thresholds are
+   monthly household income. Verified against Universities Fund statements
+   and Ministry of Education guidance. Bands and amounts are reviewed
+   periodically — always confirm your own band on hef.co.ke. */
 const BANDS=[
- {b:"Band 1",t:"Vulnerable",gov:"70%",helb:"30%",house:"—",upkeep:"KES 60,000"},
- {b:"Band 2",t:"Extremely Needy",gov:"60%",helb:"30%",house:"10%",upkeep:"KES 55,000"},
- {b:"Band 3",t:"Needy",gov:"50%",helb:"30%",house:"20%",upkeep:"KES 50,000"},
- {b:"Band 4",t:"Less Needy",gov:"40%",helb:"30%",house:"30%",upkeep:"KES 45,000"},
- {b:"Band 5",t:"Least Needy",gov:"30%",helb:"30%",house:"40%",upkeep:"KES 40,000"}
+ {b:"Band 1",t:"Extremely needy & vulnerable",income:"Up to KES 5,995 / month",    gov:70,helb:25,house:5, upkeep:60000},
+ {b:"Band 2",t:"Low income",                  income:"Up to KES 23,670 / month",   gov:60,helb:30,house:10,upkeep:55000},
+ {b:"Band 3",t:"Modest income",               income:"Up to KES 70,000 / month",   gov:50,helb:30,house:20,upkeep:50000},
+ {b:"Band 4",t:"Middle income",               income:"KES 70,001 – 120,000",       gov:40,helb:30,house:30,upkeep:45000},
+ {b:"Band 5",t:"Higher income",               income:"Above KES 120,000 / month",  gov:30,helb:30,house:40,upkeep:40000}
 ];
-let selBand=1;
+let selBand=0;
+let feeExample=120000;   // editable — typical public-university programme cost
+
 function renderBands(){
- document.getElementById("bandGrid").innerHTML=BANDS.map((b,i)=>`<button class="band ${selBand===i?"sel":""}" onclick="selBand=${i};renderBands()"><span class="chip ${i===0?"red":i===1?"lime":""}">${b.b}</span><h3 style="margin:10px 0 6px;font-size:16px">${b.t}</h3><p class="tiny muted">Gov ${b.gov} · HELB ${b.helb}<br>Household ${b.house} · Upkeep ${b.upkeep}</p><div class="bar" style="margin-top:10px"><i style="width:${70-i*10}%"></i></div></button>`).join("");
+ document.getElementById("bandGrid").innerHTML=BANDS.map((b,i)=>`<button class="band ${selBand===i?"sel":""}" onclick="selBand=${i};renderBands()"><span class="chip ${i===0?"red":i===1?"lime":""}">${b.b}</span><h3 style="margin:10px 0 6px;font-size:16px">${b.t}</h3><p class="tiny muted">Scholarship ${b.gov}% · Loan ${b.helb}%<br>Household ${b.house}% · Upkeep KES ${b.upkeep.toLocaleString()}</p><div class="bar" style="margin-top:10px"><i style="width:${b.gov}%"></i></div></button>`).join("");
+ const b=BANDS[selBand];
+ const sch=Math.round(feeExample*b.gov/100), loan=Math.round(feeExample*b.helb/100), fam=Math.round(feeExample*b.house/100);
+ document.getElementById("bandDetail").innerHTML=`
+  <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start">
+    <div style="flex:1;min-width:230px">
+      <span class="chip pine">${b.b}</span>
+      <h3 style="margin:10px 0 4px;font-size:20px">${b.t}</h3>
+      <p class="tiny muted">Household income guide: <b>${b.income}</b></p>
+      <div style="margin-top:16px">
+        <label class="flab" for="feeInput">Programme cost per year (KES) — change it to match your course</label>
+        <input class="input" id="feeInput" type="number" min="0" step="1000" value="${feeExample}" style="max-width:260px" oninput="feeExample=Math.max(0,Number(this.value)||0);renderBands()">
+      </div>
+      <p class="tiny muted" style="margin-top:10px">Upkeep loan for this band: <b>KES ${b.upkeep.toLocaleString()}</b> per year.</p>
+    </div>
+    <div style="flex:1;min-width:250px">
+      ${[
+        ["Government scholarship (you do not repay)", sch, "var(--pine)", b.gov],
+        ["HELB loan (you repay after graduation)", loan, "var(--sky)", b.helb],
+        ["Household contribution", fam, "var(--terra)", b.house]
+      ].map(function(r){
+        return '<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700"><span>'+r[0]+'</span><span>KES '+r[1].toLocaleString()+'</span></div>'+
+               '<div class="bar" style="margin-top:6px;height:12px"><i style="width:'+r[3]+'%;background:'+r[2]+'"></i></div>'+
+               '<div class="tiny muted" style="margin-top:3px">'+r[3]+'% of programme cost</div></div>';
+      }).join("")}
+      <div class="alert-green" style="margin-top:6px"><b>Total funded: KES ${(sch+loan).toLocaleString()}</b> of KES ${feeExample.toLocaleString()} — your family pays <b>KES ${fam.toLocaleString()}</b>.</div>
+    </div>
+  </div>
+  <p class="tiny muted" style="margin-top:14px">Your band is set by the Means Testing Instrument (MTI), which weighs household income, number of dependants, parents' employment, disability, gender, marginalisation and family size — not by your KCSE grade. Placement is by KUCCPS; funding is by the Universities Fund and HELB. Figures are indicative.</p>`;
 }
 renderBands();
 const SCH=window.PF_SCHOLARSHIPS||[];

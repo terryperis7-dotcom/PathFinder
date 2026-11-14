@@ -45,19 +45,31 @@
       <div class="search">⌕ <input placeholder="Search sessions…"></div>
       <div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Tutor</b><small data-user-role>TSC Tutor</small></span><span class="avatar" data-user-initials>TT</span></div>
     </header>
-    <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Demo data.</b> Tutor workspace sample data is illustrative (mock) until connected to live student records. <span class="chip mock">⚠ MOCK DATA</span></div>
+    <main class="view"><div class="alert-green" style="margin-bottom:18px"><b>Your real availability.</b> Slots and sessions you add are saved to your account. Nothing on this page is pre-filled with invented bookings.</div>
       <p class="eyebrow">Classroom Studio · Encrypted, low-bandwidth (3G/4G optimised)</p>
       <h1 style="font-size:32px;margin:8px 0 8px">Sessions &amp; Schedule</h1>
       <p class="muted" style="max-width:620px">Book, join and log sessions. Payment releases from M-Pesa escrow only after the guardian confirms completion.</p>
 
       <div class="grid g3" style="margin-top:24px">
-        <div class="card"><div class="kpi-lab">This week</div><div class="kpi-num" style="margin:10px 0">8 sessions</div><p class="tiny muted">32 teaching hours booked</p></div>
-        <div class="card"><div class="kpi-lab">Completed (June)</div><div class="kpi-num" style="margin:10px 0">24</div><p class="tiny muted">100% guardian-confirmed</p></div>
-        <div class="card"><div class="kpi-lab">Escrow pending</div><div class="kpi-num" style="margin:10px 0">KES 16,000</div><p class="tiny muted">Releases on confirmation</p></div>
+        <div class="card"><div class="kpi-lab">Sessions booked</div><div class="kpi-num" style="margin:10px 0" id="kSessions">0</div><p class="tiny muted" id="kHours">No sessions yet</p></div>
+        <div class="card"><div class="kpi-lab">Availability set</div><div class="kpi-num" style="margin:10px 0" id="kSlots">0</div><p class="tiny muted" id="kSlotHrs">No weekly slots yet</p></div>
+        <div class="card"><div class="kpi-lab">Est. monthly (4 wks)</div><div class="kpi-num" style="margin:10px 0" id="kMoney">KES 0</div><p class="tiny muted">Payments are not live — estimate only</p></div>
       </div>
 
       <div class="card" style="margin-top:20px">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3>Week ahead</h3><button class="btn btn-lime btn-sm" onclick="bookSession()">+ Book session</button><button class="btn btn-dark btn-sm" onclick="setAvailability()">+ Set availability</button></div>
+        <h3>Your weekly availability</h3>
+        <p class="tiny muted" style="margin:6px 0 14px">Add the slots you are willing to teach. These are shared with students once matching is live.</p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+          <div><label class="flab">Day</label><select class="input" id="avDay"></select></div>
+          <div><label class="flab">Start</label><input class="input" type="time" id="avStart" value="16:00"></div>
+          <div><label class="flab">End</label><input class="input" type="time" id="avEnd" value="17:00"></div>
+          <div style="display:flex;align-items:flex-end"><button class="btn btn-dark" onclick="addSlot()">+ Add slot</button></div>
+        </div>
+        <div id="avList" style="margin-top:16px"></div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3>Sessions</h3><button class="btn btn-lime btn-sm" onclick="bookSession()">+ Add session</button></div>
         <div style="overflow:auto;margin-top:10px"><table><thead><tr><th>Day</th><th>Time (EAT)</th><th>Student</th><th>Subject</th><th>Mode</th><th>Status</th><th></th></tr></thead><tbody id="schedTable"></tbody></table></div>
       </div>
 
@@ -89,31 +101,89 @@
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/tutor.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
 const s=requireRole("tutor","../signin.html"); if(s)fillUserChip();
-const SESS=[
- ["Monday","4:00 PM","Amina Odhiambo","Physics","Online Studio","Confirmed"],
- ["Tuesday","5:30 PM","Moses Kiprop","Mathematics","Online Studio","Pending guardian"],
- ["Wednesday","4:00 PM","Amina Odhiambo","Physics","Online Studio","Confirmed"],
- ["Thursday","6:00 PM","Brian Kibet","Chemistry","Online Studio","Confirmed"],
- ["Saturday","10:00 AM","Faith Wanjiku","Integrated Science","Online Studio","Confirmed"]
-];
-function setAvailability(){
-  const days = prompt("Set your teaching days (comma separated, e.g. Mon, Wed, Sat):", "Mon, Wed, Sat");
-  if(days) toast("🗓 Availability noted: " + days + " (preview only — booking isn't live yet).");
+
+let P = loadTutorProfile();
+
+document.getElementById("avDay").innerHTML =
+  TUTOR_DAYS.map(d=>'<option value="'+d+'">'+d+'</option>').join("");
+
+function addSlot(){
+  const day=document.getElementById("avDay").value;
+  const st=document.getElementById("avStart").value;
+  const en=document.getElementById("avEnd").value;
+  if(!st||!en){ toast("Please set a start and end time."); return; }
+  if(st>=en){ toast("The end time must be after the start time."); return; }
+  P = addTutorSlot(day, st, en);
+  if(!P){ toast("That slot already exists."); return; }
+  renderAll(); toast("Availability saved.");
 }
+function removeSlot(i){ P = removeTutorSlot(i); renderAll(); toast("Slot removed."); }
+
 function bookSession(){
-  const stu=(prompt("Student name:")||"").trim(); if(!stu)return;
-  const day=(prompt("Day (e.g. Monday):","Monday")||"").trim(); if(!day)return;
-  SESS.push([day,"4:00 PM",stu,"Mathematics","Online Studio","Pending guardian"]);
-  renderSched(); toast("🗓 Sample session added for "+stu+" (preview only — nobody is notified).");
+  const stu=(prompt("Student name (only add a session you have actually agreed with a learner and their guardian):")||"").trim();
+  if(!stu) return;
+  const day=(prompt("Day (e.g. Monday):","Monday")||"").trim();
+  if(!day) return;
+  const time=(prompt("Time (e.g. 4:00 PM):","4:00 PM")||"").trim();
+  const subj=(prompt("Subject:","Mathematics")||"").trim();
+  const added = addTutorSession({day:day, time:time||"4:00 PM", student:stu, subject:subj||"General"});
+  if(!added){ toast("A day and student name are required."); return; }
+  P = loadTutorProfile(); renderAll();
+  toast("Session saved. No one has been notified and no payment has been taken.");
 }
-function renderSched(){
-  document.getElementById("schedTable").innerHTML=SESS.map(function(x){ return '<tr><td><b>'+esc(x[0])+'</b></td><td>'+esc(x[1])+'</td><td>'+esc(x[2])+'</td><td>'+esc(x[3])+'</td><td>'+esc(x[4])+'</td><td><span class="chip '+(x[5]==="Confirmed"?"green":"amber")+'">'+esc(x[5])+'</span></td><td><button class="btn btn-dark btn-sm" onclick="toast(\'Preview only — no studio link is sent.\')">Join</button></td></tr>'; }).join("");
+function removeSession(id){ P = removeTutorSession(id); renderAll(); toast("Session removed."); }
+
+function renderSlots(){
+  const box=document.getElementById("avList");
+  if(!P.availability.length){
+    box.innerHTML='<div class="empty" style="padding:22px"><p class="tiny muted">No availability set yet. Students cannot book you until you add at least one slot.</p></div>';
+    return;
+  }
+  box.innerHTML='<div class="table-scroll"><table><thead><tr><th>Day</th><th>Time</th><th>Hours</th><th></th></tr></thead><tbody>'+
+    P.availability.map(function(sl,i){
+      const a=String(sl.start).split(":"), b=String(sl.end).split(":");
+      const hrs=((Number(b[0])*60+Number(b[1]))-(Number(a[0])*60+Number(a[1])))/60;
+      return '<tr><td><b>'+esc(sl.day)+'</b></td><td>'+esc(sl.start)+' – '+esc(sl.end)+'</td>'+
+        '<td>'+(isFinite(hrs)?hrs.toFixed(1):"—")+' h</td>'+
+        '<td><button class="btn btn-ghost btn-sm" onclick="removeSlot('+i+')">Remove</button></td></tr>';
+    }).join("")+'</tbody></table></div>';
 }
-renderSched();
+
+function renderSessions(){
+  const list = tutorSessionsSorted(P);
+  document.getElementById("schedTable").innerHTML = list.length
+    ? list.map(function(x){
+        return '<tr><td><b>'+esc(x.day)+'</b></td><td>'+esc(x.time)+'</td><td>'+esc(x.student)+'</td>'+
+          '<td>'+esc(x.subject)+'</td><td>'+esc(x.mode)+'</td>'+
+          '<td><span class="chip amber">'+esc(x.status)+'</span></td>'+
+          '<td><button class="btn btn-ghost btn-sm" onclick="removeSession(\''+esc(x.id)+'\')">Remove</button></td></tr>';
+      }).join("")
+    : '<tr><td colspan="7" class="muted" style="text-align:center;padding:26px">No sessions yet. '+
+      'Sessions are only shown if you add them — there are no pre-filled example bookings.</td></tr>';
+}
+
+function renderAll(){
+  P = loadTutorProfile();
+  renderSlots(); renderSessions();
+  const est = tutorMonthlyEstimate(P);
+  const hrs = tutorWeeklyHours(P);
+  document.getElementById("kSessions").textContent = est.sessions;
+  document.getElementById("kHours").textContent = est.sessions
+    ? est.hours + " teaching hour" + (est.hours===1?"":"s") + " per week"
+    : "No sessions yet";
+  document.getElementById("kSlots").textContent = P.availability.length;
+  document.getElementById("kSlotHrs").textContent = hrs > 0
+    ? hrs.toFixed(1) + " hours per week offered"
+    : "No weekly slots yet";
+  document.getElementById("kMoney").textContent = "KES " + est.amount.toLocaleString();
+}
+renderAll();
 </script>
 </body>
 </html>

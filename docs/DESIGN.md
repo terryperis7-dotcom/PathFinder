@@ -1,53 +1,53 @@
 ---
 name: Kenyan Educational Pathway
 colors:
-  surface: '#fbf9f3'
-  surface-dim: '#dcdad4'
-  surface-bright: '#fbf9f3'
+  surface: '#faf7ff'
+  surface-dim: '#ded9ea'
+  surface-bright: '#faf7ff'
   surface-container-lowest: '#ffffff'
-  surface-container-low: '#f5f3ed'
-  surface-container: '#f0eee8'
-  surface-container-high: '#eae8e2'
-  surface-container-highest: '#e4e2dd'
-  on-surface: '#1b1c18'
-  on-surface-variant: '#414845'
-  inverse-surface: '#30312d'
-  inverse-on-surface: '#f3f1eb'
-  outline: '#717975'
-  outline-variant: '#c0c8c4'
-  surface-tint: '#3f665a'
-  primary: '#002920'
+  surface-container-low: '#f3efff'
+  surface-container: '#ede9ff'
+  surface-container-high: '#e4dcf7'
+  surface-container-highest: '#d9cef2'
+  on-surface: '#2e1065'
+  on-surface-variant: '#7a6fa8'
+  inverse-surface: '#3b2a6b'
+  inverse-on-surface: '#f3efff'
+  outline: '#7a6fa8'
+  outline-variant: '#cdc4e8'
+  surface-tint: '#7c5cff'
+  primary: '#7c5cff'
   on-primary: '#ffffff'
-  primary-container: '#173f35'
-  on-primary-container: '#82aa9d'
-  inverse-primary: '#a6cfc1'
-  secondary: '#4e6700'
+  primary-container: '#ede9ff'
+  on-primary-container: '#2e1065'
+  inverse-primary: '#c4b5fd'
+  secondary: '#6d4aff'
   on-secondary: '#ffffff'
-  secondary-container: '#c7ee62'
-  on-secondary-container: '#526b00'
-  tertiary: '#4c0601'
+  secondary-container: '#e5dfff'
+  on-secondary-container: '#2e1065'
+  tertiary: '#ff7a59'
   on-tertiary: '#ffffff'
-  tertiary-container: '#6a1d10'
-  on-tertiary-container: '#f1836e'
-  error: '#ba1a1a'
+  tertiary-container: '#ffedd5'
+  on-tertiary-container: '#c2410c'
+  error: '#e11d48'
   on-error: '#ffffff'
-  error-container: '#ffdad6'
-  on-error-container: '#93000a'
-  primary-fixed: '#c1ecdd'
-  primary-fixed-dim: '#a6cfc1'
-  on-primary-fixed: '#002019'
-  on-primary-fixed-variant: '#274e43'
-  secondary-fixed: '#caf165'
-  secondary-fixed-dim: '#afd44b'
-  on-secondary-fixed: '#151f00'
-  on-secondary-fixed-variant: '#3a4d00'
-  tertiary-fixed: '#ffdad3'
-  tertiary-fixed-dim: '#ffb4a5'
-  on-tertiary-fixed: '#3f0300'
-  on-tertiary-fixed-variant: '#7d2b1d'
-  background: '#fbf9f3'
-  on-background: '#1b1c18'
-  surface-variant: '#e4e2dd'
+  error-container: '#fdecea'
+  on-error-container: '#7a1f14'
+  primary-fixed: '#ede9ff'
+  primary-fixed-dim: '#c4b5fd'
+  on-primary-fixed: '#2e1065'
+  on-primary-fixed-variant: '#5b3fd6'
+  secondary-fixed: '#e5dfff'
+  secondary-fixed-dim: '#c7bcf5'
+  on-secondary-fixed: '#1e0f4d'
+  on-secondary-fixed-variant: '#4c33b8'
+  tertiary-fixed: '#ffedd5'
+  tertiary-fixed-dim: '#ffbfa5'
+  on-tertiary-fixed: '#5c1a05'
+  on-tertiary-fixed-variant: '#9a3c1c'
+  background: '#faf7ff'
+  on-background: '#2e1065'
+  surface-variant: '#ede9ff'
 typography:
   headline-xl:
     fontFamily: Manrope
@@ -146,44 +146,28 @@ The design movement mixes **Modern Tactile Minimalism** with **Warm Civic Functi
 
 ## Colors
 
-The color palette draws directly from Kenya's diverse landscape—from highland tea estates to sun-warmed red soil:
+The v5 palette is a **single violet accent family** on a warm-tinted off-white. It is deliberately narrow: one accent hue, one warm hue for urgency, and a neutral violet-tinted grey scale. That keeps the interface calm on small, low-cost screens and means colour never competes with the content.
 
-- **Primary Deep Pine (`#173f35`, variant `#153c33`):** Conveys academic institutional weight, stability, and governmental/curriculum trust. Used for primary typography, dominant containers, navigation, and key interactions.
-- **Fresh Lime Accent (`#b9df55`, vibrant highlight `#d9f28a`):** Signifies youthful growth, modern momentum, and active progress. Utilized on interactive highlights, active badges, progress indicators, and actionable tags.
-- **Warm Background Cream (`#f5f3ed`):** Eliminates harsh blue-light glare and delivers paper-like reading comfort under harsh ambient equatorial sun.
-- **Crisp Card Surface (`#fffefa`):** Elevates readability, isolating complex subject matrices and career pathways cleanly above the cream canvas.
-- **Accent Coral/Terracotta (`#ed806b`):** Earthy warmth reserved for alerts, critical deadlines, urgent requirements, and KUCCPS cluster alerts.
-- **Golden Amber (`#efba55`):** Warm optimism reserved for scholarship flags, merit honors, and mid-tier progress indicators.
+- **Brand Violet (`#7c5cff`, dark variant `#6d4aff`):** The only accent in the system. Every interactive state uses it — buttons, active nav items, links, progress fills, focus rings. It is used sparingly, so when it appears it always reads as "tap here".
+- **Deep Ink (`#2e1065`):** Headings and body text. A very dark violet rather than black — it ties type to the brand and softens glare against the light surfaces.
+- **Muted Violet (`#7a6fa8`):** Secondary text, field labels and metadata.
+- **Background Cream (`#faf7ff`) / Card Surface (`#ffffff`):** Page canvas and cards. The faint violet cast avoids the blue-light harshness of pure white in bright equatorial sun.
+- **Accent Soft (`#ede9ff`):** The tint behind selected states — quiz options, role cards, the active sidebar item and the active bottom-nav tab.
+- **Warm Coral (`#ff7a59`):** Reserved for urgency — deadlines, alerts, destructive actions. It is the only warm hue, so it always reads as an exception.
+- **Status:** Green `#10b981` met / on track · Amber `#ffb020` borderline · Red `#e11d48` short or failed.
 
-Contrast ratios adhere strictly to WCAG 2.1 AA across low-cost mobile IPS panels under bright sunlight. Text on `#f5f3ed` and `#fffefa` consistently uses `#173f35` or `#2b3632` rather than light grays.
+### Legacy variable names
 
-## Typography
-
-Typography pairs **Manrope** for authoritative structural clarity with **DM Sans** for neutral, open, and effortless long-form reading across small mobile viewports.
-
-- **Headlines (Manrope):** Geometric, sturdy, and high-impact. The structural geometry instills immediate credibility and modern poise for programme titles, degree names, and national cut-off announcements.
-- **Body & Labels (DM Sans):** Low-contrast grotesque strokes prevent visual noise on screens with poor subpixel rendering. High x-height ensures dense course descriptions, entry prerequisites, and fee tables remain comfortable to digest.
-- **Letter Spacing:** Headlines run slightly condensed (`-0.015em`) for punchy rhythm, while micro-labels utilize positive tracking (`+0.03em`) to safeguard legibility at small sizes on entry-level Android devices.
-
-## Layout & Spacing
-
-The layout model is built on an adaptive responsive grid:
-- **Mobile (< 640px):** 4 columns, `1rem` margin, `1rem` gutter. Critical touch targets must stay at or above `48px` to support single-hand operation on public transit (matatus).
-- **Tablet (640px - 1024px):** 8 columns, `2rem` margin, `1.5rem` gutter.
-- **Desktop (> 1024px):** 12 columns, max content container of `1240px`, centered with `3.5rem` outer margin and `2rem` gutter.
-
-Spacing adheres strictly to a 4px/8px baseline rhythm. Stacked forms and pathway progression lists prioritize vertical rhythm to prevent cognitive overload.
+`--lime`, `--lime2`, `--lime-soft` and `--lime-deep` are left over from the pre-v5 green palette, where the accent really was a lime green. They are now aliases that resolve to the violet brand so existing markup keeps working. **New code must use `--pine`, `--accent`, `--accent-soft` and `--accent-deep` instead.**
 
 ## Elevation & Depth
 
-Visual hierarchy uses **tonal layer nesting** combined with soft, warm-tinted ambient shadows. Dark, heavy grey shadows are avoided; instead, depth is rendered using the primary pine tone at minimal opacity:
+Depth is rendered with **violet-tinted ambient shadows**, never grey. Grey shadows go muddy against the violet-tinted cream; tinting them keeps edges crisp even when a phone dims its screen to save battery.
 
-- **Level 0 (Canvas Base):** Warm Cream (`#f5f3ed`), entirely flat.
-- **Level 1 (Cards & Modules):** Crisp Card (`#fffefa`) layered over cream, rimmed by a subtle outline `rgba(23, 63, 53, 0.08)` and elevated by an ambient shadow `0 2px 8px -2px rgba(23, 63, 53, 0.06)`.
-- **Level 2 (Interactive Cards & Flyouts):** Raised cards and active navigation pills feature `0 8px 24px -4px rgba(23, 63, 53, 0.10)`.
-- **Level 3 (Modal Sheets & Mobile Menus):** Overlays with backdrop filter `blur(6px)` with warm pine-tinted wash, shadow `0 16px 36px -6px rgba(21, 60, 51, 0.20)`.
-
-This tactile formulation keeps edges crisp even when screens scale down brightness to save battery.
+- **Level 0 (Canvas):** Background Cream (`#faf7ff`), entirely flat.
+- **Level 1 (Cards):** Card Surface (`#ffffff`) over cream, hairline outline `rgba(124, 92, 255, 0.12)`, ambient shadow `0 1px 3px rgba(124, 92, 255, 0.06), 0 8px 24px -8px rgba(124, 92, 255, 0.10)`.
+- **Level 2 (Interactive cards, hero panels):** `0 10px 24px -10px rgba(124, 92, 255, 0.18), 0 24px 48px -16px rgba(255, 122, 89, 0.12)` — the coral tail is what gives raised elements their warmth.
+- **Level 3 (Modals, mobile drawer):** Backdrop `rgba(10, 31, 24, 0.5)` with `blur(5px)`, plus the Level 2 shadow. The mobile drawer additionally dims the page with `rgba(20, 10, 60, 0.45)` and `blur(2px)`.
 
 ## Shapes
 
@@ -195,28 +179,137 @@ A modern rounded corner aesthetic (`roundedness: 2`, `0.5rem` base, `1rem` for m
 ## Components
 
 ### Buttons
-- **Primary:** Deep Pine (`#173f35`) solid background, Warm Cream (`#f5f3ed`) text, `rounded-lg` (0.5rem), minimum height `48px`. Hover: `#153c33` with subtle translateY(-1px).
-- **Accent / Action:** Fresh Lime (`#b9df55`) background, Deep Pine (`#173f35`) text, bold font weight. Used for critical progression points (e.g., "Check Admission Odds").
-- **Secondary:** Transparent fill with `1.5px` border in `#173f35`, text in `#173f35`.
-- **Destructive/Urgent:** Warm Terracotta (`#ed806b`) with dark pine or white text for alert actions.
+- **Primary (`.btn-dark`):** Violet gradient `135deg, #7c5cff → #8b5cf6 (55%) → #a78bfa`, white text, radius `0.8125rem`, height `50px` (`56px` for `.btn-lg`). Hover: lift `translateY(-1px)` with the Level 2 shadow.
+- **Call to action (`.btn-lime`):** Violet-to-coral gradient `135deg, #7c5cff → #9d6bff (50%) → #ff7a59 (130%)` with a violet glow. Reserved for the one main action on a page.
+- **Secondary (`.btn-line`):** White fill, `1.5px` violet border, violet text.
+- **Ghost (`.btn-ghost`):** Cream-2 fill, hairline border, deep-ink text.
+- **Sizing:** Every button is at least `48px` tall on phones, and inputs use `16px` text so iOS does not zoom on focus.
 
 ### Cards
-- **Structure:** Crisp surface (`#fffefa`), border `1px solid rgba(23, 63, 53, 0.08)`, corner radius `1rem`. Internal padding uses `space-lg` (1.5rem).
-- **Course & TVET Modules:** Include header with University/College crest, cluster badge, and minimum required KCSE mean grade highlighted via high-contrast chips.
+- **Structure:** Card Surface (`#ffffff`), border `1px solid rgba(124, 92, 255, 0.12)`, radius `1.5rem`, padding `1.75rem` (`1.25rem` on phones).
+- Cards lift by `2px` on hover. Institution modules lead with the institution's own brand colour as a crest tile.
 
 ### Chips & Badges
-- **Verified Source Badge:** Pill-shaped (`9999px`), light pine surface (`rgba(23, 63, 53, 0.08)`), text `#173f35`, prepended with a filled checkmark icon in `#b9df55`. Indicates official KUCCPS, CUE, or TVETA data.
-- **Deadline/Alert Badges:** Pill-shaped, light terracotta tint (`rgba(237, 128, 107, 0.15)`), text `#a83d29`.
-- **Scholarship/Merit Badges:** Golden Amber fill (`#efba55`), dark pine text.
+- **Neutral chip:** Pill (`9999px`), Accent Soft fill, deep-ink text, hairline violet border.
+- **Verified source / on-track:** Green `#e6f4ea` on `#1e6b2e`, preceded by a filled checkmark — marks data traced to KUCCPS, CUE or TVETA.
+- **Deadline / alert:** Light coral tint on `#c2410c`.
+- **Indicative / mock data:** Amber `#fff7e6` on `#8a6d00` with a **dashed** border. The dash is what distinguishes "unverified" from "confirmed" at a glance without relying on colour alone.
 
-### Progress Rings & Career Alignment
-- **Indicator Rings:** Circular SVG meters with `#173f35` track and dynamic `#b9df55` progress arcs. Center displays typography token `headline-sm` indicating percent complete or cluster weight fulfillment.
-- **Track bars:** Background `rgba(23, 63, 53, 0.1)`, fill `#b9df55` with `0.5rem` radius.
+### Progress indicators
+- **Track bars:** `rgba(20, 52, 43, 0.09)` track, violet gradient (`#7c5cff → #c084fc`) fill, `99px` radius. Red gradient for below-target bars.
+- **Quiz progress:** Segmented pill row; completed segments use the violet-to-coral gradient.
+- **Cluster score bars:** Same violet fill, scaled against the 48-point maximum so bars are comparable across courses.
 
-### Input Fields
-- **Default State:** Background `#fffefa`, border `1.5px solid rgba(23, 63, 53, 0.2)`, text `#173f35`, height `48px`, corner radius `0.5rem`.
-- **Focus State:** Border `#173f35`, subtle ring `3px rgba(185, 223, 85, 0.3)`.
-- **Error State:** Border `#ed806b`, helper text in `#ed806b`.
+### Navigation
+- **Desktop sidebar:** `256px`, collapsible to a `76px` icon rail. The active item uses an Accent Soft fill with an inset violet hairline.
+- **Mobile:** The sidebar becomes a `280px` drawer with a scrim; a six-item bottom nav carries the primary destinations with `52px` minimum touch targets and safe-area padding.
 
-### Lists
-- Multi-row pathway checklists featuring circular state icons (check, lock, or active pulse). Separators use `1px solid rgba(23, 63, 53, 0.06)`. Touch height padded to `52px` minimum per row.
+### Motion
+- Page and view entry fade in over `0.25–0.3s`. All animation is disabled under `prefers-reduced-motion: reduce`.
+
+---
+
+## Avatars (v6)
+
+All people-pictures are **generated, not sourced**. `assets/js/avatar.js` builds each
+avatar as inline SVG — a two-colour gradient plus one abstract motif on a 64×64
+viewBox — so it is sharp at any size and costs no network request.
+
+| | |
+|---|---|
+| Personas | 12 (`PF_PERSONAS`), each with an English and a Swahili name |
+| Motifs | sun, rift, acacia, wave, star, bloom, compass, flask, circuit, book, bolt, peak |
+| Sizing | the container decides; the SVG fills its box (`.pf-avatar{width:100%;height:100%}`) |
+| Gradient ids | allocated per call, so repeated avatars never collide on one page |
+| Default | `avatarForName(name)` — a stable hash, so a learner always gets the same one |
+
+The previous set (ten anime illustrations, two photographs of real children) was deleted:
+licensed artwork and photographs of identifiable minors are both a rights risk. **The app
+now ships no image files of people.**
+
+## Mobile rules (v6)
+
+Two separate concerns, on purpose:
+
+**Layout collapsing** (`@media(max-width:640px)`) — single-column grids, tighter
+padding, smaller display type. Keyed to width, because a 740px-wide landscape phone
+genuinely has room for two columns.
+
+**Touch sizing and legibility** (`@media(max-width:640px),(max-height:520px)`) — the
+44×44 tap-target minimum, the 12px type floor, 16px form fields. Keyed to the **short
+side**, because a phone in landscape is 740×360: wider than the 640px breakpoint, so a
+width-only query misses it entirely, yet it is still a touch device with 360px of
+height.
+
+Everything below lives in those queries; desktop is unaffected.
+
+- **`.navcta`** — the nav action row wraps to its own full-width line with 44 px buttons.
+- **Inline grids collapse**: `[style*="grid-template-columns"]:not(.keep-cols)` is forced
+  to `1fr`. Inline styles outrank stylesheet rules, so this is the only way to reach them.
+- **`min-width:0`** on grid children. Without it a grid item refuses to shrink below its
+  content's intrinsic width, which is the usual cause of a page that still scrolls
+  sideways after its columns have collapsed.
+- **Tables** scroll inside their own box (`display:block; overflow-x:auto`).
+- **Tap targets**: 44×44 minimum on hamburger, sidebar close, icon buttons, language
+  switch, tabs, brand link and checkboxes. Footer and sidebar text links grow their hit
+  area with padding and pull the layout back with an equal negative margin.
+- **Legibility floor**: nothing below 12 px.
+
+- **Scroll clearance**: `scroll-margin-top:84px; scroll-margin-bottom:104px` on
+  interactive elements and `[id]`, so a focused field or anchor target never lands
+  under the sticky top bar or the fixed bottom nav.
+- **All fields**, not just `.input`, get `min-height:50px` — a bare `<input>` is 18px
+  tall otherwise. Form text is 16px, which stops iOS Safari zooming on focus.
+- **The drawer** uses `max-height:100dvh`; `100vh` is taller than the visible area on
+  mobile browsers, so its bottom would sit behind the browser chrome.
+
+Verify with:
+
+| Command | What it does |
+|---|---|
+| `npm run test:mobile [w] [h]` | seven checks per page in real Chromium |
+| `npm run test:overlay [w] [h]` | drawers and modals, which only exist while open |
+| `npm run shots` | phone, landscape and desktop screenshots of every page |
+
+Always run the audit in both orientations — landscape was the entire blind spot in the
+first pass.
+
+## Content that fits, and lines up (v7)
+
+### Numbers
+
+```css
+th.num, td.num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap }
+```
+
+Right-alignment is what makes a column of digits line up; `tabular-nums` is what keeps
+them lined up, by giving every figure the same advance width. Tag the cell **and** its
+header.
+
+### Wide tables on a phone
+
+Five columns in 360px leaves each about 15 characters — unreadable. Wide tables get
+`class="stack"` and every cell a `data-label`; on a phone each record becomes one card
+and the `::before` label replaces the hidden header.
+
+```html
+<table class="stack">
+  <td class="num" data-label="Score">72</td>
+```
+
+### Breathing room
+
+Inline `margin` values through these templates were tuned for a wide screen, where 4–6px
+reads as comfortable. On a phone they look cramped, and an inline style outranks a
+stylesheet rule, so phone spacing is applied deliberately:
+
+- `.view > * + *` and `.card > * + *` carry a minimum gap (elements with their own
+  inline margin keep it, so nothing shifts).
+- `[style*="display:flex"]` wraps, and a `flex:1` child inside takes a full line, so a
+  button beside text no longer collapses the text column.
+- Consent labels flow as blocks with the checkbox floated beside the text.
+
+Verify with `npm run test:comfort [w] [h]` — it measures characters per line,
+line-height, card padding, stack gaps, numeric alignment, card heights and mixed
+alignment. **It is non-blocking in CI on purpose**: it reports so the numbers can keep
+improving.

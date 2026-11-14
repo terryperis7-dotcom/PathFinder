@@ -163,8 +163,22 @@ function fillUserChip() {
   if (!s) return;
   $$("[data-user-name]").forEach(el => el.textContent = s.name);
   $$("[data-user-role]").forEach(el => el.textContent = s.roleLabel || s.role);
-  $$("[data-user-initials]").forEach(el => el.textContent =
-    (s.name || "U").replace(/\(Demo\)/, "").trim().split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase());
+  /* Avatar chips: the persona the user picked, or initials on a colour
+     derived from their name. Generated as inline SVG by avatar.js — no
+     image files, nothing loaded from the network. Falls back to plain
+     initials if avatar.js has not loaded. */
+  const chosen = (typeof avatarPersonaIndex === "function")
+    ? avatarPersonaIndex(s.email) : null;
+  $$("[data-user-initials]").forEach(el => {
+    if (typeof avatarSVG === "function" && chosen !== null) {
+      el.innerHTML = avatarSVG(chosen, { title: s.name });
+    } else if (typeof avatarInitialsSVG === "function") {
+      el.innerHTML = avatarInitialsSVG(s.name);
+    } else {
+      el.textContent = (s.name || "U").replace(/\(Demo\)/, "").trim()
+        .split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase();
+    }
+  });
 }
 
 /* ---------- 3. Accounts ----------

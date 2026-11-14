@@ -17,7 +17,7 @@ window.PF_INSTITUTIONS=[
  {id:"tuk",code:"TUK",name:"Technical University of Mombasa",type:"Public University",region:"Mombasa",field:"Engineering",color:"#00838f",progs:["B.Sc Civil Engineering","B.Sc Electrical Engineering","B.Sc Computer Science","B.Tech Building Technology"],funding:"KUCCPS · Universities Fund · HELB",cutoff:"Cluster ~35–39",fees:"KES 78,000–100,000/yr"},
  {id:"dekut",code:"DeKUT",name:"Dedan Kimathi University of Technology",type:"Public University",region:"Nyandarua",field:"Engineering",color:"#6a1b9a",progs:["B.Sc Mechatronics","B.Sc Computer Science","B.Sc Civil Engineering","B.Sc Geomatic Engineering"],funding:"KUCCPS · Universities Fund · HELB",cutoff:"Cluster ~36–40",fees:"KES 80,000–105,000/yr"},
  {id:"maseno",code:"MU",name:"Maseno University",type:"Public University",region:"Kisumu",field:"Business",color:"#ad1457",progs:["B.Com","B.Ed","B.Sc Computer Science","B.Sc Nursing","B.A Communication"],funding:"KUCCPS · Universities Fund · HELB",cutoff:"Cluster ~33–37",fees:"KES 68,000–92,000/yr"},
- {id:"kisii",code:"KU",name:"Kisii University",type:"Public University",region:"Kisii",field:"Health",color:"#4527a0",progs:["B.Sc Nursing","B.Ed","B.Com","B.Sc Computer Science"],funding:"KUCCPS · Universities Fund · HELB",cutoff:"Cluster ~32–36",fees:"KES 65,000–90,000/yr"},
+ {id:"kisii",code:"KisU",name:"Kisii University",type:"Public University",region:"Kisii",field:"Health",color:"#4527a0",progs:["B.Sc Nursing","B.Ed","B.Com","B.Sc Computer Science"],funding:"KUCCPS · Universities Fund · HELB",cutoff:"Cluster ~32–36",fees:"KES 65,000–90,000/yr"},
  {id:"seku",code:"SEKU",name:"South Eastern Kenya University",type:"Public University",region:"Kitui",field:"Agriculture",color:"#ef6c00",progs:["B.Sc Agriculture","B.Sc Computer Science","B.Com","B.Ed"],funding:"KUCCPS · Universities Fund · HELB",cutoff:"Cluster ~31–35",fees:"KES 62,000–88,000/yr"},
  {id:"chuka",code:"CU",name:"Chuka University",type:"Public University",region:"Tharaka Nithi",field:"Agriculture",color:"#558b2f",progs:["B.Sc Agriculture","B.Sc Computer Science","B.Com","B.Ed"],funding:"KUCCPS · Universities Fund · HELB",cutoff:"Cluster ~31–35",fees:"KES 62,000–88,000/yr"},
  {id:"karatina",code:"KaU",name:"Karatina University",type:"Public University",region:"Nyeri",field:"Business",color:"#283593",progs:["B.Com","B.Sc Computer Science","B.Ed","B.Sc Nursing"],funding:"KUCCPS · Universities Fund · HELB",cutoff:"Cluster ~32–36",fees:"KES 65,000–90,000/yr"},
@@ -27,8 +27,8 @@ window.PF_INSTITUTIONS=[
  {id:"kca",code:"KCA",name:"KCA University",type:"Private University",region:"Nairobi",field:"Business",color:"#00695c",progs:["B.Com","B.Sc Computer Science","B.Sc Actuarial Science","B.A Economics"],funding:"HELB Tuition Loan",cutoff:"Private intake",fees:"KES 280,000–400,000/yr"},
  {id:"mku",code:"MKU",name:"Mount Kenya University",type:"Private University",region:"Kiambu",field:"Health",color:"#4a148c",progs:["MBChB Medicine","B.Sc Nursing","B.Pharm Pharmacy","B.Sc Computer Science"],funding:"HELB Tuition Loan",cutoff:"Private intake",fees:"KES 450,000–700,000/yr"},
  {id:"zetech",code:"ZU",name:"Zetech University",type:"Private University",region:"Kiambu",field:"ICT",color:"#0277bd",progs:["B.Sc Computer Science","B.Sc Information Technology","B.Com"],funding:"HELB Tuition Loan",cutoff:"Private intake",fees:"KES 250,000–350,000/yr"},
- {id:"knp",code:"KNP",name:"Kabwe National Polytechnic",type:"National Polytechnic / TVET",region:"Meru",field:"ICT",color:"#2b5ea7",progs:["Diploma ICT & Cyber Defence","Building & Civil Tech","Electrical (Power)","Automotive Mechatronics"],funding:"KUCCPS TVET · Gov Capitation KES 30,000/yr + HELB TVET Loan",cutoff:"Entry KCSE C− & above",fees:"Subsidised capitation"},
- {id:"kcp",code:"KCP",name:"Kenya Coast Polytechnic",type:"National Polytechnic / TVET",region:"Mombasa",field:"Engineering",color:"#00897b",progs:["Diploma Civil Engineering","Diploma Electrical Engineering","Diploma ICT","Diploma Maritime"],funding:"KUCCPS TVET · Capitation + HELB TVET",cutoff:"Entry KCSE C− & above",fees:"Subsidised capitation"},
+ {id:"merupoly",code:"MNP",name:"The Meru National Polytechnic",type:"National Polytechnic / TVET",region:"Meru",field:"Engineering",color:"#2b5ea7",progs:["Diploma Building & Construction Technology","Diploma Civil Engineering","Diploma Electrical & Electronics Engineering","Diploma Quantity Surveying","Diploma ICT"],funding:"KUCCPS TVET · Gov Capitation KES 30,000/yr + HELB TVET Loan",cutoff:"Entry KCSE C− (diploma) · D (certificate)",fees:"Subsidised capitation"},
+ {id:"kcoastpoly",code:"KCNP",name:"The Kenya Coast National Polytechnic",type:"National Polytechnic / TVET",region:"Mombasa",field:"Engineering",color:"#00897b",progs:["Diploma Civil Engineering","Diploma Electrical Engineering","Diploma Building Technology","Diploma ICT","Diploma Maritime & Port Logistics","Diploma Hospitality Management"],funding:"KUCCPS TVET · Gov Capitation KES 30,000/yr + HELB TVET Loan",cutoff:"Entry KCSE C− (diploma) · D− (artisan/certificate)",fees:"Subsidised capitation"},
  {id:"ep",code:"EP",name:"Eldoret National Polytechnic",type:"National Polytechnic / TVET",region:"Uasin Gishu",field:"Engineering",color:"#5d4037",progs:["Diploma Mechanical Engineering","Diploma ICT","Diploma Building Technology"],funding:"KUCCPS TVET · Capitation + HELB TVET",cutoff:"Entry KCSE C− & above",fees:"Subsidised capitation"},
  {id:"nyeripoly",code:"NP",name:"Nyeri National Polytechnic",type:"National Polytechnic / TVET",region:"Nyeri",field:"Agriculture",color:"#33691e",progs:["Diploma Agriculture","Diploma ICT","Diploma Hospitality"],funding:"KUCCPS TVET · Capitation + HELB TVET",cutoff:"Entry KCSE C− & above",fees:"Subsidised capitation"},
  {id:"kmtc",code:"KMTC",name:"Kenya Medical Training College (KMTC)",type:"Health College",region:"Nairobi",field:"Health",color:"#b34724",progs:["Diploma Clinical Medicine","KRCHN Nursing","Pharmacy Technology","Medical Lab Sciences"],funding:"KMTC Portal / KUCCPS · Dedicated HELB KMTC",cutoff:"KCSE C (Bio) & Chem",fees:"County hospital rotations"},
@@ -75,13 +75,13 @@ window.PF_INSTITUTION_DETAILS={
  chuka:{website:"https://www.chuka.ac.ke",address:"Chuka Town, Tharaka Nithi",phone:"+254 64 630181",email:"vc@chuka.ac.ke",established:2007,intake:"September & January",accreditation:"CUE Chartered",campuses:"Main Campus, Chuka"},
  karatina:{website:"https://www.karatina.ac.ke",address:"Karatina Town, Nyeri",phone:"+254 61 629000",email:"vc@karatina.ac.ke",established:2013,intake:"September & January",accreditation:"CUE Chartered",campuses:"Main Campus, Karatina"},
  strathmore:{website:"https://www.strathmore.edu",address:"Ole Sangale Road, Madaraka, Nairobi",phone:"+254 703 034000",email:"admissions@strathmore.edu",established:1961,intake:"January, May, September",accreditation:"CUE Chartered",campuses:"Madaraka Campus"},
- usiu:{website:"https://www.usiu.ac.ke",address:"United States International University, Nairobi",phone:"+254 703 034000",email:"admissions@usiu.ac.ke",established:1969,intake:"January, May, September",accreditation:"CUE Chartered · WASC (USA)",campuses:"Main Campus, Nairobi"},
+ usiu:{website:"https://www.usiu.ac.ke",address:"USIU Road, Off Thika Road (Exit 7), Kasarani, Nairobi",phone:"+254 730 116 000",email:"admit@usiu.ac.ke",established:1969,intake:"January, May, September",accreditation:"CUE Chartered · WASC (USA)",campuses:"Main Campus, Kasarani, Nairobi"},
  daystar:{website:"https://www.daystar.ac.ke",address:"Athol Avenue, Nairobi",phone:"+254 709 490000",email:"admissions@daystar.ac.ke",established:1994,intake:"January, May, September",accreditation:"CUE Chartered",campuses:"Nairobi, Athi River"},
  kca:{website:"https://www.kca.ac.ke",address:"Ruaraka, Nairobi",phone:"+254 20 828800",email:"admissions@kca.ac.ke",established:2007,intake:"January, May, September",accreditation:"CUE Chartered",campuses:"Main Campus, Ruaraka"},
  mku:{website:"https://www.mku.ac.ke",address:"Thika Road, Kiambu",phone:"+254 709 867000",email:"admissions@mku.ac.ke",established:1999,intake:"January, May, September",accreditation:"CUE Chartered",campuses:"Thika Main, Parklands, Mombasa, Nakuru"},
  zetech:{website:"https://www.zetech.ac.ke",address:"Thika Road, Ruiru, Kiambu",phone:"+254 709 903000",email:"admissions@zetech.ac.ke",established:1999,intake:"January, May, September",accreditation:"CUE Chartered",campuses:"Ruiru Main, Nairobi"},
- knp:{website:"https://www.knp.ac.ke",address:"Kabwe, Meru County",phone:"+254 64 630000",email:"info@knp.ac.ke",established:1961,intake:"May & September",accreditation:"TVETA Accredited",campuses:"Main Campus, Meru"},
- kcp:{website:"https://www.kcp.ac.ke",address:"Mombasa, Kenya",phone:"+254 41 2490000",email:"info@kcp.ac.ke",established:1962,intake:"May & September",accreditation:"TVETA Accredited",campuses:"Main Campus, Mombasa"},
+ merupoly:{website:"https://www.mnp.ac.ke",address:"Meru–Nanyuki Highway, Meru County",phone:"+254 71 934 7059",email:"info@mnp.ac.ke",established:1956,intake:"January, May & September",accreditation:"TVETA Accredited · Centre of Excellence in Building & Construction Technology",campuses:"Main Campus, Meru"},
+ kcoastpoly:{website:"https://www.kenyacoastpoly.ac.ke",address:"Majengo–Kisauni Road, Mvita, Mombasa",phone:"+254 710 389 727",email:"info@kenyacoastpoly.ac.ke",established:1950,intake:"January, May & September",accreditation:"TVETA Accredited · Centre of Excellence in Marine Transport & Port Logistics",campuses:"Main Campus, Mombasa"},
  ep:{website:"https://www.ep.ac.ke",address:"Eldoret, Uasin Gishu",phone:"+254 53 2060000",email:"info@ep.ac.ke",established:1962,intake:"May & September",accreditation:"TVETA Accredited",campuses:"Main Campus, Eldoret"},
  nyeripoly:{website:"https://www.nyeripoly.ac.ke",address:"Nyeri, Kenya",phone:"+254 61 2030000",email:"info@nyeripoly.ac.ke",established:1956,intake:"May & September",accreditation:"TVETA Accredited",campuses:"Main Campus, Nyeri"},
  kmtc:{website:"https://www.kmtc.ac.ke",address:"Off Ngong Road, Nairobi",phone:"+254 20 2725711",email:"info@kmtc.ac.ke",established:1927,intake:"March & September",accreditation:"MoH / CUE Accredited",campuses:"71 campuses across 47 counties"},
@@ -126,3 +126,107 @@ window.PF_QUIZ=[
  {q:"A friend would describe you as…",opts:[["Practical & hands-on","R"],["Curious & analytical","I"],["Imaginative & expressive","A"],["Caring & dependable","S"],["Driven & persuasive","E"],["Organised & precise","C"]]},
  {q:"Finally — what does success look like for you?",opts:[["Systems I built for thousands","R"],["Expertise people trust","I"],["Work that inspires people","A"],["Lives I improved","S"],["An enterprise I lead","E"],["A stable, well-run career","C"]]}
 ];
+
+/* ============================================================
+   Reference-data audit
+   ------------------------------------------------------------
+   Runs real checks over the data in this file (and the cluster
+   definitions when cluster.js is loaded) so an admin can see
+   what needs verifying instead of trusting a hand-written
+   "16 verified institutions" claim that nobody maintains.
+
+   Returns:
+     { checks:[{id,label,ok,level,detail}], passed, failed, warnings }
+   level: 'error' means the data is broken; 'warn' means it
+   should be confirmed against an official source.
+   ============================================================ */
+function auditReferenceData() {
+  const out = [];
+  const add = (id, label, ok, level, detail) => out.push({ id: id, label: label, ok: !!ok, level: level || "error", detail: detail || "" });
+
+  const insts = window.PF_INSTITUTIONS || [];
+  const schols = window.PF_SCHOLARSHIPS || [];
+  const counties = window.PF_COUNTIES || [];
+  const details = window.PF_INSTITUTION_DETAILS || {};
+  const clusters = window.PF_CLUSTERS || null;
+
+  /* --- institutions --- */
+  add("inst-count", "Institutions loaded", insts.length > 0, "error", insts.length + " institutions");
+
+  const ids = {}, codes = {};
+  let dupIds = [], dupCodes = [], missing = [];
+  insts.forEach(function (i) {
+    if (ids[i.id]) dupIds.push(i.id); ids[i.id] = true;
+    if (codes[i.code]) dupCodes.push(i.code); codes[i.code] = true;
+    ["id", "code", "name", "type", "region", "funding", "cutoff", "fees"].forEach(function (k) {
+      if (!i[k]) missing.push(i.id + "." + k);
+    });
+    if (!Array.isArray(i.progs) || !i.progs.length) missing.push(i.id + ".progs");
+  });
+  add("inst-unique-id",   "Institution IDs are unique",   !dupIds.length,   "error", dupIds.length ? "duplicates: " + dupIds.join(", ") : "all unique");
+  add("inst-unique-code", "Institution codes are unique", !dupCodes.length, "error", dupCodes.length ? "duplicates: " + dupCodes.join(", ") : "all unique");
+  add("inst-fields",      "Every institution has all fields", !missing.length, "error", missing.length ? "missing: " + missing.slice(0, 6).join(", ") : "complete");
+
+  const noDetails = insts.filter(i => !details[i.id]);
+  add("inst-details", "Every institution has contact details", !noDetails.length, "error",
+    noDetails.length ? "missing: " + noDetails.map(i => i.id).join(", ") : insts.length + " detail records");
+
+  const badUrl = insts.filter(i => details[i.id] && !/^https:\/\//.test(details[i.id].website || ""));
+  add("inst-https", "Institution websites use HTTPS", !badUrl.length, "error",
+    badUrl.length ? "not https: " + badUrl.map(i => i.id).join(", ") : "all https");
+
+  const noEst = insts.filter(i => details[i.id] && details[i.id].established === null);
+  add("inst-established", "Every institution has a founding year", !noEst.length, "warn",
+    noEst.length ? "unknown year: " + noEst.map(i => i.name).join(", ") : "all recorded");
+
+  /* PF_TUTORS is pilot sample data. It must never be shown to students as a
+     real directory, so flag it if it is loaded but unused. */
+  const tutors = window.PF_TUTORS || [];
+  add("tutor-directory", "Tutor directory holds no sample profiles", tutors.length === 0, "warn",
+    tutors.length ? tutors.length + " sample tutor profiles in data.js — not wired to any page (showing them to students as real tutors would be misleading)" : "none loaded");
+
+  /* Anything outside Kenya is a scholarship/destination entry, not a
+     KUCCPS-placed institution — surface it so it is never mistaken for one. */
+  const nonKe = insts.filter(i => i.type === "International");
+  add("inst-scope", "Kenyan vs international entries are separated", true, "warn",
+    nonKe.length ? nonKe.length + " international entr" + (nonKe.length === 1 ? "y" : "ies") + " (" + nonKe.map(i => i.code).join(", ") + ") — not KUCCPS-placed" : "all Kenyan");
+
+  /* --- scholarships --- */
+  add("scholar-count", "Scholarships loaded", schols.length > 0, "error", schols.length + " scholarships");
+  const badSch = schols.filter(s => !s.name || !s.url || !/^https:\/\//.test(s.url || ""));
+  add("scholar-urls", "Every scholarship links to an official site", !badSch.length, "error",
+    badSch.length ? "bad link: " + badSch.map(s => s.name).join(", ") : "all https");
+  const dupSch = schols.filter((s, i) => schols.findIndex(x => x.name === s.name) !== i);
+  add("scholar-unique", "Scholarship names are unique", !dupSch.length, "error", dupSch.length ? dupSch.map(s => s.name).join(", ") : "all unique");
+
+  /* --- counties --- */
+  add("counties", "All 47 counties present", counties.length === 47, "error", counties.length + " counties");
+
+  /* --- clusters (only if cluster.js is loaded) --- */
+  if (clusters) {
+    const badCluster = [];
+    clusters.forEach(function (c) {
+      if (!c.id || !c.name) badCluster.push(c.id + ": missing id/name");
+      if (c.slots && c.slots.length !== 4) badCluster.push(c.id + ": " + (c.slots ? c.slots.length : 0) + " slots (need 4)");
+    });
+    add("cluster-shape", "Every degree cluster has 4 subject slots", !badCluster.length, "error",
+      badCluster.length ? badCluster.slice(0, 4).join("; ") : clusters.length + " clusters");
+    const indicative = clusters.filter(c => !c.official);
+    add("cluster-official", "Cluster subject rules are all from KUCCPS", !indicative.length, "warn",
+      indicative.length ? indicative.length + " derived, confirm on kuccps.net: " + indicative.map(c => c.id).join(", ") : "all official");
+  }
+
+  /* Three severities, so an admin can tell "broken" from "confirm this":
+       error   — the data is wrong and must be fixed
+       warning — usable, but a human should confirm it against an official source
+       note    — passed, with an advisory worth knowing                        */
+  out.forEach(function (c) {
+    c.severity = !c.ok ? (c.level === "warn" ? "warning" : "error")
+                       : (c.level === "warn" ? "note" : "pass");
+  });
+  const errors   = out.filter(c => c.severity === "error").length;
+  const warnings = out.filter(c => c.severity === "warning").length;
+  const notes    = out.filter(c => c.severity === "note").length;
+  const passed   = out.filter(c => c.severity === "pass").length;
+  return { checks: out, total: out.length, passed: passed, errors: errors, warnings: warnings, notes: notes };
+}

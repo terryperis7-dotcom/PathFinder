@@ -45,17 +45,36 @@
       <div class="search">⌕ <input placeholder="Search students…" id="stuSearch" oninput="renderStudents()"></div>
       <div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Tutor</b><small data-user-role>TSC Tutor</small></span><span class="avatar" data-user-initials>TT</span></div>
     </header>
-    <main class="view"><div class="alert-mock" style="margin-bottom:18px"><b>Demo data.</b> Tutor workspace sample data is illustrative (mock) until connected to live student records. <span class="chip mock">⚠ MOCK DATA</span></div>
+    <main class="view">
+      <div class="alert-green" style="margin-bottom:18px"><b>No invented records.</b> This page deliberately shows no sample students.
+        Displaying made-up names, counties and guardian contacts for children — even as a demo — is a safeguarding and data-protection
+        risk, so the roster stays empty until real, consented student links exist.</div>
       <p class="eyebrow">Assigned cohorts · Read-only progress access</p>
       <h1 style="font-size:32px;margin:8px 0 8px">My Students</h1>
-      <p class="muted" style="max-width:620px">You see only students assigned to you. All messaging happens inside supervised, guardian-visible channels — no private DMs.</p>
-      <div class="tabs" style="margin:20px 0" id="stuTabs">
-        <button class="on" data-f="">All (12)</button><button data-f="KCSE">KCSE Candidates</button><button data-f="CBC">CBC Learners</button><button data-f="flag">Needs attention</button>
+      <p class="muted" style="max-width:620px">Once student–tutor links are live you will see only the learners assigned to you, with
+        guardian-visible progress. All messaging happens inside supervised channels — no private DMs.</p>
+
+      <div class="empty" style="margin-top:24px">
+        <div style="font-size:44px">🎓</div>
+        <h2 style="margin:12px 0 8px">No students linked yet</h2>
+        <p class="muted" style="max-width:560px;margin:0 auto">Student lists need a live database and recorded guardian consent.
+          Neither exists in this build, so there is nothing to show yet.</p>
       </div>
-      <div class="card" style="padding:10px 20px">
-        <div style="overflow:auto"><table><thead><tr><th>Student</th><th>Stage</th><th>County</th><th>Mean</th><th>Focus subject</th><th>Guardian</th><th>Action</th></tr></thead><tbody id="stuTable"></tbody></table></div>
+
+      <div class="card" style="margin-top:24px">
+        <h3 style="font-size:18px">What has to exist before this page can show learners</h3>
+        <div style="margin-top:12px">
+          <div class="checkrow"><span class="ck">1</span><div><b>Connect Supabase</b><div class="tiny muted">Add your project URL and anon key to <span class="code" style="padding:2px 6px;border-radius:6px">assets/js/supabase-config.js</span>, then run <span class="code" style="padding:2px 6px;border-radius:6px">schema.sql</span>.</div></div></div>
+          <div class="checkrow"><span class="ck">2</span><div><b>A student–tutor link table</b><div class="tiny muted">A table recording which tutor may see which student, with row-level security so tutors only read their own cohort.</div></div></div>
+          <div class="checkrow"><span class="ck">3</span><div><b>Guardian consent capture</b><div class="tiny muted">Verifiable parental consent for every learner under 18, as the Kenya Data Protection Act 2019 requires.</div></div></div>
+          <div class="checkrow"><span class="ck">4</span><div><b>Matching and booking</b><div class="tiny muted">A way for a student to request a tutor and for that request to be accepted.</div></div></div>
+        </div>
+        <p class="tiny muted" style="margin-top:14px">Your own tutor profile and availability are saved and working — see
+          <a href="profile.html"><b>Profile</b></a> and <a href="schedule.html"><b>Schedule</b></a>.</p>
       </div>
-      <div class="alert-green" style="margin-top:18px">🛡 <b>Safeguarding reminder:</b> Session notes and homework are shared with guardians automatically. Direct contact outside PathFinder is not permitted.</div>
+
+      <div class="alert-mock" style="margin-top:18px">🛡 <b>Safeguarding reminder:</b> when this goes live, session notes and homework must be
+        shared with guardians automatically, and direct contact with a learner outside PathFinder must not be possible.</div>
     </main>
   </div>
 </div>
@@ -65,26 +84,12 @@
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/supabase.js"></script>
 <script src="../assets/js/data.js"></script>
+<script src="../assets/js/avatar.js"></script>
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/tutor.js"></script>
 <script src="../assets/js/shell.js"></script>
 <script>
 const s=requireRole("tutor","../signin.html"); if(s)fillUserChip();
-const STUDENTS=[
- {name:"Amina Odhiambo",stage:"KCSE Candidate",county:"Nairobi",mean:"78%",focus:"Physics (C+)",guardian:"Mary N. · SMS ✓",flag:true},
- {name:"Moses Kiprop",stage:"KCSE Candidate",county:"Uasin Gishu",mean:"82%",focus:"English (B−)",guardian:"John K. · SMS ✓",flag:false},
- {name:"Faith Wanjiku",stage:"CBC Grade 9",county:"Nairobi",mean:"71%",focus:"Integrated Science",guardian:"Lucy W. · SMS ✓",flag:true},
- {name:"Brian Kibet",stage:"KCSE Candidate",county:"Kericho",mean:"69%",focus:"Chemistry (C)",guardian:"Peter K. · SMS ✓",flag:true},
- {name:"Salma Noor",stage:"CBC Grade 8",county:"Mombasa",mean:"86%",focus:"None flagged",guardian:"Fatuma N. · SMS ✓",flag:false},
- {name:"David Omondi",stage:"KCSE Candidate",county:"Kisumu",mean:"74%",focus:"Mathematics",guardian:"Grace O. · SMS ✓",flag:false}
-];
-let filter="";
-function renderStudents(){
- const q=(document.getElementById("stuSearch").value||"").toLowerCase();
- const list=STUDENTS.filter(x=>(!q||x.name.toLowerCase().includes(q))&&(!filter||(filter==="flag"?x.flag:x.stage.includes(filter))));
- document.getElementById("stuTable").innerHTML=list.map(x=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:38px;height:38px;font-size:12px">${x.name.split(" ").map(w=>w[0]).join("")}</span><b>${x.name}</b></div></td><td><span class="chip">${x.stage}</span></td><td>${x.county}</td><td><b>${x.mean}</b></td><td>${x.focus}</td><td class="tiny muted">${x.guardian}</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Preview only — messaging isn\'t live yet.')">Message</button></td></tr>`).join("")||'<tr><td colspan="7" class="muted" style="text-align:center;padding:24px">No students match.</td></tr>';
-}
-document.querySelectorAll("#stuTabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#stuTabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");filter=b.dataset.f;renderStudents()});
-renderStudents();
 </script>
 </body>
 </html>
