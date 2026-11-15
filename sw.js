@@ -7,7 +7,7 @@
    - Pages (navigations): network-first, falling back to the cached copy, then to the homepage.
    - Static assets (css/js/images/icons): stale-while-revalidate.
    Bump CACHE when you change the precache list. */
-const CACHE = "pathfinder-v8";
+const CACHE = "pathfinder-v9";
 const CORE = [
   "/admin/dashboard.html",
   "/admin/deployment.html",

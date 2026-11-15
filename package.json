@@ -9,10 +9,12 @@
     "test": "node tests/app.test.js && python3 tests/check_html.py",
     "test:render": "node tools/render_check.js",
     "test:mobile": "node tools/mobile_audit.js",
+    "test:overflow": "node tools/overflow_audit.js",
+    "test:logic": "node tools/logic_audit.js",
     "test:overlay": "node tools/overlay_audit.js",
     "test:comfort": "node tools/comfort_audit.js",
     "test:interaction": "node tools/interaction_audit.js",
-    "test:all": "npm test && npm run test:render && npm run test:mobile && npm run test:overlay && npm run test:comfort && npm run test:interaction",
+    "test:all": "npm test && npm run test:render && npm run test:mobile && npm run test:overflow && npm run test:logic && npm run test:overlay && npm run test:comfort && npm run test:interaction",
     "shots": "node tools/shots.js",
     "seed": "node tools/gen_seed.js"
   },

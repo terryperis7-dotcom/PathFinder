@@ -53,7 +53,159 @@ let pass=0;const t=async(n,f)=>{try{await f();pass++;console.log('ok  ',n)}catch
    const r=computeRecommendations({results:[{subject:'Mathematics',score:90,target:95},{subject:'Chemistry',score:40,target:70}],quiz:{answers:{}}});
    assert.strictEqual(r.avg,65);assert.strictEqual(r.plans[0].subject,'Chemistry');assert.strictEqual(r.plans[0].priority,'High')});
  await t('chart output escapes subject names',()=>{const h=renderScoreChart([{subject:'<script>x</script>',score:50,target:60}]);assert(!h.includes('<script>'))});
- await t('quiz definition: 12 questions x 6 options',()=>{assert.strictEqual(PF_QUIZ.length,12);PF_QUIZ.forEach(q=>assert.strictEqual(q.opts.length,6))});
+ await t('quiz definition: 6 questions x 6 options',()=>{
+   assert.strictEqual(PF_QUIZ.length,6);
+   PF_QUIZ.forEach(q=>assert.strictEqual(q.opts.length,6));
+   PF_QUIZ.forEach(q=>q.opts.forEach(o=>assert.strictEqual(o.length,2)));
+ });
+ await t('quiz covers every RIASEC dimension the pathways score on',()=>{
+   /* Pathways score on R I A S E C plus N (nature/agriculture). Every one must
+      be selectable, or that pathway can never earn its full personality score. */
+   const used=new Set(); PF_QUIZ.forEach(q=>q.opts.forEach(o=>used.add(o[1])));
+   const needed=new Set(); PATHWAY_DEFS.forEach(p=>p.riasec.forEach(l=>needed.add(l)));
+   needed.forEach(l=>assert.ok(used.has(l),'no quiz option maps to '+l));
+   /* N must be reachable in more than one question or it is all-or-nothing. */
+   const nQuestions=PF_QUIZ.filter(q=>q.opts.some(o=>o[1]==='N')).length;
+   assert.ok(nQuestions>=2,'only '+nQuestions+' question(s) offer N');
+ });
+ await t('personality score is calibrated to the question count',()=>{
+   /* persPct = pers/18*100, with 3 points for a pathway primary dimension.
+      The 18 must equal questionCount x 3, or the scale saturates early. */
+   const calib=PF_QUIZ.length*3;
+   assert.strictEqual(calib,18,'scoring constant 18 no longer matches '+PF_QUIZ.length+' questions');
+   /* All answers on a pathway's primary dimension must reach exactly 100%. */
+   const p=PATHWAY_DEFS[0];
+   const answers={}; PF_QUIZ.forEach((q,i)=>{
+     const idx=q.opts.findIndex(o=>o[1]===p.riasec[0]);
+     assert.ok(idx>=0,'no option for '+p.riasec[0]+' in question '+i);
+     answers[i]=idx;
+   });
+   const r=computeRecommendations({results:[{subject:'Mathematics',score:90},{subject:'Physics',score:88}],quiz:{answers}});
+   const row=r.ranked.find(x=>x.id===p.id);
+   assert.ok(row,'pathway '+p.id+' missing from ranked output');
+   assert.strictEqual(row.persPct,100,'primary-dimension answers should score 100, got '+row.persPct);
+ });
+ await t('stored answers from a longer quiz are discarded, not silently trusted',()=>{
+   /* A quiz saved when there were more questions must not count as complete. */
+   const stale={results:[{subject:'Mathematics',score:80}],onboarded:true,quiz:{answers:{0:0,1:1,2:2,3:3,4:4,5:5,9:0,11:2}}};
+   const clean=sanitiseQuizAnswers(stale);
+   /* Salvaging the in-range answers is deliberately NOT done: if the question
+      set changed, index 2 may now be a different question, so the stored
+      answer no longer means what the student chose. Everything is cleared. */
+   assert.deepStrictEqual(clean.quiz.answers,{},'stale answers should be cleared, not partly kept');
+   /* It is no longer a complete quiz, so onboarding must ask again. */
+   assert.strictEqual(clean.onboarded,false);
+   /* The student is told why, rather than finding an empty quiz. */
+   assert.strictEqual(clean.quizResetReason,'questions-changed');
+   /* Grades are untouched — only the quiz is discarded. */
+   assert.strictEqual(clean.results.length,1);
+ });
+ /* ---------- Language switch ---------- */
+ /* ---------- KCSE grade boundaries ----------
+    gradeOf() once used its own shortened table: everything under 40 collapsed
+    to "C", so a 22% average was presented as a passing grade. It also returned
+    "A-" with a Unicode minus while the points table is keyed on an ASCII
+    hyphen, so that grade scored zero points. Both are asserted here. */
+ await t('gradeOf matches the official KNEC bands at every boundary',()=>{
+   const bands=[[80,'A'],[75,'A-'],[70,'B+'],[65,'B'],[60,'B-'],[55,'C+'],
+                [50,'C'],[45,'C-'],[40,'D+'],[35,'D'],[30,'D-'],[0,'E']];
+   bands.forEach(([min,grade])=>{
+     assert.strictEqual(gradeOf(min),grade,min+'% should be '+grade);
+     assert.strictEqual(gradeOf(min+4>100?100:min+4),grade,(min+4)+'% should still be '+grade);
+     if(min>0) assert.notStrictEqual(gradeOf(min-1),grade,(min-1)+'% should NOT be '+grade);
+   });
+ });
+ await t('every grade gradeOf returns is worth points',()=>{
+   for(let n=0;n<=100;n++){
+     const g=gradeOf(n);
+     assert.ok(g in PF_GRADE_POINTS, 'gradeOf('+n+') returned '+JSON.stringify(g)+' which has no points');
+   }
+ });
+ await t('gradeOf and the cluster calculator agree',()=>{
+   for(let n=0;n<=100;n+=1){
+     const a=gradeOf(n), b=gradeFromScore(n);
+     assert.strictEqual(a,b,'at '+n+'%: gradeOf says '+a+', gradeFromScore says '+b);
+   }
+ });
+ await t('a grade written with a Unicode minus still scores points',()=>{
+   assert.strictEqual(gradePoints('B\u2212'), gradePoints('B-'), 'U+2212 minus scored differently');
+   assert.strictEqual(gradePoints('B\u2212'), 8);
+ });
+ await t('pathway summaries cite no invented institutions',()=>{
+   const banned=[/kabwe/i];
+   PATHWAY_DEFS.forEach(p=>{
+     const text=(p.unis||'')+' '+(p.tvet||'');
+     banned.forEach(re=>assert.ok(!re.test(text),'pathway '+p.id+' cites '+text));
+   });
+ });
+
+ await t('sw dictionary is well formed',()=>{
+   assert.ok(PF_I18N && PF_I18N.sw, 'PF_I18N.sw missing');
+   assert.deepStrictEqual(PF_I18N.en, {}, 'en must stay empty: it is the source language');
+   const keys=Object.keys(PF_I18N.sw);
+   assert.ok(keys.length>=60, 'dictionary too small to be visible: '+keys.length);
+   keys.forEach(k=>{
+     assert.ok(k && k.trim(), 'empty key in dictionary');
+     assert.ok(PF_I18N.sw[k] && PF_I18N.sw[k]!==k, 'no translation for '+JSON.stringify(k));
+   });
+   // Duplicate keys differing only by whitespace silently translate nothing.
+   const norm=keys.map(k=>k.trim().toLowerCase());
+   assert.strictEqual(new Set(norm).size, norm.length, 'duplicate dictionary keys');
+ });
+ await t('language round-trip restores the original text without a reload',()=>{
+   /* Minimal node tree: applyTranslations works on direct child TEXT nodes,
+      which is how a nav link keeps its label beside its icon. */
+   const link=mkEl('A','Dashboard',[mkEl('SVG','')]);
+   const plain=mkEl('H2','Your average');
+   const all=[link,plain];
+   const realQS=document.querySelectorAll;
+   document.querySelectorAll=()=>all;
+   try{
+     const n=applyTranslations(PF_I18N.sw);
+     assert.strictEqual(n,2,'should translate the label beside the icon too, got '+n);
+     assert.strictEqual(link.textContent,'Dashibodi');
+     assert.strictEqual(plain.textContent,'Wastani wako');
+     assert.strictEqual(link.dataset.pfOrig,'Dashboard','original not cached');
+     const m=restoreTranslations();
+     assert.strictEqual(m,2);
+     assert.strictEqual(link.textContent,'Dashboard','EN did not restore');
+     assert.strictEqual(plain.textContent,'Your average','EN did not restore');
+     assert.strictEqual(link.dataset.pfOrig,undefined,'cache not cleared after restore');
+   } finally { document.querySelectorAll=realQS; }
+ });
+ await t('translator never touches inputs or numbers',()=>{
+   const input=mkEl('INPUT','Dashboard');
+   const num=mkEl('SPAN','84');
+   const realQS=document.querySelectorAll;
+   document.querySelectorAll=()=>[input,num];
+   try{
+     const n=applyTranslations(PF_I18N.sw);
+     assert.strictEqual(n,0,'must not translate form values or bare numbers');
+     assert.strictEqual(input.textContent,'Dashboard');
+     assert.strictEqual(num.textContent,'84');
+   } finally { document.querySelectorAll=realQS; }
+ });
+ /* Minimal element stub. textContent needs a real setter: restoreTranslations
+    assigns to it, and a getter-only property would silently swallow the write
+    and make the test pass for the wrong reason. */
+ function mkEl(tag,text,kids){
+   const textNodes = text==null?[]:[{nodeType:3,nodeValue:text}];
+   return {tagName:tag, children:kids||[], childNodes:[...(kids||[]), ...textNodes], dataset:{},
+     get textContent(){return this.childNodes.filter(n=>n.nodeType===3).map(n=>n.nodeValue).join('')},
+     set textContent(v){
+       const tn=this.childNodes.filter(n=>n.nodeType===3);
+       if(tn.length){ tn[0].nodeValue=v; for(let i=1;i<tn.length;i++) tn[i].nodeValue=''; }
+       else this.childNodes.push({nodeType:3,nodeValue:v});
+     }};
+ }
+
+ await t('sanitiseQuizAnswers leaves a complete, valid quiz untouched',()=>{
+   const answers={}; PF_QUIZ.forEach((q,i)=>answers[i]=0);
+   const d={results:[{subject:'Mathematics',score:80}],onboarded:true,quiz:{answers}};
+   const out=sanitiseQuizAnswers(d);
+   assert.deepStrictEqual(out.quiz.answers,answers);
+   assert.strictEqual(out.onboarded,true,'a finished quiz must stay finished');
+ });
 
 
  // ---- KUCCPS cluster points engine ----

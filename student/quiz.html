@@ -25,21 +25,21 @@
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
-    <div class="side-role">🎓 <b data-user-name>Student</b><br><span class="tiny" data-user-role>KCSE Candidate</span></div>
+    <div class="side-role"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-grad"/></svg> <b data-user-name>Student</b><br><span class="tiny" data-user-role>KCSE Candidate</span></div>
     <nav class="snav">
       <h5>MY PATH</h5>
-      <a href="dashboard.html">⌂ &nbsp;Dashboard</a>
-      <a href="cluster.html">🧮 &nbsp;Cluster Points</a>
-      <a href="quiz.html" class="on">🧭 &nbsp;Passion Quiz</a>
-      <a href="institutions.html">🏛 &nbsp;Institutions</a>
-      <a href="funding.html">💰 &nbsp;Funding &amp; HELB</a>
-      <a href="tracker.html">📊 &nbsp;My Tracker</a>
+      <a href="dashboard.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-home"/></svg>Dashboard</a>
+      <a href="cluster.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-cluster"/></svg>Cluster Points</a>
+      <a href="quiz.html" class="on"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-compass"/></svg>Passion Quiz</a>
+      <a href="institutions.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-inst"/></svg>Institutions</a>
+      <a href="funding.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-funding"/></svg>Funding &amp; HELB</a>
+      <a href="tracker.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-tracker"/></svg>My Tracker</a>
       <h5>ACCOUNT</h5>
-      <a href="profile.html">👤 &nbsp;Profile &amp; Stage</a>
-      <a href="../index.html">← &nbsp;Public homepage</a>
-      <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
+      <a href="profile.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-profile"/></svg>Profile &amp; Stage</a>
+      <a href="../index.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-back"/></svg>Public homepage</a>
+      <a href="#" onclick="signOutDeep();return false"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-signout"/></svg>Sign out</a>
     </nav>
-    <div class="side-foot"><b>🛡 Private &amp; free</b><br>Kenya DPA 2019 compliant · v0.9.4<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
+    <div class="side-foot"><b><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-shield"/></svg> Private &amp; free</b><br>Kenya DPA 2019 compliant · v0.9.4<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
   </aside>
   <div class="main">
     <header class="topbar">
@@ -49,14 +49,14 @@
       <div class="userchip"><span class="ut" style="text-align:right"><b data-user-name>Student</b><small data-user-role>KCSE Candidate</small></span><span class="avatar" data-user-initials>ST</span></div>
     </header>
     <main class="view">
-      <p class="eyebrow">RIASEC-aligned · 12 questions · 6 options each · Combined with your real grades</p>
+      <p class="eyebrow" id="quizMeta">RIASEC-aligned · Combined with your real grades</p>
       <h1 style="font-size:32px;margin:8px 0 8px">Passion Quiz &amp; 6-Pathway Matcher</h1>
       <p class="muted" style="max-width:620px">Answer honestly — there are no wrong answers. We combine your personality with your <b>real entered results</b> to rank pathways you both love <b>and</b> qualify for.</p>
 
       <div id="topPanel" style="margin-top:22px"></div>
 
       <div class="card" style="margin-top:20px">
-        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b id="quizStepLab">Question 1 of 12</b><span class="tiny muted" id="quizPct">8% Completed</span></div>
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b id="quizStepLab">Question 1 of 6</b><span class="tiny muted" id="quizPct">8% Completed</span></div>
         <div class="prog" style="margin:14px 0"><i id="qp"></i></div>
         <h3 id="quizQ" style="font-size:20px;margin-bottom:6px"></h3>
         <p class="small muted" style="margin-bottom:14px">Pick the one that feels most like you.</p>
@@ -88,20 +88,26 @@ ensureDemoData();
 const data=getStudentData();
 if(!data||!data.results||!data.results.length){location.href="onboarding.html";throw new Error("onboarding required")}
 const QUIZ=window.PF_QUIZ;
+/* Keep the strap-line honest if the quiz length ever changes. */
+document.getElementById("quizMeta").textContent=
+  "RIASEC-aligned · "+QUIZ.length+" questions · "+QUIZ[0].opts.length+" options each · Combined with your real grades";
 let qi=0, answers={...(data.quiz?.answers||{})};
 function renderQuiz(){
+ /* Guard the index: a stored or restored position past the last question
+    would make QUIZ[qi] undefined and take the whole page down. */
+ if(!(qi>=0) || qi>=QUIZ.length) qi=0;
  const q=QUIZ[qi];
- document.getElementById("quizStepLab").textContent=`Question ${qi+1} of 12`;
- document.getElementById("quizPct").textContent=Math.round((qi+1)/12*100)+"% Completed";
+ document.getElementById("quizStepLab").textContent=`Question ${qi+1} of ${QUIZ.length}`;
+ document.getElementById("quizPct").textContent=Math.round((qi+1)/QUIZ.length*100)+"% Completed";
  document.getElementById("quizQ").textContent=q.q;
- document.getElementById("quizNext").textContent=qi===11?"See my results ✓":"Next →";
+ document.getElementById("quizNext").textContent=qi===QUIZ.length-1?"See my results ✓":"Next →";
  const L=["A","B","C","D","E","F"];
  document.getElementById("quizOpts").innerHTML=q.opts.map((o,i)=>`<button class="quiz-opt ${answers[qi]===i?"sel":""}" onclick="answers[${qi}]=${i};renderQuiz()"><span class="k">${L[i]}</span><span><b>${o[0]}</b></span></button>`).join("");
 }
-function skipQ(){ if(qi<11){qi++;renderQuiz();toast("⏭ Skipped — answer all 12 for the most accurate match.")} else toast("Please choose an option on the last question to see your results.") }
+function skipQ(){ if(qi<QUIZ.length-1){qi++;renderQuiz();toast("⏭ Skipped — answer all "+QUIZ.length+" for the most accurate match.")} else toast("Please choose an option on the last question to see your results.") }
 function nextQ(){
  if(answers[qi]==null){toast("Please choose one option.");return}
- if(qi<11){qi++;renderQuiz()}
+ if(qi<QUIZ.length-1){qi++;renderQuiz()}
  else{
   data.quiz={answers}; const rec=computeRecommendations(data);
   data.quiz.top=rec.ranked[0].name; data.quiz.riasec=rec.riasecLabel; data.onboarded=true; saveStudentData(data);
@@ -125,7 +131,7 @@ function renderPathways(rec){
  rec=rec||computeRecommendations(data);
  document.getElementById("pathwayGrid").innerHTML=rec.ranked.map((p,i)=>`<div class="card"><div style="display:flex;justify-content:space-between"><span class="path-ic" style="background:${p.bg};margin:0">${p.icon}</span><span style="text-align:right"><b style="font-size:20px">${p.overall}%</b><br><span class="tiny muted">${p.verdict.split("—")[0]}</span></span></div><h3 style="margin:12px 0 6px">${i+1}. ${p.name}</h3><p class="small muted">${p.desc}</p><div style="margin-top:12px"><div style="display:flex;justify-content:space-between" class="tiny muted"><span>Personality</span><b>${p.persPct}%</b></div><div class="bar" style="margin-top:5px"><i style="width:${p.persPct}%"></i></div><div style="display:flex;justify-content:space-between;margin-top:8px" class="tiny muted"><span>Grade feasibility</span><b>${p.feasPct}%</b></div><div class="bar" style="margin-top:5px"><i class="pine" style="width:${Math.min(100,p.feasPct)}%"></i></div></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">${p.occ.map(o=>`<span class="chip">${o}</span>`).join("")}</div>${p.gaps.length?`<p class="tiny" style="color:var(--terra-d);margin-top:10px"><b>Gaps:</b> ${p.gaps.map(g=>g.msg).join(" · ")}</p>`:'<p class="tiny" style="color:var(--green);margin-top:10px"><b>✓ Meets grade requirements</b></p>'}<a class="btn btn-ghost btn-sm" style="margin-top:12px" href="institutions.html">View courses →</a></div>`).join("");
 }
-function redoQuiz(){ qi=0; answers={}; renderQuiz(); toast('↻ Quiz reset — answer all 12 again. Your saved match stays until you finish.'); window.scrollTo({top:0,behavior:'smooth'}); }
+function redoQuiz(){ qi=0; answers={}; renderQuiz(); toast('↻ Quiz reset — answer all '+QUIZ.length+' again. Your saved match stays until you finish.'); window.scrollTo({top:0,behavior:'smooth'}); }
 renderQuiz(); renderTop(); renderPathways();
 </script>
 </body>

@@ -20,7 +20,7 @@
 
 PathFinder helps a student answer two questions: **what should I study, and how do I pay for it?**
 
-A student enters their KCSE subject scores and takes a 12-question career-interest quiz. PathFinder ranks six career pathways by combining *personality fit* (55%) with *grade feasibility* (45%), shows which grades to raise, computes their real KUCCPS weighted cluster points, and points them to institutions and funding.
+A student enters their KCSE subject scores and takes a 6-question career-interest quiz. PathFinder ranks six career pathways by combining *personality fit* (55%) with *grade feasibility* (45%), shows which grades to raise, computes their real KUCCPS weighted cluster points, and points them to institutions and funding.
 
 It is plain HTML, CSS and JavaScript with **no build step**. It runs entirely in the browser in *local demo mode*, and switches to real accounts and cloud sync the moment you add [Supabase](https://supabase.com) keys.
 
@@ -34,7 +34,7 @@ It is plain HTML, CSS and JavaScript with **no build step**. It runs entirely in
   subjects and `t` is your best-seven aggregate. It picks your strongest valid subject
   combination, checks the KUCCPS minimum grade for each required subject, compares you
   against indicative cut-offs, and names the single subject that would lift you most.
-- Onboarding: subject results + 12-question RIASEC quiz → ranked pathways and a
+- Onboarding: subject results + 6-question RIASEC quiz → ranked pathways and a
   per-subject improvement plan.
 - Dashboard with your average, strongest and weakest subject, and a scores-vs-targets chart.
 - Academic tracker: set targets, log assessments, export CSV.

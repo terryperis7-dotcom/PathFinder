@@ -350,9 +350,15 @@ const PF_CUTOFFS = [
    Core calculations
    ============================================================ */
 
-/* Grade → points. Unknown/blank grades score 0. */
+/* Grade → points. Unknown/blank grades score 0.
+   Grade strings reach here from typed input, from the tracker, and from
+   reference data, and some of those spell the minus sign as U+2212 ("B−")
+   rather than the ASCII hyphen the points table is keyed on. Normalise first,
+   otherwise a perfectly good B− silently scores zero and knocks the whole
+   cluster calculation out. */
 function gradePoints(grade) {
-  return PF_GRADE_POINTS[String(grade || "").trim().toUpperCase()] || 0;
+  const g = String(grade || "").trim().toUpperCase().replace(/\u2212/g, "-").replace(/\s+/g, "");
+  return PF_GRADE_POINTS[g] || 0;
 }
 
 /* Sum of the best `n` grade points across every subject the

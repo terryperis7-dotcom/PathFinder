@@ -112,19 +112,19 @@ window.PF_SCHOLARSHIP_URLS={
 
 /* ---------- Passion quiz (RIASEC) — single source of truth ----------
    Each option is [label, RIASEC letter]. Answers are stored as option INDEXES. */
+/* Six questions. The personality score is summed as 3 points for a pathway's
+   primary dimension and 2 for its secondary, then divided by 18 — which is
+   exactly 6 questions x the 3-point primary weight. A longer quiz saturates:
+   with 12 questions a student hit the 100% cap with only half their answers
+   on the primary dimension. These six cover all seven dimensions
+   (R I A S E C + N for nature/agriculture) across three of the questions. */
 window.PF_QUIZ=[
  {q:"Which workplace energises you most every day?",opts:[["Lab, workshop or data hardware room","R"],["Hospital ward or clinic","S"],["Startup hub, trade floor or venture office","E"],["Design studio, film set or exhibition floor","A"],["Farm, field site or conservation area","N"],["Office with clear targets & checklists","C"]]},
- {q:"When solving a hard problem, you first…",opts:[["Break it into data & test hypotheses","I"],["Build a physical prototype","R"],["Research the human story behind it","A"],["Organise team, budget & timeline","C"],["Listen to affected people first","S"],["Lead the pitch & negotiation","E"]]},
- {q:"Which school activity makes you lose track of time?",opts:[["Physics practicals / electronics","R"],["Biology labs / diagnostics","I"],["Programming / robotics club","I"],["Debate, literature or art studio","A"],["Field trips & nature walks","N"],["Business club / entrepreneurship","E"]]},
- {q:"Your ideal weekend project would be…",opts:[["Fixing an engine or building a circuit","R"],["Volunteering at a health camp","S"],["Designing a poster or editing a film","A"],["Running a small business","E"],["Gardening or animal care","N"],["Organising files, budgets & schedules","C"]]},
  {q:"In a group project, you naturally become the…",opts:[["Technical builder","R"],["Researcher with evidence","I"],["Creative designer","A"],["Supporter who includes everyone","S"],["Presenter who sells the idea","E"],["Planner with deadlines","C"]]},
  {q:"Which outcome matters most to you?",opts:[["Systems that work reliably","R"],["Deep understanding & discovery","I"],["Original creative work","A"],["Lives improved in my community","S"],["A thriving enterprise I lead","E"],["Order, accuracy & reliability","C"]]},
  {q:"Which Kenya career excites you most?",opts:[["Software / civil / mechatronics","R"],["Medicine / nursing / pharmacy","S"],["Finance / logistics / actuarial","E"],["Film / design / journalism","A"],["Agriculture / veterinary / forestry","N"],["Accounting / auditing / admin","C"]]},
- {q:"Your strongest subject feels like…",opts:[["Maths / Physics — logic","I"],["Biology / Chemistry — life science","I"],["English / Kiswahili — ideas","A"],["Business / Geography — systems","E"],["Agriculture — food & land","N"],["Computer Studies — tech & data","C"]]},
- {q:"University degree vs TVET diploma — your instinct?",opts:[["University degree first","C"],["TVET diploma — faster to work","R"],["Either, if the career fits","S"],["Not sure — guide me with data","I"],["Entrepreneurship over both","E"],["Creative portfolio over both","A"]]},
  {q:"You learn best when lessons are…",opts:[["Hands-on: build, fix, test","R"],["Data-driven: experiments","I"],["Visual & story-based","A"],["Discussion & real examples","S"],["Structured checklists","C"],["Field-based & practical","N"]]},
- {q:"A friend would describe you as…",opts:[["Practical & hands-on","R"],["Curious & analytical","I"],["Imaginative & expressive","A"],["Caring & dependable","S"],["Driven & persuasive","E"],["Organised & precise","C"]]},
- {q:"Finally — what does success look like for you?",opts:[["Systems I built for thousands","R"],["Expertise people trust","I"],["Work that inspires people","A"],["Lives I improved","S"],["An enterprise I lead","E"],["A stable, well-run career","C"]]}
+ {q:"A friend would describe you as…",opts:[["Practical & hands-on","R"],["Curious & analytical","I"],["Imaginative & expressive","A"],["Caring & dependable","S"],["Driven & persuasive","E"],["Organised & precise","C"]]}
 ];
 
 /* ============================================================

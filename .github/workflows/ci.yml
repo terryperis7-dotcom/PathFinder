@@ -75,6 +75,10 @@ jobs:
         run: |
           npx --no-install node tools/overlay_audit.js 360 640
           npx --no-install node tools/overlay_audit.js 740 360
+      # An element wider than the screen is what forces a phone to zoom out.
+      # The viewport tag is fine on every page, so this is the real check.
+      - name: Horizontal overflow at every phone size
+        run: npx --no-install node tools/overflow_audit.js
 
   # "Nothing overflows" is a low bar — a page can pass and still be cramped.
   # This job measures reading comfort, spacing density and alignment. It
@@ -93,3 +97,16 @@ jobs:
         run: (python3 -m http.server 8000 &) && sleep 2
       - run: npx --no-install node tools/comfort_audit.js 360 640
       - run: npx --no-install node tools/comfort_audit.js 740 360
+
+  # Data that still parses can be simply wrong: grade tables that disagree,
+  # scoring that saturates, institutions that do not exist. These are the
+  # invariants behind everything a student is shown. No browser required.
+  logic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run test:logic

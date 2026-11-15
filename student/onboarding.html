@@ -25,19 +25,19 @@
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div class="side-logo"><span class="brand-mark">P</span><span><b>PathFinder</b><small>KENYA · STUDENT</small></span><button class="side-close" onclick="closeSidebar()" aria-label="Close menu">✕</button></div>
-    <div class="side-role">🎓 <b data-user-name>Student</b><br><span class="tiny">First-time setup · 2 minutes</span></div>
+    <div class="side-role"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-grad"/></svg> <b data-user-name>Student</b><br><span class="tiny">First-time setup · 2 minutes</span></div>
     <nav class="snav">
       <h5>SETUP</h5>
-      <a href="onboarding.html" class="on">✨ &nbsp;My Setup</a>
-      <a href="dashboard.html">⌂ &nbsp;Dashboard</a>
-      <a href="cluster.html">🧮 &nbsp;Cluster Points</a>
-      <a href="quiz.html">🧭 &nbsp;Passion Quiz</a>
-      <a href="institutions.html">🏛 &nbsp;Institutions</a>
-      <a href="funding.html">💰 &nbsp;Funding &amp; HELB</a>
-      <a href="tracker.html">📊 &nbsp;My Tracker</a>
+      <a href="onboarding.html" class="on"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-spark"/></svg>My Setup</a>
+      <a href="dashboard.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-home"/></svg>Dashboard</a>
+      <a href="cluster.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-cluster"/></svg>Cluster Points</a>
+      <a href="quiz.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-compass"/></svg>Passion Quiz</a>
+      <a href="institutions.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-inst"/></svg>Institutions</a>
+      <a href="funding.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-funding"/></svg>Funding &amp; HELB</a>
+      <a href="tracker.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-tracker"/></svg>My Tracker</a>
       <h5>ACCOUNT</h5>
-      <a href="profile.html">👤 &nbsp;Profile &amp; Stage</a>
-      <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
+      <a href="profile.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-profile"/></svg>Profile &amp; Stage</a>
+      <a href="#" onclick="signOutDeep();return false"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-signout"/></svg>Sign out</a>
     </nav>
     <div class="side-foot"><b>🔒 Your real data</b><br>Only you + your guardian see this. No mock data in a real account.<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
   </aside>
@@ -56,7 +56,7 @@
         <span class="step-dot" id="dot2">2</span><span style="flex:1;height:2px;background:var(--line)"></span>
         <span class="step-dot" id="dot3">3</span>
       </div>
-      <p class="tiny muted" style="margin-bottom:16px">1 · Results &nbsp;·&nbsp; 2 · Passion quiz (12 questions) &nbsp;·&nbsp; 3 · Your personalised path &amp; improvement plan</p>
+      <p class="tiny muted" style="margin-bottom:16px">1 · Results &nbsp;·&nbsp; 2 · Passion quiz (6 questions) &nbsp;·&nbsp; 3 · Your personalised path &amp; improvement plan</p>
 
       <!-- STEP 1: RESULTS -->
       <section id="step1">
@@ -89,7 +89,7 @@
       <!-- STEP 2: QUIZ -->
       <section id="step2" style="display:none">
         <div class="card">
-          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b id="qLab">Question 1 of 12</b><span class="tiny muted" id="qPct">5%</span></div>
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b id="qLab">Question 1 of 6</b><span class="tiny muted" id="qPct">17%</span></div>
           <div class="prog" style="margin:14px 0"><i id="qBar" style="width:5%"></i></div>
           <h3 id="qText" style="font-size:20px;margin-bottom:6px"></h3>
           <p class="tiny muted" style="margin-bottom:14px" id="qHint">Choose the option that feels most like you. There are no wrong answers.</p>
@@ -99,7 +99,7 @@
             <button class="btn btn-dark" id="qNext" onclick="nextQ()">Next →</button>
           </div>
         </div>
-        <p class="tiny muted" style="margin-top:12px;text-align:center">12 questions · 6 options each · Maps your RIASEC personality (Realistic, Investigative, Artistic, Social, Enterprising, Conventional, Nature) to 6 Kenyan career pathways.</p>
+        <p class="tiny muted" style="margin-top:12px;text-align:center">6 questions · 6 options each · Maps your RIASEC personality (Realistic, Investigative, Artistic, Social, Enterprising, Conventional, Nature) to 6 Kenyan career pathways.</p>
       </section>
 
       <!-- STEP 3: RESULTS -->
@@ -131,6 +131,13 @@
 const sess=requireRole("student","../signin.html"); if(sess)fillUserChip();
 ensureDemoData();
 let draft=getStudentData()||{results:[],quiz:{answers:{}}};
+/* If the quiz was reset because the question set changed, say so plainly
+   instead of silently showing an empty quiz to someone who already finished. */
+if(draft.quizResetReason){
+  delete draft.quizResetReason;
+  setTimeout(()=>toast("↻ We shortened the career quiz to "+PF_QUIZ.length+
+    " questions. Your old answers were cleared \u2014 please answer again to refresh your match."),700);
+}
 let step=1, qi=0, qAnswers=draft.quiz?.answers||{};
 
 /* ---------- Step 1: results rows ---------- */
@@ -169,24 +176,27 @@ function saveStep1(){
  draft.quiz={answers:qAnswers}; saveStudentData(draft);
  goStep(2);
 }
-/* ---------- Step 2: 12-question, 6-option adaptive quiz ---------- */
+/* ---------- Step 2: 6-question, 6-option adaptive quiz ---------- */
 const QUIZ=window.PF_QUIZ;
 function renderQ(){
+ /* Guard the index: a stored or restored position past the last question
+    would make QUIZ[qi] undefined and take the whole page down. */
+ if(!(qi>=0) || qi>=QUIZ.length) qi=0;
  const q=QUIZ[qi];
- document.getElementById("qLab").textContent=`Question ${qi+1} of 12`;
- document.getElementById("qPct").textContent=Math.round((qi+1)/12*100)+"%";
- document.getElementById("qBar").style.width=((qi+1)/12*100)+"%";
+ document.getElementById("qLab").textContent=`Question ${qi+1} of ${QUIZ.length}`;
+ document.getElementById("qPct").textContent=Math.round((qi+1)/QUIZ.length*100)+"%";
+ document.getElementById("qBar").style.width=((qi+1)/QUIZ.length*100)+"%";
  document.getElementById("qText").textContent=q.q;
- document.getElementById("qNext").textContent=qi===11?"See my personalised path ✓":"Next →";
+ document.getElementById("qNext").textContent=qi===QUIZ.length-1?"See my personalised path ✓":"Next →";
  const L=["A","B","C","D","E","F"];
  document.getElementById("qOpts").innerHTML=q.opts.map((o,i)=>`<button class="quiz-opt ${qAnswers[qi]===i?"sel":""}" onclick="qAnswers[${qi}]=${i};renderQ()"><span class="k">${L[i]}</span><span><b>${o[0]}</b></span></button>`).join("");
 }
 function nextQ(){
  if(qAnswers[qi]==null){toast("Please choose one option — it helps us understand you.");return}
- if(qi<11){qi++;renderQ()} else finishOnboarding();
+ if(qi<QUIZ.length-1){qi++;renderQ()} else finishOnboarding();
 }
 function prevQ(){if(qi>0){qi--;renderQ()}}
-function redoQuiz(){ qi=0; qAnswers={}; draft.quiz={answers:{}}; draft.onboarded=false; saveStudentData(draft); goStep(2); toast("↻ Quiz reset — 12 fresh questions. Good luck!"); }
+function redoQuiz(){ qi=0; qAnswers={}; draft.quiz={answers:{}}; draft.onboarded=false; saveStudentData(draft); goStep(2); toast("↻ Quiz reset — "+PF_QUIZ.length+" fresh questions. Good luck!"); }
 function finishOnboarding(){
  draft.quiz={answers:qAnswers};
  const rec=computeRecommendations(draft);
@@ -236,7 +246,7 @@ function goStep(n){
  });
  document.getElementById("stepNum").textContent=n;
  document.getElementById("stepTitle").textContent=n===1?"Tell us your real results":n===2?"Now, the passion quiz":"Your personalised path";
- document.getElementById("stepSub").textContent=n===1?"We use your actual marks — never mock data — to estimate which pathways you can qualify for.":n===2?"12 questions, 6 options each. Combined with your grades, this reveals pathways you both love AND qualify for.":"Ranked by personality + real grade feasibility, with a concrete plan to improve weak subjects.";
+ document.getElementById("stepSub").textContent=n===1?"We use your actual marks — never mock data — to estimate which pathways you can qualify for.":n===2?(PF_QUIZ.length+" questions, "+PF_QUIZ[0].opts.length+" options each. Combined with your grades, this reveals pathways you both love AND qualify for."):"Ranked by personality + real grade feasibility, with a concrete plan to improve weak subjects.";
  window.scrollTo({top:0,behavior:"smooth"});
  if(n===2)renderQ();
 }

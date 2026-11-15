@@ -103,6 +103,23 @@ label.flab{font-size:13px;font-weight:700;color:var(--pine3);display:block;margi
 .tabs{display:flex;gap:8px;flex-wrap:wrap}
 .tabs button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-weight:700;font-size:13px;color:var(--pine3)}
 .tabs button.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+/* ---------- Language switch (EN / SW) ----------
+   The two buttons ship with hard-coded inline background and colour, so the
+   selected state was baked into the markup and could never move: clicking SW
+   translated nothing the eye could see and left EN highlighted. These rules
+   out-specify the inline styles so the .on class actually drives the button. */
+.lang{ display:flex; border:1.5px solid var(--line); border-radius:10px;
+  overflow:hidden; background:#fff; }
+.lang button{
+  border:0 !important; background:#fff !important; color:var(--muted) !important;
+  padding:8px 11px !important; font-weight:800 !important; font-size:12px !important;
+  cursor:pointer; transition:background .15s,color .15s;
+}
+.lang button.on{
+  background:var(--pine) !important; color:#fff !important;
+}
+.lang button:hover:not(.on){ background:var(--lime-soft) !important; color:var(--pine3) !important; }
+.lang button:focus-visible{ outline:2px solid var(--pine); outline-offset:2px; }
 .alert-green{background:#e6f4ea;border:1px solid #bfe3c6;border-radius:14px;padding:16px;font-size:14px;color:#14532d}
 .alert-red{background:#fdecea;border:1px solid #f5c6bd;border-radius:14px;padding:16px;font-size:14px;color:#7a1f14}
 .alert-mock{background:#fff8e1;border:1.5px dashed #d9b84a;border-radius:14px;padding:14px 16px;font-size:13.5px;color:#5d4e00}
@@ -150,6 +167,11 @@ label.flab{font-size:13px;font-weight:700;color:var(--pine3);display:block;margi
 .snav h5{font-size:10px;letter-spacing:.16em;color:#9a9ab5;margin:16px 8px 7px;font-weight:800}
 .snav a{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:13px;color:#6b6b8a;font-size:14px;font-weight:600;margin-bottom:3px}
 .snav a svg{width:18px;height:18px;flex:0 0 18px}
+/* Drawn icons, not emoji: one stroke weight and one colour everywhere. */
+.ic{width:18px;height:18px;flex:0 0 18px;stroke:currentColor;fill:none;
+  stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.side-role .ic,.side-foot .ic{width:16px;height:16px;flex:0 0 16px;vertical-align:-3px}
+.side-role{display:flex;align-items:center;gap:9px}
 .snav a:hover{background:#f5f3ff;color:var(--pine3)}
 .snav a.on{background:linear-gradient(135deg,#ede9ff,#f3efff);color:var(--pine);box-shadow:inset 0 0 0 1px rgba(124,92,255,.14)}
 .side-foot{margin:14px;background:#f7f7fa;border:1px solid var(--line);border-radius:15px;padding:14px;font-size:12px;color:var(--muted)}
@@ -407,6 +429,18 @@ img{ max-width:100%; }
   /* Cells that span the whole table (empty states) stay as plain blocks. */
   table.stack td[colspan]{ display:block; text-align:left; padding:14px 0; }
   table.stack td.num{ justify-content:space-between; }
+  /* Action cells hold several buttons. Stacked, they must wrap onto their own
+     lines — a nowrap cell here is what pushed the whole table off-screen. */
+  table.stack td.act-cell{
+    flex-wrap:wrap; white-space:normal; gap:8px;
+    justify-content:flex-start; padding-top:12px;
+  }
+  table.stack td.act-cell .btn{ flex:1 1 auto; }
+  /* .table-scroll deliberately pins wide tables to 560px so columns keep their
+     shape and the wrapper scrolls. A stacked table is not scrolled — it is
+     re-laid-out as cards — so that floor would push it straight off-screen.
+     Specificity beats the later .table-scroll table rule, so order is safe. */
+  .table-scroll table.stack{ min-width:0; }
   /* Give text a comfortable measure instead of a squeezed column. */
   .tiny, .small{ max-width:68ch; }
   .kpi-num{ font-size:30px; }
@@ -429,6 +463,16 @@ img{ max-width:100%; }
   /* ---- Thumb-sized controls (the 44x44 minimum touch target) ---- */
   .hamb, .side-close, .iconbtn{ min-width:44px; min-height:44px; }
   .side-close{ width:44px; height:44px; }
+  /* On a 360x640 phone the drawer spent 259px on branding, role chip and
+     footer, leaving a 340px window onto a 567px nav — so "Sign out" was two
+     scrolls away. Tighten the chrome so the links get the height instead. */
+  .side-logo{ padding:12px 14px; }
+  .side-logo b{ font-size:16px; }
+  .side-role{ margin:0 12px 8px; padding:9px 12px; }
+  .snav{ padding:4px 10px; }
+  .snav h5{ margin:12px 8px 5px; }
+  .snav a{ padding:10px 12px; margin-bottom:2px; min-height:44px; }
+  .side-foot{ margin:10px 12px; padding:11px 12px; font-size:12px; }
   /* Language switch and other small toggles */
   .lang button, button[data-lang]{ min-width:44px; min-height:44px; }
   /* Footer and utility text links: grow the hit area with padding, then pull

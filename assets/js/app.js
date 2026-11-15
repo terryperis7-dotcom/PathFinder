@@ -301,7 +301,34 @@ function demoSignin(role) {
 
 /* ---------- 4. Student data store (per account) ---------- */
 function dataKey(email) { const s = getSession(); return "pf_data_" + (email || (s ? s.email : "guest")); }
-function getStudentData() { return lsGet(dataKey(), null); }
+/* Answers are stored as {questionIndex: optionIndex}. If the quiz ever gets
+   shorter or an option is removed, a stored answer can point at a question or
+   option that no longer exists. Those answers are silently ignored today, but
+   they would leave a student believing their quiz is complete when it is not,
+   so drop them and let the UI ask for the missing ones again. */
+function sanitiseQuizAnswers(data) {
+  if (!data || !data.quiz || !data.quiz.answers) return data;
+  const quiz = window.PF_QUIZ || [];
+  const answers = data.quiz.answers;
+  const clean = {};
+  let stale = 0;
+  Object.keys(answers).forEach(function (qi) {
+    const i = +qi, q = quiz[i], v = answers[qi];
+    const opt = q && q.opts ? q.opts[+v] : null;
+    if (opt) clean[i] = +v; else stale++;
+  });
+  if (!stale) return data;
+  /* Do NOT keep the surviving answers. If the question set changed, an answer
+     at index 2 may now belong to a different question than the one the student
+     saw, so its RIASEC letter is no longer what they chose. Silently keeping it
+     would report a personality profile the student never gave. Clear the quiz
+     and let them answer again — six questions takes about a minute. */
+  data.quiz.answers = {};
+  data.onboarded = false;
+  data.quizResetReason = "questions-changed";
+  return data;
+}
+function getStudentData() { return sanitiseQuizAnswers(lsGet(dataKey(), null)); }
 let _syncTimer = null;
 function saveStudentData(d) {
   lsSet(dataKey(), d);                                       // instant local cache = fast UI
@@ -337,7 +364,7 @@ function ensureDemoData() { if (isDemo() && !getStudentData()) saveStudentData(m
    (b) grade feasibility vs typical KUCCPS cluster requirements.
    NOTE: this ESTIMATES pathway fit. Official cluster points are calculated by KUCCPS. */
 const PATHWAY_DEFS = [
-  { id: "eng", name: "Engineering & Technology", icon: "⚙", bg: "#eef7d6", cluster: "Cluster 1 & 3", req: { Mathematics: 75, Physics: 70, Chemistry: 60, "Computer Studies": 60 }, riasec: ["R", "I"], desc: "Software, civil, mechatronics, electrical — computational & built systems.", occ: ["Software Engineer", "Civil Engineer", "Mechatronics Tech"], unis: "UoN, JKUAT, TUK", tvet: "Kabwe Poly, Kenya Coast Poly" },
+  { id: "eng", name: "Engineering & Technology", icon: "⚙", bg: "#eef7d6", cluster: "Cluster 1 & 3", req: { Mathematics: 75, Physics: 70, Chemistry: 60, "Computer Studies": 60 }, riasec: ["R", "I"], desc: "Software, civil, mechatronics, electrical — computational & built systems.", occ: ["Software Engineer", "Civil Engineer", "Mechatronics Tech"], unis: "UoN, JKUAT, TUK", tvet: "Nairobi NP, Kiambu NP" },
   { id: "health", name: "Health & Medicine", icon: "✚", bg: "#fdecea", cluster: "Cluster 13", req: { Biology: 65, Chemistry: 65, Mathematics: 60, Physics: 60 }, riasec: ["S", "I"], desc: "Clinical medicine, nursing, pharmacy, lab science.", occ: ["Clinical Officer", "Nurse (KRCHN)", "Lab Scientist"], unis: "UoN, Moi, Egerton", tvet: "KMTC (71 campuses)" },
   { id: "business", name: "Business & Finance", icon: "↗", bg: "#e6f4ea", cluster: "Cluster 6 & 7", req: { Mathematics: 65, English: 60 }, riasec: ["E", "C"], desc: "Finance, audit, logistics, actuarial, fintech.", occ: ["Financial Analyst", "Supply Chain Lead", "Actuarial Scientist"], unis: "Strathmore, KCA, Co-op Univ", tvet: "KASNEB (CPA/CIFA)" },
   { id: "agri", name: "Agriculture & Environment", icon: "🌱", bg: "#eef7d6", cluster: "Cluster 11", req: { Biology: 60, Chemistry: 55, Mathematics: 55 }, riasec: ["R", "N"], desc: "Agronomy, food tech, climate-smart agriculture.", occ: ["Agronomist", "Food Technologist", "Soil Scientist"], unis: "Egerton, JKUAT", tvet: "Bukura Agricultural College" },
@@ -355,7 +382,27 @@ const SUBJECT_FOCUS = {
 };
 const GENERIC_FOCUS = ["Past-paper practice + topic mastery for your weakest topics.", "2 × 45 min / week"];
 
-function gradeOf(score) { return score >= 80 ? "A" : score >= 70 ? "A−" : score >= 60 ? "B+" : score >= 50 ? "B" : score >= 40 ? "C+" : "C"; }
+/* Percentage -> KCSE letter grade.
+   This used to carry its own boundaries, and they were wrong: everything from
+   0 to 39 collapsed to "C", so a student averaging 22% was shown a passing
+   grade instead of an E, and 45% was shown as "B" instead of C-. It also
+   returned "A-" with a Unicode minus (U+2212) while the grade-points table is
+   keyed on an ASCII hyphen, so any lookup scored that grade as zero points.
+   cluster.js owns the official KNEC table; use it when it is on the page. */
+function gradeOf(score) {
+  const n = Number(score);
+  if (!isFinite(n) || n < 0) return "E";
+  const table = window.PF_KNEC_GRADES;
+  if (table && table.length) {
+    // Ordered best-first, so the first band the score reaches is the grade.
+    const hit = table.filter(function (g) { return n >= g.min; })[0];
+    if (hit) return String(hit.grade).replace(/\u2212/g, "-");
+  }
+  // Fallback for pages that do not load cluster.js. Keep in step with it.
+  return n >= 80 ? "A" : n >= 75 ? "A-" : n >= 70 ? "B+" : n >= 65 ? "B" : n >= 60 ? "B-"
+       : n >= 55 ? "C+" : n >= 50 ? "C" : n >= 45 ? "C-" : n >= 40 ? "D+"
+       : n >= 35 ? "D" : n >= 30 ? "D-" : "E";
+}
 
 /* Quiz answers are stored as option INDEXES (new) or RIASEC LETTERS (legacy/remote). Return the letter. */
 function quizLetter(qi, v) {
@@ -510,49 +557,160 @@ function initGlobalSearch() {
   if (el) attachAutocomplete(el, globalSearchItems, function (it) { toast("Searching: " + it.title); });
 }
 
-/* ---------- Kiswahili (SW) / English (EN) toggle ---------- */
+/* ---------- Kiswahili (SW) / English (EN) toggle ----------
+   Two things used to make this look broken. First, the EN/SW buttons carried
+   hard-coded inline colours, so the highlighted button never moved no matter
+   which language was active (the .on class is now styled in style.css with
+   enough specificity to win). Second, the Swahili dictionary held about thirty
+   strings, so switching translated almost nothing the eye could see.
+
+   English needs no entries: it is the source language. Original text is
+   cached per element, so switching back is instant and needs no reload. */
 window.PF_I18N = {
   en: {},
   sw: {
-    "Dashboard": "Dashibodi", "My progress": "Maendeleo yangu", "Career explorer": "Kichunguzi cha kazi",
-    "Universities & TVET": "Vyuo vikuu & TVET", "Scholarships & funding": "Ruzuku & ufadhili",
-    "Settings": "Mipangilio", "Help & support": "Msaada", "Sign in": "Ingia", "Get started free": "Anza bure",
-    "Create your free account": "Fungua akaunti yako ya bure", "Take the 60-second quiz": "Fanya quiz ya sekunde 60",
-    "Every Kenyan student deserves a clear path.": "Kila mwanafunzi wa Kenya anastahili njia iliyo wazi.",
-    "Hello, future achiever": "Habari, mshindi wa baadaye", "Big dreams start here.": "Ndoto kubwa huanza hapa.",
-    "Discover your path": "Gundua njia yako", "Add a result": "Weka matokeo", "Your overview": "Muhtasari wako",
-    "Overall average": "Wastani wa jumla", "Subjects tracked": "Masomo yanayofuatiliwa", "Strongest subject": "Somo bora zaidi",
-    "Saved institutions": "Vyuo vilivyohifadhiwa", "Passion Quiz": "Quiz ya shauku", "My Tracker": "Kifuatiliaji changu",
-    "Profile & Stage": "Wasifu & hatua", "Sign out": "Toka", "Save changes": "Hifadhi mabadiliko"
+    /* ---- navigation ---- */
+    "MY PATH": "NJIA YANGU", "ACCOUNT": "AKAUNTI", "TEACHING": "UFUNDISHAJI",
+    "GOVERNANCE": "UTAWALA", "SETUP": "USANIDI",
+    "Dashboard": "Dashibodi", "Cluster Points": "Alama za Klasta",
+    "Passion Quiz": "Quiz ya Shauku", "Institutions": "Vyuo",
+    "Funding & HELB": "Ufadhili & HELB", "My Tracker": "Kifuatiliaji Changu",
+    "My Setup": "Usanidi Wangu", "Profile & Stage": "Wasifu & Hatua",
+    "Public homepage": "Ukurasa wa mwanzo", "Sign out": "Toka",
+    "Privacy": "Faragha", "Terms": "Masharti",
+    "Home": "Nyumbani", "Schedule": "Ratiba", "Profile": "Wasifu",
+    "Site": "Tovuti", "Console": "Dashibodi Kuu",
+    "Deployment Centre": "Kituo cha Uwekaji",
+    "Data Protection (DPA)": "Ulinzi wa Data (DPA)",
+    "My Students": "Wanafunzi Wangu", "Sessions & Schedule": "Vipindi & Ratiba",
+    "Tutor Profile": "Wasifu wa Mkufunzi",
+
+    /* ---- pathway names (shown in ranked results) ---- */
+    "Engineering & Technology": "Uhandisi na Teknolojia",
+    "Agriculture & Environment": "Kilimo na Mazingira",
+    "Health & Medicine": "Afya na Tiba",
+    "Business & Finance": "Biashara na Fedha",
+    "Creative Arts & Media": "Sanaa na Vyombo vya Habari",
+    "Law, Education & Governance": "Sheria, Elimu na Utawala",
+
+    /* ---- dashboard ---- */
+    "Your average": "Wastani wako", "Top pathway match": "Njia bora kwako",
+    "Strongest subject": "Somo bora zaidi", "Focus first": "Anza na hili",
+    "Next step": "Hatua inayofuata",
+    "Your subjects at a glance": "Masomo yako kwa muhtasari",
+    "Open full tracker →": "Fungua kifuatiliaji kamili →",
+    "Improvement plan →": "Mpango wa kuboresha →",
+    "Open calculator →": "Fungua kikokotoo →",
+    "Funding guide →": "Mwongozo wa ufadhili →",
+    "Explore institutions for this path →": "Tazama vyuo vya njia hii →",
+    "See all 6 →": "Tazama zote 6 →",
+
+    /* ---- onboarding ---- */
+    "Your personalised path": "Njia yako binafsi",
+    "Academic stage": "Hatua ya masomo", "County": "Kaunti",
+    "School / centre": "Shule / kituo",
+    "Latest exam type": "Aina ya mtihani wa mwisho",
+    "Dream career (optional)": "Kazi ya ndoto (hiari)",
+    "Your subject results (%)": "Matokeo ya masomo yako (%)",
+    "Add subject": "Ongeza somo", "Subject": "Somo",
+    "Score %": "Alama %", "Target %": "Lengo %",
+    "Continue to quiz →": "Endelea kwenye quiz →",
+    "Back": "Rudi", "Next →": "Inayofuata →",
+
+    /* ---- admin ---- */
+    "Admin Governance": "Utawala", "Accounts": "Akaunti",
+    "Degree clusters": "Klasta za shahada",
+    "Data checks failing": "Ukaguzi ulioshindwa",
+    "Reference data integrity": "Uadilifu wa data rejea",
+    "User": "Mtumiaji", "Role": "Wajibu", "Status": "Hali",
+    "Onboarded": "Amesajiliwa", "Actions": "Vitendo",
+    "Export all users (CSV)": "Pakua watumiaji wote (CSV)",
+    "Export dataset (CSV)": "Pakua data (CSV)",
+
+    /* ---- tutor ---- */
+    "Sessions logged": "Vipindi vilivyorekodiwa",
+    "Weekly availability": "Upatikanaji wa wiki",
+    "Est. monthly": "Makadirio ya mwezi",
+    "Verification": "Uthibitisho", "Your sessions": "Vipindi vyako",
+    "Student": "Mwanafunzi", "When": "Wakati",
+    "Hourly rate (KES)": "Kiwango cha saa (KES)",
+    "Hours / week": "Saa / wiki",
+    "Rate estimator": "Kadirio la kiwango",
+    "Manage schedule →": "Dhibiti ratiba →",
+
+    /* ---- shared ---- */
+    "Settings": "Mipangilio", "Help & support": "Msaada",
+    "Sign in": "Ingia", "Get started free": "Anza bure",
+    "Save changes": "Hifadhi mabadiliko"
   }
 };
+
+/* Which nodes the translator may rewrite. Deliberately narrow: it must not
+   touch inputs, numbers, or anything a script re-renders. */
+var PF_I18N_SELECTOR = "a,button,h1,h2,h3,h4,h5,th,label,span,p,div";
+
+function applyTranslations(dict) {
+  var count = 0;
+  document.querySelectorAll(PF_I18N_SELECTOR).forEach(function (el) {
+    if (/^(INPUT|TEXTAREA|SELECT|SCRIPT|STYLE|SVG|USE|PATH)$/.test(el.tagName)) return;
+    // Translate the element's OWN text nodes only. A plain `children.length`
+    // test would skip every nav link, because each now carries an icon: the
+    // label sits in a text node beside the <svg>, not inside an element.
+    Array.prototype.forEach.call(el.childNodes, function (n) {
+      if (n.nodeType !== 3 || !n.nodeValue || !n.nodeValue.trim()) return;
+      var key = n.nodeValue.trim();
+      if (!dict[key]) return;
+      // Remember the English once, so switching back needs no page reload.
+      if (el.dataset.pfOrig === undefined) el.dataset.pfOrig = el.textContent;
+      n.nodeValue = n.nodeValue.replace(key, dict[key]);
+      count++;
+    });
+  });
+  return count;
+}
+
+function restoreTranslations() {
+  var count = 0;
+  document.querySelectorAll("[data-pf-orig]").forEach(function (el) {
+    el.textContent = el.dataset.pfOrig;
+    delete el.dataset.pfOrig;
+    count++;
+  });
+  return count;
+}
+
 function setLang(lang) {
   try { localStorage.setItem("pf_lang", lang); } catch (e) {}
-  document.querySelectorAll("[data-lang]").forEach(function (b) { b.classList.toggle("on", b.dataset.lang === lang); });
-  const dict = window.PF_I18N[lang] || {};
+  document.querySelectorAll("[data-lang]").forEach(function (b) {
+    b.classList.toggle("on", b.dataset.lang === lang);
+    b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+  });
+  document.documentElement.lang = lang;
+
   if (lang === "sw") {
-    document.querySelectorAll("a,button,h1,h2,h3,span,div,p").forEach(function (el) {
-      if (el.children.length === 0 && el.textContent) {
-        const k = el.textContent.trim();
-        if (dict[k]) el.textContent = el.textContent.replace(k, dict[k]);
-      }
-    });
-    document.documentElement.lang = "sw";
-    toast("🇰🇪 Kiswahili Sanifu imewashwa — muongozo wa kozi na vyuo.");
+    var n = applyTranslations(window.PF_I18N.sw || {});
+    toast("Kiswahili Sanifu imewashwa — " + n + " maandishi yametafsiriwa.");
   } else {
-    document.documentElement.lang = "en";
-    location.reload();
+    var m = restoreTranslations();
+    toast("English restored" + (m ? " — " + m + " labels returned to English." : "."));
   }
+  // Re-running the page's own setup keeps any dynamically built labels honest.
+  if (typeof window.initPreviewBanner === "function") { /* no-op: banner is static */ }
 }
+
 function initLang() {
   let lang = "en";
   try { lang = localStorage.getItem("pf_lang") || "en"; } catch (e) {}
   document.querySelectorAll("[data-lang]").forEach(function (b) {
     b.classList.toggle("on", b.dataset.lang === lang);
+    b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+    b.setAttribute("type", "button");
     b.onclick = function () { setLang(b.dataset.lang); };
   });
-  if (lang === "sw") setLang("sw");
+  document.documentElement.lang = lang;
+  if (lang === "sw") applyTranslations(window.PF_I18N.sw || {});
 }
+
 /* Tutor and admin workspaces are UI previews with sample data and simulated actions. Say so on every page. */
 function initPreviewBanner() {
   if (!/\/(tutor|admin)\//.test(location.pathname)) return;

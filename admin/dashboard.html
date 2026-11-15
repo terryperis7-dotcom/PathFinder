@@ -28,12 +28,12 @@
     <div class="side-role">🛡 <b data-user-name>SuperAdmin</b><br><span class="tiny" data-user-role>SuperAdmin</span></div>
     <nav class="snav">
       <h5>GOVERNANCE</h5>
-      <a href="dashboard.html" class="on">⌂ &nbsp;Console</a>
-      <a href="deployment.html">🚀 &nbsp;Deployment Centre</a>
-      <a href="dpa.html">🛡 &nbsp;Data Protection (DPA)</a>
+      <a href="dashboard.html" class="on"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-home"/></svg>Console</a>
+      <a href="deployment.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-rocket"/></svg>Deployment Centre</a>
+      <a href="dpa.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-home"/></svg>Data Protection (DPA)</a>
       <h5>ACCOUNT</h5>
-      <a href="../index.html">← &nbsp;Public homepage</a>
-      <a href="#" onclick="signOutDeep();return false">↩ &nbsp;Sign out</a>
+      <a href="../index.html"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-back"/></svg>Public homepage</a>
+      <a href="#" onclick="signOutDeep();return false"><svg class="ic" aria-hidden="true" focusable="false"><use href="#pf-signout"/></svg>Sign out</a>
     </nav>
     <div class="side-foot"><b>● ROLE: ADMIN</b><br>Built around the Kenya Data Protection Act 2019<br><a href="../legal/privacy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></div>
   </aside>
@@ -74,7 +74,7 @@
         <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center"><h3>User Control — manage who uses PathFinder</h3><span class="chip pine">Admin privileges</span></div>
         <p class="tiny muted" style="margin:6px 0 12px">Suspend, reactivate, reset onboarding, change roles, or remove accounts.
           In local mode these are the accounts stored in this browser; with Supabase connected, use the database policies instead.</p>
-        <div style="overflow:auto"><table><thead><tr><th>User</th><th>Role</th><th>Status</th><th>Onboarded</th><th>Actions</th></tr></thead><tbody id="userTable"></tbody></table></div>
+        <div class="table-scroll" style="overflow:auto"><table class="stack"><thead><tr><th>User</th><th>Role</th><th>Status</th><th>Onboarded</th><th>Actions</th></tr></thead><tbody id="userTable"></tbody></table></div>
         <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
           <button class="btn btn-ghost btn-sm" onclick="exportUsers()">⬇ Export all users (CSV)</button>
         </div>
@@ -149,9 +149,12 @@ function renderUsers(){
   const rows = users.map(function(u,i){
     const status = u.suspended ? '<span class="chip red">Suspended</span>' : '<span class="chip green">Active</span>';
     const ob = u.role==="student" ? ((getStudentDataFor(u.email)||{}).onboarded ? "Yes" : "No") : "—";
-    return '<tr><td><b>' + esc(u.name) + '</b><br><span class="tiny muted">' + esc(u.email) + '</span></td>' +
-      '<td><span class="chip">' + esc(u.role) + '</span></td><td>' + status + '</td><td>' + ob + '</td>' +
-      '<td style="white-space:nowrap">' +
+    return '<tr>' +
+      '<td data-label="User"><b>' + esc(u.name) + '</b><br><span class="tiny muted">' + esc(u.email) + '</span></td>' +
+      '<td data-label="Role"><span class="chip">' + esc(u.role) + '</span></td>' +
+      '<td data-label="Status">' + status + '</td>' +
+      '<td data-label="Onboarded">' + ob + '</td>' +
+      '<td data-label="Actions" class="act-cell">' +
       '<button class="btn btn-ghost btn-sm" onclick="adminToggleSuspend(' + i + ')">' + (u.suspended ? "Reactivate" : "Suspend") + '</button> ' +
       '<button class="btn btn-ghost btn-sm" onclick="adminResetOnboard(' + i + ')">Reset setup</button> ' +
       '<button class="btn btn-sm" style="background:var(--red);color:#fff" onclick="adminDeleteUser(' + i + ')">Remove</button></td></tr>';

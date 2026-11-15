@@ -505,3 +505,156 @@ zero.
 5. Under-18 guardian consent still not enforced by the app.
 6. Emoji are still used as icons in places; the master prompt asks for an inline SVG
    sprite.
+
+---
+
+## Round 9 — phone fit, a working menu, a working language switch, and honest logic
+
+Seven asks: make the site fit a phone without zooming out, make the text fit, "all
+other stuff", fix the sidebar menu, make the language chooser visibly change language,
+check that everything logical makes sense, and cut the quiz to six questions.
+
+Four screenshots were attached. They could not be read — this session has no vision —
+so every item below was diagnosed by measurement in a real browser (Chromium at
+320/360/390px portrait and 740×360 landscape) rather than by looking at the images.
+
+### 1. The quiz is now six questions — and two crashes came with it
+
+`PF_QUIZ` was cut from 12 questions to 6, keeping the six that together still cover all
+seven dimensions the pathways score on (R I A S E C plus N for nature/agriculture).
+
+Reducing it exposed **two latent crashes**, both from hard-coded `11`s — the old
+"last question" index — in `student/quiz.html` and `student/onboarding.html`:
+
+- `nextQ()` tested `qi < 11`, so with six questions it could never finish; it walked
+  past the end and `QUIZ[6]` was `undefined`, which threw on `q.q` and killed the page.
+- The button label tested `qi === 11`, so it never changed to "See my results ✓".
+
+Both now derive from `QUIZ.length`, and `renderQuiz()` / `renderQ()` clamp the index so
+a stale position can never take the page down. Verified end to end: 17% → 100%,
+"See my results ✓" on the last question, results saved, no console errors.
+
+**The length also fixed a real scoring bug.** The personality score is
+`pers / 18 * 100`, where 18 is six questions × the 3-point primary weight. With twelve
+questions a student hit the 100% cap with only half their answers on their best
+dimension, so every pathway flattened to 100% fit. A mixed-answer student now ranks
+properly (100 / 78 / 83 / 67 / 50 instead of all 100). A test asserts the calibration
+constant still matches the question count, so the quiz cannot silently grow again.
+
+Every "12 questions" string now comes from `PF_QUIZ.length` — the strap-lines, the
+step counters and the progress bars — except the plain-English copies in the README and
+`index.html`, which were corrected by hand.
+
+### 2. Why a phone had to zoom out
+
+It was **not** the viewport tag; all 20 pages already carried
+`width=device-width, initial-scale=1.0, viewport-fit=cover`. A new
+`tools/overflow_audit.js` measures the right edge of every element against the viewport
+on all 20 pages at four sizes. It found two tables that were wider than the screen:
+
+| Page | Table | Overflow at 360px |
+|---|---|---|
+| `tutor/schedule.html` | Sessions | 55px |
+| `admin/dashboard.html` | User control | 13px |
+
+Both sat in `.table-scroll` wrappers, which pin tables to `min-width:560px` so columns
+keep their shape and the wrapper scrolls — reasonable on a desktop, wrong for a phone.
+Both now use the `table.stack` pattern already built in round 7 (labelled cells become
+cards), with `.table-scroll table.stack{ min-width:0 }` to opt them out of the 560px
+floor. Landscape phone, where the drawer is only 360px tall, still scrolls inside the
+nav — that is unavoidable with ten links in 142px.
+
+The audit also caught that **7 of the 20 page names in its own list did not exist**
+(`about.html`, `contact.html`, `schools.html`, `student/pathways.html`,
+`student/tutors.html`, `tutor/earnings.html`, `tutor/sessions.html`). Those were stale
+entries in the audit, not broken links — no page links to them, and the live site
+returns Vercel's 404 page for them, which is what produced a stray "copy debug prompt"
+button in the measurements.
+
+### 3. The sidebar menu
+
+The drawer opened, closed on overlay / Escape / nav-click, and its nav scrolled. But on
+a 360×640 phone it spent 259px on branding, role chip and footer, leaving a 340px
+window onto a 567px nav — so "Sign out" was two scrolls away. The chrome is now
+tighter on short viewports, and **all ten links fit without scrolling** in portrait.
+
+The nav also used **emoji as icons** (⌂ 🧭 💰 📊 ✨ 👤 …), against the standing
+"no emoji as UI icons" rule. `assets/js/shell.js` now injects one inline SVG sprite
+(fifteen symbols) that every page shares, and all 10 links per page plus the role and
+footer glyphs render as drawn icons. Verified: 10/10 links resolve their symbol.
+
+### 4. The language chooser
+
+Two separate faults, both now fixed:
+
+- **The selected button never changed.** EN and SW carried hard-coded inline
+  `background`/`color`, and there was no CSS rule for `.lang button.on` at all, so the
+  highlight was baked into the markup. `.lang button.on` is now styled with enough
+  specificity to win, and `aria-pressed` tracks the state.
+- **Almost nothing translated.** The Swahili dictionary held 30 entries. It now holds
+  60+, covering navigation, all six pathway names, dashboard, onboarding, admin and
+  tutor labels — so switching visibly changes the page.
+
+Switching back to English previously called `location.reload()`. It now restores the
+cached original text, so it is instant and needs no reload. The translator works on an
+element's own text nodes, which matters because nav labels now sit beside an `<svg>`;
+a plain "has children" test would have skipped every one of them.
+
+### 5. Logic
+
+A new `tools/logic_audit.js` asserts 36 invariants. It found the worst bug of the round:
+
+**`gradeOf()` used the wrong KCSE boundaries.** It was
+`>=80 A : >=70 A− : >=60 B+ : >=50 B : >=40 C+ : C` — six of the twelve grades were
+missing and **everything from 0 to 39 collapsed to "C"**. A student averaging 22% was
+shown a passing grade instead of an E; 45% was shown as B instead of C−. This is the
+number on the dashboard's "Grade X projection" chip, the tracker, and every improvement
+plan. It now uses the official KNEC table that `cluster.js` already held, and a test
+asserts the two implementations agree at every percentage from 0 to 100.
+
+It also emitted `"A−"` with a **Unicode minus (U+2212)** while the grade-points table is
+keyed on an ASCII hyphen — so that grade scored **zero points** in any cluster
+calculation. `gradeOf` now normalises, and `gradePoints()` accepts both spellings.
+
+Also fixed: the Engineering pathway cited **"Kabwe Poly"**, an institution that does not
+exist; it now cites Nairobi National Polytechnic and Kiambu National Polytechnic.
+
+The audit checks, among others: quiz/pathway dimension coverage, personality
+calibration and saturation, grade points monotonic across all 12 grades, boundary
+descent, unique institution ids and codes, plausible contact details, the 47 counties,
+scholarship deadlines and links, HEF bands summing to 100% with support falling as
+income rises, every cluster computable and capped at 48, blank grades not throwing, and
+that `tutor.js` cannot mark a document verified by itself.
+
+### 6. Suite results
+
+| Suite | Result |
+|---|---|
+| `npm test` | **63 checks passed, 0 problems** |
+| `npm run test:render` | All pages render cleanly |
+| `npm run test:mobile` | 0 problems |
+| `npm run test:overflow` (new) | No overflow on any page at any size |
+| `npm run test:logic` (new) | All 36 logic checks pass |
+| `npm run test:overlay` | 0 problems |
+| `npm run test:comfort` | 21 (unchanged; sub-6px label-to-bar pairs) |
+| `npm run test:interaction` | 318 links, 200 buttons — all resolve and respond |
+
+`test:overflow` and `test:logic` were added to CI via `test:all`. The service-worker
+cache was bumped to `pathfinder-v9` so returning visitors pick up the changed assets.
+
+Two regressions I introduced were caught by the existing suites and fixed: tightening
+the drawer had dropped `.side-foot` to 11.5px (below the 12px legibility floor) and
+`a.snav` to 42px (below the 44px touch minimum). The space saving now comes only from
+spacing, never from text size or tap targets.
+
+### Still outstanding
+
+1. **Rotate the leaked admin password in git history** — still the top item.
+2. Connect Supabase and test end to end.
+3. Confirm the five derived cluster definitions against `kuccps.net`.
+4. Tutor verification review flow, booking and messaging.
+5. Under-18 guardian consent still not enforced by the app.
+6. Emoji remain as icons outside the sidebar (pathway tiles, KPI tiles); the sprite in
+   `shell.js` is the mechanism to replace them.
+7. Landscape phone (740×360) still needs inner scrolling in the drawer — ten links in
+   142px. A shorter list or a two-column nav would fix it properly.
