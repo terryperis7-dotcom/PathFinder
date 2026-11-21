@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#7c5cff" />
+    <title>Sign in — PathFinder Kenya</title>
+    <meta
+      name="description"
+      content="Sign in to your student, tutor or superadmin workspace, or take the one-click demo tour."
+    />
+    <meta property="og:title" content="Sign in — PathFinder Kenya" />
+    <meta
+      property="og:description"
+      content="Sign in to your student, tutor or superadmin workspace, or take the one-click demo tour."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="assets/icons/icon.svg" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/app.css" />
+  </head>
+  <body data-page="signin" data-root="">
+    <div id="publicShell">
+      <header class="pnav">
+        <div class="container pnav-in">
+          <a class="brand" href="index.html">
+            <span class="brand-mark">
+              <svg viewBox="0 0 24 24"><path d="M7 20V5h7a5 5 0 010 10H10" /></svg>
+            </span>
+            PathFinder
+            <small>KENYA</small>
+          </a>
+          <nav class="pnav-links">
+            <a href="index.html#features">Features</a>
+            <a href="index.html#how">How it works</a>
+            <a href="index.html#faq">FAQ</a>
+            <span id="pubRight"></span>
+          </nav>
+        </div>
+      </header>
+      <main>
+        <div class="container">
+          <div class="auth-wrap">
+            <div>
+              <span class="eyebrow">Welcome back</span>
+              <h2 style="font-size: 34px; margin: 10px 0 14px">Sign in to your workspace</h2>
+              <p class="lead" style="font-size: 16.5px; margin-bottom: 24px">
+                Students, tutors and superadmins each have their own clean workspace. Sign in and we'll take you
+                straight to yours.
+              </p>
+              <div class="ws-row">
+                <span class="tile lav">
+                  <svg class="ic lg"><use href="#i-cap" /></svg>
+                </span>
+                <div>
+                  <b>Student workspace</b>
+                  <p>Overview, career check, tracker, funding &amp; institutions</p>
+                </div>
+              </div>
+              <div class="ws-row">
+                <span class="tile mint">
+                  <svg class="ic lg"><use href="#i-users" /></svg>
+                </span>
+                <div>
+                  <b>Tutor workspace</b>
+                  <p>Requests, students, availability, earnings &amp; verification</p>
+                </div>
+              </div>
+              <div class="ws-row">
+                <span class="tile peach">
+                  <svg class="ic lg"><use href="#i-shield" /></svg>
+                </span>
+                <div>
+                  <b>SuperAdmin workspace</b>
+                  <p>User control, safety &amp; reports, data audit &amp; deployment</p>
+                </div>
+              </div>
+            </div>
+            <div class="auth-card">
+              <h3 style="font-size: 22px; margin-bottom: 18px">Sign in</h3>
+              <label class="flab" for="siEmail">Email</label>
+              <input
+                class="input"
+                id="siEmail"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+              />
+              <label class="flab" for="siPw" style="margin-top: 14px">Password</label>
+              <input
+                class="input"
+                id="siPw"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Your password"
+              />
+              <div id="siErr" class="alert-red" style="display: none; margin-top: 14px"></div>
+              <button class="btn btn-lime btn-block" id="siBtn" style="margin-top: 18px">Sign in</button>
+              <div style="text-align: center; margin-top: 16px; font-size: 14px; color: var(--muted)">
+                New here?
+                <a href="#signup" data-nav="signup" style="font-weight: 700">Create a free account</a>
+              </div>
+              <div class="divider"></div>
+              <span class="eyebrow">One-click demo accounts</span>
+              <p class="tiny muted" style="margin: 6px 0 4px">Local demo mode — always labelled DEMO.</p>
+              <div class="demo-row">
+                <button class="demo-btn" data-demo="student">
+                  <svg class="ic"><use href="#i-cap" /></svg>
+                  Student
+                  <small>Wanjiku M.</small>
+                </button>
+                <button class="demo-btn" data-demo="tutor">
+                  <svg class="ic"><use href="#i-users" /></svg>
+                  Tutor
+                  <small>Brian O.</small>
+                </button>
+                <button class="demo-btn" data-demo="admin">
+                  <svg class="ic"><use href="#i-shield" /></svg>
+                  Admin
+                  <small>Terry P.</small>
+                </button>
+              </div>
+              <div class="alert-violet" id="siSyncNote" style="margin-top: 16px; font-size: 13px"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-grid">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px">
+                <span class="brand-mark" style="width: 34px; height: 34px; border-radius: 12px">
+                  <svg
+                    viewBox="0 0 24 24"
+                    style="
+                      width: 18px;
+                      height: 18px;
+                      stroke: #fff;
+                      fill: none;
+                      stroke-width: 2.2;
+                      stroke-linecap: round;
+                    "
+                  >
+                    <path d="M7 20V5h7a5 5 0 010 10H10" />
+                  </svg>
+                </span>
+                <b style="font-family: var(--font-d); font-size: 16px; color: var(--pine3)">PathFinder Kenya</b>
+              </div>
+              <p style="max-width: 340px">
+                One trusted guide from classroom to career. Guidance only — official placement, cluster points and
+                funding decisions come from KUCCPS, HEF and HELB.
+              </p>
+              <p class="tiny" style="margin-top: 14px">
+                © 2026 PathFinder Kenya. All rights reserved. Data Protection Act, 2019.
+                <a href="legal/privacy.html">Privacy</a>
+                ·
+                <a href="legal/terms.html">Terms</a>
+              </p>
+            </div>
+            <div>
+              <h4>Official portals</h4>
+              <a href="https://students.kuccps.ac.ke" target="_blank" rel="noopener">KUCCPS student portal ↗</a>
+              <a href="https://students.kuccps.ac.ke/programmes/search/" target="_blank" rel="noopener">
+                KUCCPS programme search ↗
+              </a>
+              <a href="https://www.hef.co.ke" target="_blank" rel="noopener">HEF — Universities Fund ↗</a>
+              <a href="https://www.helb.co.ke" target="_blank" rel="noopener">HELB loans ↗</a>
+            </div>
+            <div>
+              <h4>Regulators &amp; app</h4>
+              <a href="https://www.cue.or.ke" target="_blank" rel="noopener">Commission for University Education ↗</a>
+              <a href="https://www.tveta.or.ke" target="_blank" rel="noopener">TVET Authority (TVETA) ↗</a>
+              <a href="signin.html">Sign in</a>
+              <a href="signup.html">Create account</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="modal-bg" id="modalBg"><div class="modal" id="modalBox" role="dialog" aria-modal="true"></div></div>
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="assets/js/icons.js"></script>
+    <script src="assets/js/supabase-config.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/core.js"></script>
+    <script src="./assets/js/charts.js"></script>
+    <script src="./assets/js/notify.js"></script>
+    <script src="assets/js/avatar.js"></script>
+    <script src="assets/js/supabase.js"></script>
+    <script src="assets/js/safety.js"></script>
+    <script src="assets/js/chat.js"></script>
+    <script src="assets/js/cluster.js"></script>
+    <script src="assets/js/recommend.js"></script>
+    <script src="assets/js/motion.js"></script>
+    <script src="assets/js/locked.js"></script>
+    <script src="assets/js/shell.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/pages/signin.js"></script>
+  </body>
+</html>
