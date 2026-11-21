@@ -51,7 +51,15 @@ let S = Object.assign(
     adFilter: "all",
     targets: {},
     assessments: [],
-    profile: { name: "", stage: "KCSE Form 3–4", county: "Nairobi", school: "" },
+    profile: {
+      name: "",
+      stage: "KCSE Form 3–4",
+      county: "Nairobi",
+      school: "",
+      pathway: "",
+      electives: [],
+      avatar: { kind: "initials", style: "gradient", colour: "violet" }
+    },
     tutorRate: 450,
     tutorHours: 4,
     lang: "en",

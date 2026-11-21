@@ -20,7 +20,7 @@ ICONS = (ROOT / "assets/js/icons.js").read_text(encoding="utf-8")
 SPRITE_IDS = set(re.findall(r'<symbol id=\\?"([^"\\]+)', ICONS)) or set(re.findall(r'id=\\"(i-[a-z0-9-]+)\\"', ICONS))
 SHELL = (ROOT / "assets/js/shell.js").read_text(encoding="utf-8")
 KNOWN_PAGES = set(re.findall(r'"?([a-z-]+)"?:\s*"[a-z0-9/.\-]+\.html"', SHELL))
-CORE_ORDER = ["icons", "supabase-config", "data", "core", "charts", "notify", "avatar", "supabase", "safety",
+CORE_ORDER = ["icons", "supabase-config", "data", "stages", "core", "charts", "notify", "avatar", "supabase", "safety",
               "chat", "cluster", "recommend", "motion", "locked", "shell", "auth"]
 
 pages = sorted(p for p in ROOT.rglob("*.html") if "node_modules" not in p.parts)

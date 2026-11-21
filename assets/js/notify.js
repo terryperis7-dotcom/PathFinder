@@ -76,10 +76,9 @@ function renderBell(host) {
       toggleNotif($("#notifPop").hidden);
     });
     $("#notifPop").addEventListener("click", notifClick);
-    document.addEventListener("click", (e) => {
-      const pop = $("#notifPop");
-      if (pop && !pop.hidden && !e.target.closest("#notifWrap")) toggleNotif(false);
-    });
+    $("#notifPop").addEventListener("keydown", notifKey);
+    /* No outside-click dismissal on purpose: the panel stays open until the
+       person closes it, so a long list cannot vanish mid-read on a phone. */
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && $("#notifPop") && !$("#notifPop").hidden) toggleNotif(false);
     });
@@ -134,15 +133,16 @@ function paintNotif() {
           ? rows
               .map((n) => {
                 const k = noteKind(n.kind);
-                return `<button type="button" class="nitem${n.read ? "" : " unread"}" data-note="${esc(n.id)}">
+                return `<div class="nitem${n.read ? "" : " unread"}" data-note="${esc(n.id)}" role="button" tabindex="0" aria-label="${esc(n.title)}">
           <span class="ntile ${k.tone}">${ic(k.icon)}</span>
           <span class="nmain">
             <span class="nrow"><b>${esc(n.title)}</b>${n.demo ? `<span class="ndemo">DEMO</span>` : ""}</span>
             <span class="nbody">${esc(n.body)}</span>
-            <span class="nmeta">${esc(n.from)} · ${esc(ago(n.ts))}${n.link && !n.demo ? "" : ""}</span>
+            <span class="nmeta">${esc(n.from)} · ${esc(ago(n.ts))}</span>
           </span>
           ${n.read ? "" : `<span class="ndot" aria-hidden="true"></span>`}
-        </button>`;
+          <button type="button" class="ndel" data-note-del="${esc(n.id)}" aria-label="Delete this notification" title="Delete">${ic("i-x", "sm")}</button>
+        </div>`;
               })
               .join("")
           : `<div class="np-empty">${ic("i-inbox")}<b>Nothing here yet</b><span>${NOTIF_FILTER.key === "unread" ? "You have read everything." : "Messages, decisions and safety alerts land here."}</span></div>`
@@ -153,6 +153,7 @@ function paintNotif() {
       <div class="np-acts">
         ${canCompose ? `<button type="button" class="np-link" data-note-compose>${ic("i-send", "sm")} Announce</button>` : ""}
         <button type="button" class="np-link" data-note-read-all ${unread ? "" : "disabled"}>Mark all read</button>
+        <button type="button" class="np-link danger" data-note-clear ${rows.length ? "" : "disabled"}>${ic("i-x", "sm")} Clear</button>
       </div>
     </div>`;
 }
@@ -161,6 +162,16 @@ function notifClick(e) {
   const t = e.target;
   if (t.closest("[data-note-close]")) {
     toggleNotif(false);
+    return;
+  }
+  const del = t.closest("[data-note-del]");
+  if (del) {
+    e.stopPropagation();
+    removeNotes([del.dataset.noteDel]);
+    return;
+  }
+  if (t.closest("[data-note-clear]")) {
+    clearNotif();
     return;
   }
   if (t.closest("[data-note-read-all]")) {
@@ -190,10 +201,49 @@ function notifClick(e) {
     n.read = true;
     save();
     paintBell();
-    toggleNotif(false);
-    if (n.link) go(n.link);
-    else paintNotif();
+    if (n.link) {
+      toggleNotif(false);
+      go(n.link);
+    } else paintNotif();
   }
+}
+
+/* ---------- deleting ----------
+   Deleting removes the note from this device only (and from state, so it does
+   not come back). Seeded and real rows are treated the same, and the count in
+   the bell drops immediately. */
+function removeNotes(ids) {
+  const gone = new Set(ids.map(String));
+  S.notes = (S.notes || []).filter((n) => !gone.has(String(n.id)));
+  save();
+  paintBell();
+  paintNotif();
+}
+
+function clearNotif() {
+  const rows = notesFor();
+  if (!rows.length) return;
+  openModal(`<div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+      <span class="tile rose">${ic("i-bell", "lg")}</span>
+      <div style="flex:1;min-width:0"><h3 style="font-size:18px">Clear your notifications?</h3>
+        <p class="tiny muted">${rows.length} ${rows.length === 1 ? "notification" : "notifications"} will be deleted from this device. Messages, decisions and reports themselves are not deleted.</p></div>
+      <button class="modal-x" data-close>${ic("i-x")}</button></div>
+    <div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-ghost" data-close>Keep them</button>
+      <button class="btn btn-danger" id="noteClearYes" style="margin-left:auto">${ic("i-x", "sm")} Delete ${rows.length}</button></div>`);
+  $("#noteClearYes").addEventListener("click", () => {
+    removeNotes(rows.map((n) => n.id));
+    closeModal();
+    toast("Notifications cleared", "i-check");
+  });
+}
+
+/* Enter / Space open a note, like a button would. */
+function notifKey(e) {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const item = e.target.closest && e.target.closest("[data-note]");
+  if (!item) return;
+  e.preventDefault();
+  item.click();
 }
 
 /* Admins can send an announcement into the inbox of any group. It is a

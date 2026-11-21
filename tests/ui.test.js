@@ -322,6 +322,285 @@ const check = (name, ok, extra) => results.push({ name, ok: !!ok, extra: extra |
     check("graph: asks for a second log", /Log another assessment/.test(txt($(".gc-foot", w))), txt($(".gc-foot", w)));
   }
 
+  /* ---------- the panel stays until it is closed, and notes can go ---------- */
+  {
+    const { w } = await load("student/dashboard.html", STUDENT, { grades: GRADES });
+    const pop = $("#notifPop", w);
+    click(w, $("#notifBtn", w));
+    check("pinned: panel opens", pop.hidden === false);
+
+    /* a click anywhere else must NOT dismiss it — this was the bug */
+    click(w, $("#dashBox", w) || w.document.body);
+    click(w, w.document.body);
+    check("pinned: an outside click leaves it open", pop.hidden === false);
+
+    /* Escape is still an explicit close */
+    w.document.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    check("pinned: Escape closes it", pop.hidden === true);
+    click(w, $("#notifBtn", w));
+
+    const before = state(w).notes.length;
+    const first = state(w).notes[0];
+    click(w, $$("[data-note-del]", w)[0]);
+    const after = state(w).notes;
+    check("delete: one note removed", after.length === before - 1, before + " → " + after.length);
+    check("delete: the right note went", !after.some((n) => n.id === first.id), first.id);
+    check("delete: the panel stays open", pop.hidden === false);
+    check(
+      "delete: the row is gone from the list",
+      $$("[data-note]", w).length === after.filter((n) => n.to === "student" || n.to === "all").length
+    );
+
+    /* clear all asks first, then empties the list */
+    click(w, $("[data-note-clear]", w));
+    check("clear: confirm dialog opens", !!$("#noteClearYes", w));
+    click(w, $("#noteClearYes", w));
+    check(
+      "clear: nothing left for this role",
+      state(w).notes.filter((n) => n.to === "student" || n.to === "all").length === 0
+    );
+    check("clear: badge gone", $("#notifBadge", w).hidden === true);
+    check(
+      "clear: empty state explains itself",
+      /Nothing here yet/.test(txt($("#notifPop", w))),
+      txt($("#notifPop", w)).slice(0, 80)
+    );
+
+    /* a fresh page does not resurrect them */
+    const { w: w2 } = await load("student/dashboard.html", STUDENT, state(w));
+    check(
+      "clear: stays cleared after a reload",
+      w2.localStorage.getItem("pf-state-v1").indexOf('"to":"student"') === -1 ||
+        state(w2).notes.filter((n) => n.to === "student").length === 0
+    );
+  }
+
+  /* ---------- profile picture ---------- */
+  {
+    const { w, errs } = await load("student/profile.html", STUDENT, { grades: GRADES });
+    check("pfp: the picture is a button", !!$("#pfAvatar", w));
+    check("pfp: chip on the page", /Change picture/.test(txt($("#profileBox", w))));
+    click(w, $("#pfAvatar", w));
+    check("pfp: picker opens", !!$(".avpick", w));
+    check(
+      "pfp: three ways to pick",
+      $$("[data-avkind]", w).map(txt).join("|") === "Initials|Icon|Photo",
+      $$("[data-avkind]", w).map(txt).join("|")
+    );
+    check("pfp: eight colours", $$("[data-avcolour]", w).length === 8, String($$("[data-avcolour]", w).length));
+    check("pfp: icons offered", $$("[data-avemoji]", w).length >= 12);
+
+    click(w, $('[data-avkind="emoji"]', w));
+    check("pfp: icon pane shows", $('[data-pane="emoji"]', w).hidden === false);
+    click(w, $$("[data-avemoji]", w)[0]);
+    const emoji = $$("[data-avemoji]", w)[0].dataset.avemoji;
+    click(w, $('[data-avcolour="green"]', w));
+    click(w, $("#avSave", w));
+    const av = state(w).profile.avatar;
+    check(
+      "pfp: saved to the profile",
+      av.kind === "emoji" && av.emoji === emoji && av.colour === "green",
+      JSON.stringify(av)
+    );
+    check("pfp: the top-bar chip picks it up", $("#userChip", w).innerHTML.includes(emoji));
+    check("pfp: the page avatar picks it up", $("#pfAvatar", w).innerHTML.includes(emoji));
+    check("pfp: no errors", errs.length === 0, errs.join(" | "));
+
+    /* a photo is accepted only as an image, and is resized on a canvas */
+    click(w, $("#pfAvatar", w));
+    check("pfp: a file input is offered", !!$("#avFile", w));
+    check("pfp: input accepts images only", $("#avFile", w).getAttribute("accept") === "image/*");
+    click(w, $("#avReset", w));
+    check("pfp: reset restores initials", !state(w).profile.avatar || state(w).profile.avatar.kind === "initials");
+  }
+
+  /* ---------- stage awareness: CBC vs 8-4-4 ---------- */
+  {
+    const { w, errs } = await load("student/quiz.html", STUDENT, {
+      profile: { stage: "CBC Grade 7–9", county: "Nakuru" },
+      grades: {},
+      answers: [],
+      qStep: 0
+    });
+    const opts = Array.from($$("#gradeGrid select", w)[0].options).map((o) => o.value);
+    check("stage: quiz asks for CBC levels", opts.includes("EE") && opts.includes("BE"), opts.join(","));
+    check("stage: no A–E grades in CBC mode", !opts.includes("A"), opts.join(","));
+    check(
+      "stage: uses the junior subject list",
+      /Integrated Science/.test(txt($("#gradeGrid", w))),
+      txt($("#gradeGrid", w)).slice(0, 120)
+    );
+    check("stage: names the exam", /KJSEA/.test(txt($("#quizBox", w))));
+    check("stage: six stages to pick from", $$("[data-stage]", w).length === 6, String($$("[data-stage]", w).length));
+    check("stage: quiz has no errors", errs.length === 0, errs.join(" | "));
+  }
+  {
+    /* switching stage inside the quiz re-renders the scale */
+    const { w } = await load("student/quiz.html", STUDENT, {
+      profile: { stage: "KCSE Form 3–4", county: "Nakuru" },
+      grades: {},
+      answers: [],
+      qStep: 0
+    });
+    const kcseOpts = Array.from($$("#gradeGrid select", w)[0].options).map((o) => o.value);
+    check("stage: KCSE mode offers A–E", kcseOpts.includes("A") && kcseOpts.includes("E"), kcseOpts.join(","));
+    click(w, $('[data-stage="junior"]', w));
+    const after = Array.from($$("#gradeGrid select", w)[0].options).map((o) => o.value);
+    check(
+      "stage: switching to Grade 7–9 swaps the scale",
+      after.includes("EE") && !after.includes("A"),
+      after.join(",")
+    );
+    check("stage: the choice is saved", state(w).profile.stage === "junior");
+  }
+  {
+    const { w } = await load("student/dashboard.html", STUDENT, {
+      profile: { stage: "CBC Grade 10–12", pathway: "stem", electives: ["Physics", "Chemistry", "Biology"] },
+      grades: {
+        English: "ME",
+        Kiswahili: "ME",
+        Mathematics: "EE",
+        "Community Service Learning": "ME",
+        Physics: "ME",
+        Chemistry: "AE",
+        Biology: "EE"
+      }
+    });
+    const body = txt($("#dashBox", w));
+    check("stage: CBC overview names the stage", /CBC Grade 10–12/.test(body));
+    check("stage: no KCSE cluster aggregate in CBC", !/Best-7 aggregate/.test(body));
+    check("stage: CBC average is a level", /Average level/.test(body));
+  }
+  {
+    const { w } = await load("student/dashboard.html", STUDENT, {
+      grades: GRADES,
+      profile: { stage: "KCSE Form 3–4", county: "Nakuru" }
+    });
+    check("stage: KCSE overview keeps cluster points", /Best-7 aggregate/.test(txt($("#dashBox", w))));
+    check("stage: KCSE names the final sitting", /November 2027/.test(txt($("#dashBox", w))));
+  }
+  {
+    const { w, errs } = await load("student/cluster.html", STUDENT, {
+      profile: { stage: "CBC Grade 7–9" },
+      grades: { English: "ME", Kiswahili: "ME", Mathematics: "EE", "Integrated Science": "ME" }
+    });
+    const body = txt($("#clusterBox", w));
+    check("stage: CBC gets pathway fit, not clusters", /Pathway fit/.test(body));
+    check("stage: explains why there are no points", /8-4-4 idea/.test(body));
+    check("stage: shows all three pathways", $$(".fit-row", w).length === 3, String($$(".fit-row", w).length));
+    check("stage: cluster page has no errors", errs.length === 0, errs.join(" | "));
+  }
+
+  /* ---------- the reward screen after the career check ---------- */
+  {
+    const ANSW = [0, 1, 2, 3, 0, 1];
+    const { w, errs } = await load("student/quiz.html", STUDENT, {
+      profile: { stage: "KCSE Form 3–4", county: "Nakuru" },
+      grades: GRADES,
+      answers: ANSW,
+      qStep: 7
+    });
+    await new Promise((r) => setTimeout(r, 1300));
+    check("reveal: a celebration renders", !!$("#reveal", w));
+    check("reveal: names the strongest pathway", /career check complete/i.test(txt($("#reveal", w))));
+    check("reveal: has a progress ring", !!$(".reveal-ring svg", w));
+    check("reveal: states the match in the ring", /%/.test(txt($(".reveal-ring", w))));
+    check(
+      "reveal: three facts about the learner",
+      $$(".reveal-facts .rf", w).length === 3,
+      String($$(".reveal-facts .rf", w).length)
+    );
+    check("reveal: the breakdown is collapsed at first", $("#resultsWrap", w).hidden === true);
+    click(w, $("#revealMore", w));
+    check("reveal: see-the-breakdown opens it", $("#resultsWrap", w).hidden === false);
+    check("reveal: the reveal shrinks to a header", $("#reveal", w).classList.contains("reveal-slim"));
+    check("reveal: ranked cards follow", $$(".result-card", w).length >= 3, String($$(".result-card", w).length));
+    check("reveal: only the top card is badged best", $$(".result-card.top", w).length === 1);
+    check("reveal: no errors", errs.length === 0, errs.join(" | "));
+    check(
+      "result: persisted with the stage it was taken in",
+      state(w).result && state(w).result.stage === "form34",
+      JSON.stringify(state(w).result && state(w).result.stage)
+    );
+  }
+  {
+    /* the same flow under CBC must not crash and must not talk about points */
+    const ANSW = [1, 1, 0, 2, 1, 0];
+    const { w, errs } = await load("student/quiz.html", STUDENT, {
+      profile: { stage: "CBC Grade 7–9", county: "Nakuru" },
+      grades: {
+        English: "ME",
+        Kiswahili: "ME",
+        Mathematics: "EE",
+        "Integrated Science": "ME",
+        "Social Studies": "AE",
+        Agriculture: "ME",
+        "Pre-Technical Studies": "ME",
+        "Business Studies": "AE",
+        "Creative Arts & Sports": "EE",
+        "Religious Education": "ME"
+      },
+      answers: ANSW,
+      qStep: 7
+    });
+    await new Promise((r) => setTimeout(r, 1300));
+    check("cbc result: reveal renders", !!$("#reveal", w));
+    click(w, $("#revealMore", w));
+    const body = txt($("#resultsWrap", w));
+    check("cbc result: no KUCCPS cluster claim", !/weighted cluster points/.test(body));
+    check("cbc result: says CBC has no cluster points", /does not use cluster points/.test(body));
+    check("cbc result: no errors", errs.length === 0, errs.join(" | "));
+  }
+
+  /* ---------- the pie beside the graph ---------- */
+  {
+    const { w } = await load("student/dashboard.html", STUDENT, {
+      profile: { stage: "KCSE Form 3–4" },
+      grades: GRADES,
+      assessments: LOGS
+    });
+    check("pie: a donut renders beside the line", !!$(".prog-pie .gdonut svg", w));
+    check(
+      "pie: it has an arc per grade band",
+      $$(".prog-pie .dn-seg", w).length >= 2,
+      String($$(".prog-pie .dn-seg", w).length)
+    );
+    check("pie: the centre states a number", /%/.test(txt($(".prog-pie .dn-big", w))), txt($(".prog-pie .dn-big", w)));
+    check(
+      "pie: the legend shares add to 100%",
+      (() => {
+        const pcts = $$(".prog-pie .dn-li b", w).map((b) => parseInt(txt(b), 10));
+        const sum = pcts.reduce((a, b) => a + b, 0);
+        return Math.abs(sum - 100) <= 2;
+      })()
+    );
+    check("pie: the line chart is still there", !!$(".prog-chart .gchart svg", w));
+    check(
+      "pie: the line is smoother (cubic)",
+      /C/.test(($(".gc-line", w) || {}).getAttribute ? $(".gc-line", w).getAttribute("d") : "")
+    );
+    check("pie: axes carry units", /%/.test(txt($(".gchart", w))));
+  }
+
+  /* ---------- phone sizing ---------- */
+  {
+    const css = fs.readFileSync(path.join(ROOT, "assets/css/app.css"), "utf8");
+    check("phone: a 400 px breakpoint exists", /@media \(max-width: 400px\)/.test(css));
+    check("phone: a 720 px breakpoint exists", /@media \(max-width: 720px\)/.test(css));
+    check("phone: no horizontal overflow", /overflow-x: hidden/.test(css));
+    check("phone: safe-area padding is used", /env\(safe-area-inset-bottom\)/.test(css));
+    check("phone: the panel is a fixed sheet", /\.notif-pop\s*\{[^}]*position: fixed/.test(css));
+    check("phone: 44 px tap targets", /min-height: 44px/.test(css));
+    check("phone: KPIs restack", /\.kpi-row\s*\{[^}]*grid-template-columns: 1fr/.test(css));
+    check("phone: the ring stacks under the line", /\.prog-split\s*\{\s*grid-template-columns: 1fr/.test(css));
+    /* every page must declare a viewport or nothing above matters */
+    const pages = ["student/dashboard.html", "student/quiz.html", "student/profile.html", "student/tracker.html"];
+    check(
+      "phone: viewport meta on the student pages",
+      pages.every((pg) => /name="viewport"/.test(fs.readFileSync(path.join(ROOT, pg), "utf8")))
+    );
+  }
+
   /* ---------- report ---------- */
   let bad = 0;
   for (const r of results) {

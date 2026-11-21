@@ -390,6 +390,7 @@ function accountSheet() {
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
       <button class="btn btn-line btn-sm" data-safety-centre>${ic("i-shield", "sm")} Safety centre</button>
       <a class="btn btn-line btn-sm" href="${urlFor("home")}">${ic("i-compass", "sm")} Public homepage</a>
+      <button class="btn btn-line btn-sm" data-account-avatar>${ic("i-user", "sm")} Change picture</button>
       <button class="btn btn-ghost btn-sm" data-account-export>${ic("i-download", "sm")} Export my data</button>
       ${SESSION ? `<button class="btn btn-danger btn-sm" data-signout>${ic("i-logout", "sm")} Sign out</button>` : `<a class="btn btn-dark btn-sm" href="${urlFor("signin")}">${ic("i-user", "sm")} Sign in</a>`}
     </div>`);
@@ -526,6 +527,10 @@ document.addEventListener("click", (e) => {
   }
   if (e.target.closest("[data-account-export]")) {
     exportMyData();
+    return;
+  }
+  if (e.target.closest("[data-account-avatar]")) {
+    if (typeof openAvatarPicker === "function") openAvatarPicker();
     return;
   }
   if (e.target.closest("[data-signout]")) {
