@@ -1,7 +1,0 @@
-# PathFinder Kenya — a private pilot, not an official KUCCPS service.
-User-agent: *
-Allow: /
-Disallow: /admin/
-Disallow: /tutor/
-Disallow: /student/profile.html
-Sitemap: /sitemap.xml
