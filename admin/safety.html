@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#7c5cff" />
+    <title>Safety queue — PathFinder Kenya</title>
+    <meta name="description" content="Learner reports, suspended tutors and the chat filter log." />
+    <meta property="og:title" content="Safety queue — PathFinder Kenya" />
+    <meta property="og:description" content="Learner reports, suspended tutors and the chat filter log." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="../assets/icons/icon.svg" />
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/app.css" />
+  </head>
+  <body data-page="admin" data-root="../" data-adtab="safety">
+    <div class="app" id="appShell">
+      <div class="side-overlay" id="sideOverlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="side-logo">
+          <span class="brand-mark" style="width: 34px; height: 34px; border-radius: 12px; flex-basis: 34px">
+            <svg
+              viewBox="0 0 24 24"
+              style="width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round"
+            >
+              <path d="M7 20V5h7a5 5 0 010 10H10" />
+            </svg>
+          </span>
+          <div>
+            <b><a href="../index.html" style="color: inherit">PathFinder</a></b>
+            <small>KENYA</small>
+          </div>
+          <button class="side-close" id="sideClose" aria-label="Close menu">
+            <svg class="ic"><use href="#i-x" /></svg>
+          </button>
+        </div>
+        <div class="side-role" id="sideRole"></div>
+        <nav class="snav" id="snav"></nav>
+        <div class="side-foot" id="sideFoot"></div>
+      </aside>
+      <div class="main">
+        <header class="topbar">
+          <button class="hamb" id="hambBtn" aria-label="Menu">
+            <svg class="ic"><use href="#i-menu" /></svg>
+          </button>
+          <div class="crumb" id="crumb"></div>
+          <div class="search" id="topSearch" style="display: none">
+            <svg class="ic" style="color: var(--muted)"><use href="#i-search" /></svg>
+            <input id="globalSearch" placeholder="Search institutions…" aria-label="Search institutions" />
+          </div>
+          <button class="btn btn-ghost btn-sm" id="langBtn" title="English / Kiswahili" style="margin-left: auto">
+            EN
+          </button>
+          <button class="userchip" id="userChip" aria-label="Your account"></button>
+        </header>
+        <main class="view active" id="viewBody">
+          <div id="adBox"></div>
+        </main>
+        <nav class="bottom-nav" id="bottomNav"></nav>
+      </div>
+    </div>
+
+    <div class="compare-bar" id="compareBar">
+      <b id="cmpCount">0 selected</b>
+      <span class="names" id="cmpNames"></span>
+      <button
+        class="btn btn-sm"
+        id="cmpClear"
+        style="background: rgba(255, 255, 255, 0.14); color: #fff; border-color: rgba(255, 255, 255, 0.25)"
+      >
+        Clear
+      </button>
+      <button class="btn btn-sm btn-lime" id="cmpGo">Compare</button>
+    </div>
+    <div class="modal-bg" id="modalBg"><div class="modal" id="modalBox" role="dialog" aria-modal="true"></div></div>
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="../assets/js/icons.js"></script>
+    <script src="../assets/js/supabase-config.js"></script>
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/stages.js"></script>
+    <script src="../assets/js/core.js"></script>
+    <script src="../assets/js/camera.js"></script>
+    <script src="../assets/js/charts.js"></script>
+    <script src="../assets/js/notify.js"></script>
+    <script src="../assets/js/avatar.js"></script>
+    <script src="../assets/js/supabase.js"></script>
+    <script src="../assets/js/safety.js"></script>
+    <script src="../assets/js/chat.js"></script>
+    <script src="../assets/js/inbox.js"></script>
+    <script src="../assets/js/onboarding.js"></script>
+    <script src="../assets/js/cluster.js"></script>
+    <script src="../assets/js/recommend.js"></script>
+    <script src="../assets/js/motion.js"></script>
+    <script src="../assets/js/locked.js"></script>
+    <script src="../assets/js/shell.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/profcard.js"></script>
+    <script src="../assets/js/pages/admin.js"></script>
+  </body>
+</html>

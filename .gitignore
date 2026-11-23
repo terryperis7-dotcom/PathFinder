@@ -1,0 +1,18 @@
+# dependencies (only ever needed for the jsdom render check)
+node_modules/
+
+# editor / OS noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# logs and local env
+*.log
+.env
+.env.local
+
+# generated previews
+*.pdf
+screenshots/

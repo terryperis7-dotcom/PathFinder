@@ -1,0 +1,42 @@
+{
+  "name": "pathfinder-kenya",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Free KUCCPS, HELB, TVET, KCSE and CBC guidance for Kenyan students, parents and tutors. Plain HTML, CSS and JavaScript \u2014 no build step.",
+  "homepage": "https://pathfinder-two-tau.vercel.app",
+  "license": "MIT",
+  "type": "commonjs",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "serve": "python3 -m http.server 8000",
+    "test": "node tests/app.test.js && python3 tools/check_html.py && python3 tools/check_sql.py",
+    "test:render": "node tools/render_check.js && node tools/click_check.js && node tests/admin.test.js && node tests/ui.test.js && node tests/roles.test.js && node tests/onboarding.test.js",
+    "test:all": "npm test && npm run test:render",
+    "seed": "node tools/gen_seed.mjs",
+    "test:admin": "node tests/admin.test.js",
+    "test:ui": "node tests/ui.test.js",
+    "test:roles": "node tests/roles.test.js",
+    "test:sql": "python3 tools/check_sql.py",
+    "format": "prettier --write \"assets/js/**/*.js\" \"assets/css/*.css\" \"tests/*.js\" \"tools/*.js\" \"*.html\" \"student/*.html\" \"tutor/*.html\" \"admin/*.html\" \"legal/*.html\"",
+    "test:clicks": "node tools/click_check.js",
+    "test:onboarding": "node tests/onboarding.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "kuccps",
+    "helb",
+    "tvet",
+    "kcse",
+    "cbc",
+    "kenya",
+    "education",
+    "vanilla-js",
+    "pwa"
+  ],
+  "devDependencies": {
+    "jsdom": "^29.0.0",
+    "prettier": "^3.3.3"
+  }
+}
